@@ -26,9 +26,17 @@ repeat_masking:
 # First-pass, provisional mChr classification thresholds
 # (workflow/scripts/define_mchr_candidates.py). Dataset-dependent; expect to
 # recalibrate as more isolates and evidence types are added.
+#
+# Size thresholds reflect published M. oryzae biology: mini-chromosomes are
+# supernumerary, repeat-rich, gene-poor accessory chromosomes with sizes
+# roughly from a few hundred kb up to ~3 Mb. A contig below
+# small_max_length_bp is therefore evaluated as a candidate; one at/above
+# core_min_length_bp is treated as core. Contigs strictly between the two
+# thresholds (i.e. 3-4 Mb here) are an intentional gray zone ("uncertain")
+# rather than being forced into either class.
 mchr:
-  core_min_length_bp: 1000000
-  small_max_length_bp: 500000
+  core_min_length_bp: 4000000
+  small_max_length_bp: 3000000
   gc_deviation_threshold: 0.03
   repeat_enrichment_threshold: 0.10
   gene_density_ratio_threshold: 0.5

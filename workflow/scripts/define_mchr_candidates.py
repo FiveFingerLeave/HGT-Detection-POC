@@ -7,7 +7,15 @@ call: per isolate, contigs at/above `--core-min-length-bp` define a "core"
 reference (length-weighted mean GC, repeat fraction and gene density).
 Smaller contigs are then scored against that reference. Thresholds are
 dataset-dependent and must be recalibrated as more isolates and evidence
-types (secretome, coverage, synteny) are added; see docs/decisions.md.
+types (telomeres, synteny, secretome, coverage) are added; see
+docs/decisions.md.
+
+Default size thresholds reflect published M. oryzae biology: mini-
+chromosomes are supernumerary, repeat-rich, gene-poor accessory
+chromosomes roughly a few hundred kb up to ~3 Mb in size. Contigs strictly
+between `--small-max-length-bp` and `--core-min-length-bp` fall into an
+intentional gray zone ("uncertain") rather than being forced into either
+class.
 
 Classes (as defined in Starfish_und_MiniChromosomen_Analyseplan.md, C3):
 - core_like: contig length at/above the core threshold.
@@ -175,8 +183,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, type=Path, help="Combined contig_metrics TSV")
     parser.add_argument("--output", required=True, type=Path, help="Output TSV with classification")
-    parser.add_argument("--core-min-length-bp", type=int, default=1_000_000)
-    parser.add_argument("--small-max-length-bp", type=int, default=500_000)
+    parser.add_argument("--core-min-length-bp", type=int, default=4_000_000)
+    parser.add_argument("--small-max-length-bp", type=int, default=3_000_000)
     parser.add_argument("--gc-deviation-threshold", type=float, default=0.03)
     parser.add_argument("--repeat-enrichment-threshold", type=float, default=0.10)
     parser.add_argument("--gene-density-ratio-threshold", type=float, default=0.5)

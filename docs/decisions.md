@@ -144,6 +144,33 @@ Ein `unplaced-scaffold`-Kandidat braucht zusätzliche, unabhängige Evidenz
 (z. B. Synteny-Vergleich zu anderen Isolaten oder Read-Coverage), bevor er
 ernsthaft als akzessorisches Chromosom in Betracht gezogen wird.
 
+## 2026-08-31 — mChr-Größenschwellen an publizierte *M. oryzae*-Biologie angepasst
+
+**Entscheidung:** `core_min_length_bp` wurde von 1 Mb auf 4 Mb angehoben,
+`small_max_length_bp` von 500 kb auf 3 Mb. Contigs zwischen 3 und 4 Mb
+sind bewusst eine Grauzone (`uncertain`), keine automatische Zuordnung.
+
+**Begründung (Nutzerhinweis):** Mini-Chromosomen bei *M. oryzae* gelten als
+supernumerär, typischerweise repeatreicher und genärmer als Core-Chromosomen;
+publizierte Größen reichen von einigen hundert kb bis etwa 3 Mb. Die
+vorherigen Schwellen (Core ab 1 Mb) hätten Contigs in genau diesem
+publizierten mChr-Größenbereich automatisch als `core_like` durchgewunken,
+ohne die übrigen Evidenzlinien überhaupt zu prüfen.
+
+**Beobachtete Auswirkung im Drei-Isolat-Testlauf:** `GCA_004785725.2`
+(B71) hat einen 1,9-Mb-Contig (`CP060337.1`), der vorher `core_like` war
+und jetzt `uncertain` ist (GC- und Repeat-Abweichung vom Core-Referenzwert
+liegen jeweils knapp unter der Nachweisschwelle — kein starkes Signal,
+aber auch keine automatische Core-Zuordnung mehr). `GCA_046718735.1`
+(Guy11) hat einen 3,9-Mb-Contig (`CM102889.1`), der jetzt in die 3–4-Mb-
+Grauzone fällt. Beide verdienen manuelle Prüfung, bevor sie als Core oder
+mChr gelten.
+
+**Konsequenz:** Die Klassifikation ist konservativer geworden (mehr
+`uncertain`-Fälle statt vorschneller `core_like`-Zuordnung). Das ist
+gewünscht: ein unsicheres, dokumentiertes Ergebnis ist besser als eine
+falsche Sicherheit (vgl. Analyseplan Abschnitt 14).
+
 ## 2026-08-31 — Starfish über `conda run -n starfish_env`
 
 **Entscheidung:** Die Snakemake-Regel `starfish_annotate_yr` ruft Starfish

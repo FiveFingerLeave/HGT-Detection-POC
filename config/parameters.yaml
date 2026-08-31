@@ -40,3 +40,8 @@ mchr:
   gc_deviation_threshold: 0.03
   repeat_enrichment_threshold: 0.10
   gene_density_ratio_threshold: 0.5
+  # Canonical (TTAGGG)n fungal telomere repeat, scanned within this many bp
+  # of each contig end. Real M. oryzae telomeres in the pilot showed 18-31
+  # tandem repeat units vs. 0-1 for non-telomeric ends - clear separation.
+  telomere_window_bp: 1000
+  telomere_min_repeats: 5

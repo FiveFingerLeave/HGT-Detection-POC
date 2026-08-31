@@ -19,6 +19,8 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "repeat_fraction": "",
             "assembly_unit": "",
             "role": "",
+            "telomere_start": False,
+            "telomere_end": False,
         },
         {
             "isolate_id": "ISO1",
@@ -29,6 +31,8 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "repeat_fraction": "",
             "assembly_unit": "",
             "role": "",
+            "telomere_start": False,
+            "telomere_end": False,
         },
     ]
 
@@ -109,3 +113,48 @@ def test_calculate_contig_metrics_adds_repeat_fraction_from_masked_fasta(
 
     assert rows[0]["repeat_fraction"] == 0.5
     assert rows[1]["repeat_fraction"] == 0.0
+
+
+def test_calculate_contig_metrics_detects_telomere_at_start_only(tmp_path: Path) -> None:
+    fasta = tmp_path / "genome.fasta"
+    telomere = "TTAGGG" * 6
+    non_telomere = "ACGT" * 100
+    fasta.write_text(f">contig1\n{telomere}{non_telomere}\n")
+
+    rows = calculate_contig_metrics(
+        fasta, "ISO1", telomere_window_bp=50, telomere_min_repeats=5
+    )
+
+    assert rows[0]["telomere_start"] is True
+    assert rows[0]["telomere_end"] is False
+
+
+def test_calculate_contig_metrics_detects_telomere_reverse_complement_at_end(
+    tmp_path: Path,
+) -> None:
+    fasta = tmp_path / "genome.fasta"
+    non_telomere = "ACGT" * 100
+    telomere_revcomp = "CCCTAA" * 6
+    fasta.write_text(f">contig1\n{non_telomere}{telomere_revcomp}\n")
+
+    rows = calculate_contig_metrics(
+        fasta, "ISO1", telomere_window_bp=50, telomere_min_repeats=5
+    )
+
+    assert rows[0]["telomere_start"] is False
+    assert rows[0]["telomere_end"] is True
+
+
+def test_calculate_contig_metrics_below_min_repeats_is_not_a_telomere(
+    tmp_path: Path,
+) -> None:
+    fasta = tmp_path / "genome.fasta"
+    weak_signal = "TTAGGG" * 2
+    non_telomere = "ACGT" * 100
+    fasta.write_text(f">contig1\n{weak_signal}{non_telomere}\n")
+
+    rows = calculate_contig_metrics(
+        fasta, "ISO1", telomere_window_bp=50, telomere_min_repeats=5
+    )
+
+    assert rows[0]["telomere_start"] is False

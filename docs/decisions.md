@@ -171,6 +171,47 @@ mChr gelten.
 gewünscht: ein unsicheres, dokumentiertes Ergebnis ist besser als eine
 falsche Sicherheit (vgl. Analyseplan Abschnitt 14).
 
+## 2026-08-31 — Telomer-Vollständigkeit und 5-Klassen-Schema
+
+**Entscheidung:** `calculate_contig_metrics.py` sucht in den ersten/letzten
+`telomere_window_bp` (Default 1000 bp) jedes Contigs nach einem
+Tandem-Lauf von mindestens `telomere_min_repeats` (Default 5) Kopien des
+kanonischen fungalen Telomer-Repeats `(TTAGGG)n` (oder seines
+Revers-Komplements `(CCCTAA)n`, da die Ausrichtung des Contigs relativ zum
+Chromosomenende vorab unbekannt ist). Ergebnis: `telomere_start`/
+`telomere_end` (bool) pro Contig.
+
+`define_mchr_candidates.py` nutzt das für eine 5. Klasse:
+- `high_confidence_mChr`: ≥2 Evidenzlinien UND Telomere an beiden Enden.
+- `mChr_candidate`: ≥2 Evidenzlinien, aber Telomere fehlen/unvollständig.
+- `accessory_region` (vorher `accessory_candidate`, umbenannt auf
+  Nutzer-Terminologie): genau 1 Evidenzlinie.
+- `uncertain`, `core_like`, `excluded_non_nuclear`: unverändert.
+
+**Begründung (Nutzerhinweis):** Long-Read-Assemblies liefern besonders
+wertvolle mChr-Evidenz, wenn ein Contig vollständig von Telomer zu Telomer
+reicht (Long Reads können repetitive Bereiche überspannen). Ein
+kompletter, eigenständiger chromosomaler Contig mit Telomeren an beiden
+Enden ist ein stärkeres Signal als Größe/GC/Repeat/Gendichte allein.
+
+**Validierung an echten Daten:** Vor dem Einbau am Pilot-Isolat getestet:
+echte Telomere zeigten 18–31 Tandem-Kopien, Nicht-Telomer-Enden 0–1 — klar
+trennbar, `min_repeats=5` liegt sicher dazwischen. Im Drei-Isolat-Lauf
+erreicht kein Contig `high_confidence_mChr` (keiner der Kandidaten hat
+Telomere an beiden Enden); mehrere Core-Chromosomen selbst fehlt an einem
+Ende das Telomer (z. B. `GCA_004346965.1-CP034204.1` an beiden, mehrere
+weitere an einem) — plausibel für reale Assemblies (rDNA-Arrays u. Ä.
+blockieren manche Chromosomenenden) und bestätigt, dass die Erkennung
+nicht trivial immer "True" liefert.
+
+**Noch nicht umgesetzt (aus dem vollständigen 5-Klassen-Schema):**
+Fragmentierungsprüfung (ein zusammenhängender Contig vs. mehrere
+unverbundene Stücke desselben mChr) und Core-Synteny-Vergleich (breites
+kollineares Alignment zu Core-Chromosomen) fehlen noch — `core_like`
+basiert aktuell nur auf Größe, nicht auf Syntenie. Diese sind der
+nächste geplante Ausbauschritt und erfordern einen Aligner
+(minimap2/nucmer), der noch nicht eingebunden ist.
+
 ## 2026-08-31 — Starfish über `conda run -n starfish_env`
 
 **Entscheidung:** Die Snakemake-Regel `starfish_annotate_yr` ruft Starfish

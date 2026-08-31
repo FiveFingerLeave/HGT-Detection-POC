@@ -29,7 +29,11 @@ def contig_metrics_input(wildcards):
 
 
 def contig_metrics_args(wildcards):
-    args = f" --masked-fasta results/minichromosomes/{wildcards.sample}.masked.fna"
+    args = (
+        f" --masked-fasta results/minichromosomes/{wildcards.sample}.masked.fna"
+        f" --telomere-window-bp {config['mchr']['telomere_window_bp']}"
+        f" --telomere-min-repeats {config['mchr']['telomere_min_repeats']}"
+    )
     if has_gff(wildcards.sample):
         args += f" --gff results/normalized/{wildcards.sample}.gff"
     if has_sequence_report(wildcards.sample):

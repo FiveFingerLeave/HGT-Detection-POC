@@ -17,16 +17,26 @@ between `--small-max-length-bp` and `--core-min-length-bp` fall into an
 intentional gray zone ("uncertain") rather than being forced into either
 class.
 
-Classes (as defined in Starfish_und_MiniChromosomen_Analyseplan.md, C3):
-- core_like: contig length at/above the core threshold.
-- mChr_candidate: below the small-contig threshold with >=2 independent
-  lines of supporting evidence (repeat-enriched, GC-deviant, gene-poor).
-- accessory_candidate: below the small-contig threshold with exactly 1
+Classes:
+- core_like: contig length at/above the core threshold. (The target
+  definition also requires broad core synteny; that check is not yet
+  wired up, so this is size-based only for now.)
+- high_confidence_mChr: below the small-contig threshold with >=2
+  independent lines of supporting evidence (repeat-enriched, GC-deviant,
+  gene-poor) AND telomeric repeats detected at both ends (a complete,
+  single chromosomal contig). NOTE: the full biological definition also
+  wants low core synteny and explicit long-read structural support: those
+  are not yet checked here, so treat this as a partial proxy, not a final
+  call.
+- mChr_candidate: below the small-contig threshold with >=2 supporting
+  evidence lines, but telomeres are missing/incomplete at one or both ends.
+- accessory_region: below the small-contig threshold with exactly 1
   supporting evidence line.
 - uncertain: below the small-contig threshold with no supporting evidence,
   or in the gray zone between the two length thresholds, or when no core
   reference could be established for the isolate (e.g. a single-contig
-  assembly, or all contigs are non-nuclear).
+  assembly, or all contigs are non-nuclear). Also covers likely assembly
+  fragments/repeat contigs that cannot yet be told apart from a true mChr.
 - excluded_non_nuclear: assembly_unit indicates the mitochondrial/
   non-nuclear genome; not part of the core/accessory/mChr scheme.
 """
@@ -46,6 +56,8 @@ COLUMNS = [
     "repeat_fraction",
     "assembly_unit",
     "role",
+    "telomere_start",
+    "telomere_end",
     "classification",
 ]
 
@@ -69,6 +81,8 @@ def read_rows(path: Path) -> list[dict[str, object]]:
                     "repeat_fraction": _parse_optional_float(raw["repeat_fraction"]),
                     "assembly_unit": raw["assembly_unit"],
                     "role": raw["role"],
+                    "telomere_start": raw["telomere_start"] == "True",
+                    "telomere_end": raw["telomere_end"] == "True",
                 }
             )
         return rows
@@ -151,9 +165,12 @@ def classify_contigs(
                         evidence += 1
 
                 if evidence >= 2:
-                    row["classification"] = "mChr_candidate"
+                    if row.get("telomere_start") and row.get("telomere_end"):
+                        row["classification"] = "high_confidence_mChr"
+                    else:
+                        row["classification"] = "mChr_candidate"
                 elif evidence == 1:
-                    row["classification"] = "accessory_candidate"
+                    row["classification"] = "accessory_region"
                 else:
                     row["classification"] = "uncertain"
 

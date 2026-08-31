@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Calculate per-contig length, GC fraction, gene count and repeat fraction
-as a first step towards mini-chromosome (mChr) candidate metrics.
+"""Calculate per-contig length, GC fraction, gene count, repeat fraction and
+telomere-completeness as a first step towards mini-chromosome (mChr)
+candidate metrics.
 
 `repeat_fraction` is the soft-masked base fraction from windowmasker
 (genome-self-content based masking, no curated repeat library). This is a
@@ -8,11 +9,17 @@ coarse repeat-content proxy, not a curated TE-family annotation ("TE_fraction"
 in the target schema) - that requires a tool like RepeatMasker/EDTA with a
 species-appropriate repeat library and is deferred.
 
+`telomere_start`/`telomere_end` flag whether a tandem run of the canonical
+(TTAGGG)n fungal telomeric repeat (either orientation) is found within
+`--telomere-window-bp` of each contig end - evidence that a long-read
+assembly captured the true chromosome end there, per
+Starfish_und_MiniChromosomen_Analyseplan.md.
+
 Further columns from the mChr metric table (core_gene_count, TE_fraction,
 secreted_protein_count, effector_candidate_count, median_depth,
-depth_ratio_to_core, mchr_score) require additional annotation/coverage
-inputs that are not yet available for all isolates and are added once those
-tools are wired up.
+depth_ratio_to_core, mchr_score, core-synteny) require additional
+annotation/coverage/alignment inputs that are not yet available for all
+isolates and are added once those tools are wired up.
 """
 
 from __future__ import annotations
@@ -23,6 +30,12 @@ from pathlib import Path
 
 GC_BASES = set("GCgc")
 ACGT_BASES = set("ACGTacgt")
+
+# Canonical (TTAGGG)n telomeric repeat used by M. oryzae and most other
+# filamentous ascomycetes, checked in both orientations since a contig's
+# assembled strand/direction relative to the chromosome end is not known
+# a priori.
+TELOMERE_MOTIFS = ("TTAGGG", "CCCTAA")
 
 
 def read_contig_lengths_and_gc(fasta: Path) -> dict[str, tuple[int, int, int]]:
@@ -97,6 +110,65 @@ def read_masked_fractions(masked_fasta: Path) -> dict[str, float]:
     }
 
 
+def _longest_tandem_run(seq: str, motif: str) -> int:
+    """Longest run of immediately-consecutive (tandem) copies of motif in seq."""
+    n = len(motif)
+    best = current = 0
+    i = 0
+    while i <= len(seq) - n:
+        if seq[i : i + n] == motif:
+            current += 1
+            best = max(best, current)
+            i += n
+        else:
+            current = 0
+            i += 1
+    return best
+
+
+def read_telomere_flags(
+    fasta: Path, window_bp: int, min_repeats: int
+) -> dict[str, tuple[bool, bool]]:
+    """Return {contig_id: (telomere_start, telomere_end)}: whether a tandem
+    run of >= min_repeats telomeric repeat units (in either orientation) is
+    found within the first/last window_bp bases of the contig.
+    """
+    start_buffers: dict[str, str] = {}
+    end_buffers: dict[str, str] = {}
+    contig_id: str | None = None
+
+    with fasta.open("r") as infile:
+        for line in infile:
+            if line.startswith(">"):
+                header = line[1:].rstrip("\n")
+                contig_id = header.split(maxsplit=1)[0]
+                start_buffers[contig_id] = ""
+                end_buffers[contig_id] = ""
+                continue
+
+            if contig_id is None:
+                continue
+
+            seq = line.strip().upper()
+            if len(start_buffers[contig_id]) < window_bp:
+                start_buffers[contig_id] = (start_buffers[contig_id] + seq)[:window_bp]
+            end_buffers[contig_id] = (end_buffers[contig_id] + seq)[-window_bp:]
+
+    flags: dict[str, tuple[bool, bool]] = {}
+    for cid in start_buffers:
+        start_hit = any(
+            _longest_tandem_run(start_buffers[cid], motif) >= min_repeats
+            for motif in TELOMERE_MOTIFS
+        )
+        end_hit = any(
+            _longest_tandem_run(end_buffers[cid], motif) >= min_repeats
+            for motif in TELOMERE_MOTIFS
+        )
+        flags[cid] = (start_hit, end_hit)
+
+    return flags
+
+
 def read_sequence_report_fields(
     sequence_report: Path, id_map: Path
 ) -> dict[str, dict[str, str]]:
@@ -144,6 +216,8 @@ def calculate_contig_metrics(
     sequence_report: Path | None = None,
     id_map: Path | None = None,
     masked_fasta: Path | None = None,
+    telomere_window_bp: int = 1000,
+    telomere_min_repeats: int = 5,
 ) -> list[dict[str, object]]:
     contig_stats = read_contig_lengths_and_gc(fasta)
     gene_counts = read_gene_counts(gff) if gff is not None else None
@@ -155,6 +229,7 @@ def calculate_contig_metrics(
     masked_fractions = (
         read_masked_fractions(masked_fasta) if masked_fasta is not None else None
     )
+    telomere_flags = read_telomere_flags(fasta, telomere_window_bp, telomere_min_repeats)
 
     rows = []
     for contig_id, (length_bp, gc_count, acgt_count) in contig_stats.items():
@@ -168,6 +243,7 @@ def calculate_contig_metrics(
         repeat_fraction = (
             masked_fractions.get(contig_id, "") if masked_fractions is not None else ""
         )
+        telomere_start, telomere_end = telomere_flags.get(contig_id, (False, False))
         rows.append(
             {
                 "isolate_id": isolate_id,
@@ -178,6 +254,8 @@ def calculate_contig_metrics(
                 "repeat_fraction": repeat_fraction,
                 "assembly_unit": report_fields.get("assembly_unit", ""),
                 "role": report_fields.get("role", ""),
+                "telomere_start": telomere_start,
+                "telomere_end": telomere_end,
             }
         )
     return rows
@@ -193,6 +271,8 @@ def write_contig_metrics(rows: list[dict[str, object]], output: Path) -> None:
         "repeat_fraction",
         "assembly_unit",
         "role",
+        "telomere_start",
+        "telomere_end",
     ]
     with output.open("w") as outfile:
         outfile.write("\t".join(columns) + "\n")
@@ -237,6 +317,20 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="windowmasker soft-masked version of --fasta (optional; enables "
         "repeat_fraction)",
     )
+    parser.add_argument(
+        "--telomere-window-bp",
+        type=int,
+        default=1000,
+        help="Bases from each contig end to scan for telomeric repeats (default: 1000)",
+    )
+    parser.add_argument(
+        "--telomere-min-repeats",
+        type=int,
+        default=5,
+        help="Minimum tandem (TTAGGG)n/(CCCTAA)n repeat units to call a telomere "
+        "(default: 5; real M. oryzae telomeres in test data showed 18-31 vs. "
+        "0-1 for non-telomeric ends)",
+    )
     parser.add_argument("--output", required=True, type=Path, help="Output TSV path")
     return parser.parse_args(argv)
 
@@ -252,6 +346,8 @@ def main(argv: list[str] | None = None) -> int:
         args.sequence_report,
         args.id_map,
         args.masked_fasta,
+        args.telomere_window_bp,
+        args.telomere_min_repeats,
     )
     write_contig_metrics(rows, args.output)
 

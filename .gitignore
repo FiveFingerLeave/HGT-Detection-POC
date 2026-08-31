@@ -1,0 +1,49 @@
+# Große Rohdaten und Sequenzdaten
+assemblies/
+raw_data/
+reads/
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.bam
+*.bai
+*.cram
+*.crai
+
+# Große Bioinformatikdateien
+*.fna
+*.fa
+*.fasta
+*.fas
+*.faa
+*.gff
+*.gff3
+*.hmm
+*.dmnd
+*.mmi
+
+# Automatisch erzeugte Ergebnis- und temporäre Dateien
+results/
+logs/
+benchmarks/
+temp/
+tmp/
+.snakemake/
+.pytest_cache/
+
+# Projektspezifische lokale Rohdaten-/Werkzeugordner
+data/
+starfish/
+
+# Python- und Editor-Artefakte
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/settings.json
+.DS_Store
+.claude/
+
+# Zugangsdaten und Geheimnisse
+.env
+*.key

@@ -7,6 +7,8 @@ separator: "-"
 
 pilot_samples:
   - GCA_004346965.1
+  - GCA_004785725.2
+  - GCA_046718735.1
 
 starfish:
   conda_env: starfish_env

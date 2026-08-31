@@ -52,6 +52,33 @@ wirtskontrastierende Isolate ohne GFF ergänzt: `GCA_004785725.2` (B71,
 Fingerhirse), 12 (B71, Weizen) und 16 (Guy11, Reis) HMM-validierte
 YR-Kandidaten, keine Header-Warnungen bei keinem der drei Isolate.
 
+## 2026-08-31 — Mitochondriale Contigs von mChr-Kandidaten trennen
+
+**Entscheidung:** `calculate_contig_metrics.py` bekommt eine `assembly_unit`-
+Spalte, befüllt über das originale NCBI `sequence_report.jsonl` (Feld
+`assemblyUnit`), verknüpft über die alte-ID/neue-ID-Mapping-Tabelle. Dafür
+hat `config/samples.tsv` eine neue optionale Spalte `sequence_report`.
+
+**Begründung:** In der ersten Contig-Metrik-Tabelle fiel bei zwei der drei
+Pilotisolate je ein auffälliger Ausreißer-Contig auf: ca. 35 kb lang und mit
+~28,6 % GC deutlich von allen anderen Contigs (1,9–8,8 Mb, ~48–51 % GC)
+abweichend — in `GCA_004785725.2` (B71) `CP060338.1`, in `GCA_046718735.1`
+(Guy11) `CM102890.1`. Prüfung im jeweiligen `sequence_report.jsonl` zeigt:
+Beide sind als `"assemblyUnit": "non-nuclear"`,
+`"assignedMoleculeLocationType": "Mitochondrion"` deklariert — es handelt
+sich um das mitochondriale Genom, nicht um ein akzessorisches
+Kern-Mini-Chromosom. Größe (~35 kb) und niedriger GC-Gehalt sind für
+*M. oryzae*-mtDNA typisch. Der Pilot `GCA_004346965.1` enthält kein
+separates MT-Contig in seiner Assembly.
+
+**Konsequenz:** Jede spätere mChr-Klassifikation (`core_like`,
+`accessory_candidate`, `mChr_candidate`, `uncertain`) muss Contigs mit
+`assembly_unit == "non-nuclear"` vorab ausschließen. Ohne diesen Filter
+wäre das Mitogenom fälschlich als starker mChr-Kandidat erschienen (klein,
+Core-Gen-arm, stark abweichender GC-Gehalt) — ein Lehrbuchbeispiel für die
+in `Starfish_und_MiniChromosomen_Analyseplan.md` (Abschnitt 11) genannte
+Gefahr der Fehlzuordnung.
+
 ## 2026-08-31 — Starfish über `conda run -n starfish_env`
 
 **Entscheidung:** Die Snakemake-Regel `starfish_annotate_yr` ruft Starfish

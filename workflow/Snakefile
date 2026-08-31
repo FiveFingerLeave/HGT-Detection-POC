@@ -19,8 +19,17 @@ def sample_gff(wildcards):
     return samples.loc[wildcards.sample, "gff"]
 
 
+def has_sequence_report(sample: str) -> bool:
+    return samples.loc[sample, "sequence_report"].strip() != ""
+
+
+def sample_sequence_report(wildcards):
+    return samples.loc[wildcards.sample, "sequence_report"]
+
+
 include: "rules/headers.smk"
 include: "rules/starfish.smk"
+include: "rules/minichromosomes.smk"
 
 
 rule all:
@@ -28,4 +37,5 @@ rule all:
         expand(
             "results/starfish/{sample}/{sample}_YR.filt.gff",
             sample=config["pilot_samples"],
-        )
+        ),
+        "results/minichromosomes/contig_metrics.tsv",

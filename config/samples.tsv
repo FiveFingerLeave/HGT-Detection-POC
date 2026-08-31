@@ -1,4 +1,4 @@
-sample	assembly_accession	fasta	gff
-GCA_004346965.1	GCA_004346965.1	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/genomic.gff
-GCA_004785725.2	GCA_004785725.2	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004785725.2/GCA_004785725.2_ASM478572v2_genomic.fna
-GCA_046718735.1	GCA_046718735.1	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_046718735.1/GCA_046718735.1_KSU_PyrO_Guy11_1_genomic.fna
+sample	assembly_accession	fasta	gff	sequence_report
+GCA_004346965.1	GCA_004346965.1	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/genomic.gff	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/sequence_report.jsonl
+GCA_004785725.2	GCA_004785725.2	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004785725.2/GCA_004785725.2_ASM478572v2_genomic.fna		assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004785725.2/sequence_report.jsonl
+GCA_046718735.1	GCA_046718735.1	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_046718735.1/GCA_046718735.1_KSU_PyrO_Guy11_1_genomic.fna		assemblies/ncbi_dataset/ncbi_dataset/data/GCA_046718735.1/sequence_report.jsonl

@@ -1,4 +1,16 @@
 project_name: barragan_hgt
 
+# Must not occur inside any isolate/sample ID (e.g. NCBI accessions like
+# GCA_004346965.1 already contain '_'), otherwise starfish cannot reliably
+# split "<genomeID><separator><featureID>" back apart.
+separator: "-"
+
 pilot_samples:
   - GCA_004346965.1
+
+starfish:
+  conda_env: starfish_env
+  profile: /home/flori/miniforge3/envs/starfish_env/db/YRsuperfams.p1-512.hmm
+  proteins: /home/flori/miniforge3/envs/starfish_env/db/YRsuperfamRefs.faa
+  idtag: YR
+  threads: 6

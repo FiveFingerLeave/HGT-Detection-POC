@@ -12,6 +12,7 @@ rule normalize_fasta_headers:
         "python workflow/scripts/normalize_fasta_headers.py "
         "--fasta {input.fasta} --isolate-id {wildcards.sample} "
         "--output-fasta {output.fasta} --output-mapping {output.mapping} "
+        "--separator '{config[separator]}' "
         "> {log} 2>&1"
 
 

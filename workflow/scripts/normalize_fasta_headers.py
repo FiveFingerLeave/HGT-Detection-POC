@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Normalize FASTA headers to <isolate_id>_<original_id> and record an ID mapping."""
+"""Normalize FASTA headers to <isolate_id><separator><original_id> and record an ID mapping."""
 
 from __future__ import annotations
 
@@ -13,9 +13,23 @@ def normalize_fasta_headers(
     isolate_id: str,
     output_fasta: Path,
     mapping_tsv: Path,
+    separator: str = "_",
 ) -> None:
-    """Rewrite FASTA headers as ``<isolate_id>_<original_id>`` and write an
-    ``old_id -> new_id`` TSV mapping. Sequence lines are copied unchanged."""
+    """Rewrite FASTA headers as ``<isolate_id><separator><original_id>`` and
+    write an ``old_id -> new_id`` TSV mapping. Sequence lines are copied
+    unchanged.
+
+    ``separator`` must not itself occur inside ``isolate_id`` (e.g. NCBI
+    accessions like ``GCA_004346965.1`` already contain '_'), otherwise
+    downstream tools that split on the separator to recover the isolate ID
+    cannot do so unambiguously.
+    """
+    if separator in isolate_id:
+        raise ValueError(
+            f"separator '{separator}' occurs inside isolate_id '{isolate_id}'; "
+            "choose a separator that is not part of the isolate ID"
+        )
+
     seen_new_ids: set[str] = set()
     mapping: list[tuple[str, str]] = []
 
@@ -31,7 +45,7 @@ def normalize_fasta_headers(
             if not old_id:
                 raise ValueError(f"{input_fasta}:{line_number}: empty FASTA header")
 
-            new_id = f"{isolate_id}_{old_id}"
+            new_id = f"{isolate_id}{separator}{old_id}"
 
             if new_id in seen_new_ids:
                 raise ValueError(
@@ -64,6 +78,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         help="Path for old_id/new_id TSV mapping output",
     )
+    parser.add_argument(
+        "--separator",
+        default="_",
+        help="Character(s) separating isolate_id from the original id (default: '_')",
+    )
     return parser.parse_args(argv)
 
 
@@ -74,7 +93,11 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         normalize_fasta_headers(
-            args.fasta, args.isolate_id, args.output_fasta, args.output_mapping
+            args.fasta,
+            args.isolate_id,
+            args.output_fasta,
+            args.output_mapping,
+            args.separator,
         )
     except ValueError as exc:
         print(f"Error: {exc}", file=sys.stderr)

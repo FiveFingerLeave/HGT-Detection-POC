@@ -1,0 +1,24 @@
+import pandas as pd
+
+configfile: "config/parameters.yaml"
+
+samples = pd.read_csv("config/samples.tsv", sep="\t").set_index("sample", drop=False)
+
+
+def sample_fasta(wildcards):
+    return samples.loc[wildcards.sample, "fasta"]
+
+
+def sample_gff(wildcards):
+    return samples.loc[wildcards.sample, "gff"]
+
+
+include: "rules/headers.smk"
+
+
+rule all:
+    input:
+        expand(
+            "results/normalized/{sample}.validated.ok",
+            sample=config["pilot_samples"],
+        )

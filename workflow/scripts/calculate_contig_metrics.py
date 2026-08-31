@@ -188,6 +188,20 @@ def read_core_synteny(core_synteny: Path) -> dict[str, float]:
     return coverage
 
 
+def read_reference_synteny(reference_synteny: Path) -> dict[str, tuple[int, bool]]:
+    """Read {contig_id: (reference_core_hits, reference_core_consensus)} from
+    compute_reference_synteny.py output."""
+    result: dict[str, tuple[int, bool]] = {}
+    with reference_synteny.open("r") as infile:
+        next(infile)  # header
+        for line in infile:
+            if not line.strip():
+                continue
+            contig_id, hits, consensus = line.rstrip("\n").split("\t")
+            result[contig_id] = (int(hits), consensus == "True")
+    return result
+
+
 def read_sequence_report_fields(
     sequence_report: Path, id_map: Path
 ) -> dict[str, dict[str, str]]:
@@ -238,6 +252,7 @@ def calculate_contig_metrics(
     telomere_window_bp: int = 1000,
     telomere_min_repeats: int = 5,
     core_synteny: Path | None = None,
+    reference_synteny: Path | None = None,
 ) -> list[dict[str, object]]:
     contig_stats = read_contig_lengths_and_gc(fasta)
     gene_counts = read_gene_counts(gff) if gff is not None else None
@@ -252,6 +267,9 @@ def calculate_contig_metrics(
     telomere_flags = read_telomere_flags(fasta, telomere_window_bp, telomere_min_repeats)
     core_synteny_coverage = (
         read_core_synteny(core_synteny) if core_synteny is not None else None
+    )
+    reference_synteny_data = (
+        read_reference_synteny(reference_synteny) if reference_synteny is not None else None
     )
 
     rows = []
@@ -272,6 +290,11 @@ def calculate_contig_metrics(
             if core_synteny_coverage is not None
             else ""
         )
+        reference_core_hits, reference_core_consensus = (
+            reference_synteny_data.get(contig_id, ("", ""))
+            if reference_synteny_data is not None
+            else ("", "")
+        )
         rows.append(
             {
                 "isolate_id": isolate_id,
@@ -285,6 +308,8 @@ def calculate_contig_metrics(
                 "telomere_start": telomere_start,
                 "telomere_end": telomere_end,
                 "core_synteny_coverage": synteny,
+                "reference_core_hits": reference_core_hits,
+                "reference_core_consensus": reference_core_consensus,
             }
         )
     return rows
@@ -303,6 +328,8 @@ def write_contig_metrics(rows: list[dict[str, object]], output: Path) -> None:
         "telomere_start",
         "telomere_end",
         "core_synteny_coverage",
+        "reference_core_hits",
+        "reference_core_consensus",
     ]
     with output.open("w") as outfile:
         outfile.write("\t".join(columns) + "\n")
@@ -367,6 +394,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="compute_core_synteny.py output TSV (optional; enables core_synteny_coverage)",
     )
+    parser.add_argument(
+        "--reference-synteny",
+        type=Path,
+        default=None,
+        help="compute_reference_synteny.py output TSV (optional; enables "
+        "reference_core_hits/reference_core_consensus)",
+    )
     parser.add_argument("--output", required=True, type=Path, help="Output TSV path")
     return parser.parse_args(argv)
 
@@ -385,6 +419,7 @@ def main(argv: list[str] | None = None) -> int:
         args.telomere_window_bp,
         args.telomere_min_repeats,
         args.core_synteny,
+        args.reference_synteny,
     )
     write_contig_metrics(rows, args.output)
 

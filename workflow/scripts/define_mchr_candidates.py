@@ -18,35 +18,46 @@ intentional gray zone ("uncertain") rather than being forced into either
 class.
 
 Classes:
-- core_like: contig length at/above the core threshold. (Size-based only;
-  does not itself require broad core synteny.)
+- core_like: EITHER `reference_core_consensus` is True (collinear with the
+  core chromosomes of at least `consensus_min_hits` independent reference
+  genomes, see compute_reference_synteny.py and config/references.yaml) OR
+  contig length is at/above the core threshold (this isolate's own
+  internal size cutoff).
 - high_confidence_mChr: below the small-contig threshold with >=2
   independent lines of supporting evidence (repeat-enriched, GC-deviant,
-  gene-poor), telomeric repeats at both ends (a complete, single
-  chromosomal contig), AND low core-synteny coverage (< --core-synteny-low-
-  threshold, i.e. not a broad collinear match to a core chromosome). NOTE:
+  gene-poor, confirmed absent from every reference in the panel),
+  telomeric repeats at both ends (a complete, single chromosomal contig),
+  AND low core-synteny coverage (< --core-synteny-low-threshold, i.e. not
+  a broad collinear match to a core chromosome of the SAME isolate). NOTE:
   explicit long-read structural support beyond telomere completeness is
   not separately checked; treat this as a partial proxy, not a final call.
 - mChr_candidate: below the small-contig threshold with >=2 supporting
-  evidence lines, but telomeres are missing/incomplete and/or core-synteny
-  coverage is not confirmed low.
+  evidence lines, but telomeres are missing/incomplete and/or self core-
+  synteny coverage is not confirmed low.
 - accessory_region: below the small-contig threshold with exactly 1
   supporting evidence line.
 - uncertain: below the small-contig threshold with no supporting evidence,
   in the gray zone between the two length thresholds, when no core
   reference could be established for the isolate (e.g. a single-contig
-  assembly, or all contigs are non-nuclear), or when core-synteny coverage
-  is at/above --core-synteny-veto-coverage (broad collinearity with a core
-  chromosome - more likely an assembly fragment/duplicate of that
-  chromosome than a distinct element; this veto overrides any other
-  evidence). Also covers likely assembly fragments/repeat contigs that
-  cannot yet be told apart from a true mChr.
+  assembly, or all contigs are non-nuclear), or when self core-synteny
+  coverage is at/above --core-synteny-veto-coverage (broad collinearity
+  with a core chromosome of the SAME isolate - more likely an assembly
+  fragment/duplicate of it than a distinct element; this veto overrides
+  any other evidence). Also covers likely assembly fragments/repeat
+  contigs that cannot yet be told apart from a true mChr.
 - excluded_non_nuclear: assembly_unit indicates the mitochondrial/
   non-nuclear genome; not part of the core/accessory/mChr scheme.
 
-Core-synteny coverage (see compute_core_synteny.py) does not yet detect
-redundancy between two non-core contigs (e.g. two small scaffolds that are
-mutual duplicates) - only collinearity with a core-sized contig.
+Two distinct synteny signals are used, and must not be confused:
+- core_synteny_coverage (compute_core_synteny.py): collinearity to a
+  DIFFERENT, core-sized contig of the SAME isolate's own assembly (an
+  assembly-artifact/duplication check).
+- reference_core_hits/reference_core_consensus (compute_reference_synteny.py):
+  collinearity to independent, EXTERNAL reference genomes (a
+  species-wide conserved-core check). Neither yet detects redundancy
+  between two non-core contigs (e.g. two small scaffolds that are mutual
+  duplicates) - that is a separate, not-yet-implemented fragmentation
+  check.
 """
 
 from __future__ import annotations
@@ -67,12 +78,22 @@ COLUMNS = [
     "telomere_start",
     "telomere_end",
     "core_synteny_coverage",
+    "reference_core_hits",
+    "reference_core_consensus",
     "classification",
 ]
 
 
 def _parse_optional_float(value: str) -> float | None:
     return float(value) if value != "" else None
+
+
+def _parse_optional_int(value: str) -> int | None:
+    return int(value) if value != "" else None
+
+
+def _parse_optional_bool(value: str) -> bool | None:
+    return value == "True" if value != "" else None
 
 
 def read_rows(path: Path) -> list[dict[str, object]]:
@@ -94,6 +115,10 @@ def read_rows(path: Path) -> list[dict[str, object]]:
                     "telomere_end": raw["telomere_end"] == "True",
                     "core_synteny_coverage": _parse_optional_float(
                         raw["core_synteny_coverage"]
+                    ),
+                    "reference_core_hits": _parse_optional_int(raw["reference_core_hits"]),
+                    "reference_core_consensus": _parse_optional_bool(
+                        raw["reference_core_consensus"]
                     ),
                 }
             )
@@ -151,6 +176,12 @@ def classify_contigs(
             row = dict(row)
             if row["assembly_unit"] == "non-nuclear":
                 row["classification"] = "excluded_non_nuclear"
+            elif row.get("reference_core_consensus") is True:
+                # Collinear with the core chromosomes of multiple independent
+                # reference genomes: strong evidence of species-wide
+                # conserved core content, regardless of this isolate's own
+                # internal size/GC/repeat profile.
+                row["classification"] = "core_like"
             elif row["length_bp"] >= core_min_length_bp:
                 row["classification"] = "core_like"
             elif row["length_bp"] > small_max_length_bp or not has_reference:
@@ -184,6 +215,11 @@ def classify_contigs(
                     density = row["gene_count"] / row["length_bp"]
                     if density / reference_gene_density <= gene_density_ratio_threshold:
                         evidence += 1
+                if row.get("reference_core_hits") == 0:
+                    # Confirmed absent from every structural-tier reference
+                    # genome: independent support for lineage-specific
+                    # content (not merely "no data").
+                    evidence += 1
 
                 has_both_telomeres = bool(row.get("telomere_start")) and bool(
                     row.get("telomere_end")

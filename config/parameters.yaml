@@ -33,6 +33,19 @@ alignment:
   minimap2_preset: asm5
   minimap2_num_secondary: 5
   threads: 4
+  # Cross-lineage alignment against the reference panel (config/references.yaml)
+  # can see more divergence than the same-genome self-alignment above, so it
+  # gets its own, looser preset.
+  reference_minimap2_preset: asm20
+  # Fraction of a query contig's length that must align to a SINGLE core
+  # contig of a reference (not summed across several) to count as a "hit"
+  # against that reference.
+  min_coverage_per_reference: 0.3
+  # Alignment blocks below this mapping quality are excluded from synteny
+  # coverage - they indicate ambiguous/repetitive (multi-mapping) matches
+  # rather than confident 1:1 synteny. See docs/decisions.md for the case
+  # that motivated this (a repeat family inflating apparent core synteny).
+  min_mapq: 30
 
 # First-pass, provisional mChr classification thresholds
 # (workflow/scripts/define_mchr_candidates.py). Dataset-dependent; expect to

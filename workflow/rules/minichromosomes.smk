@@ -59,6 +59,7 @@ def contig_metrics_input(wildcards):
         "id_map": f"results/normalized/{wildcards.sample}.id_map.tsv",
         "masked_fasta": f"results/minichromosomes/{wildcards.sample}.masked.fna",
         "core_synteny": f"results/minichromosomes/{wildcards.sample}.core_synteny.tsv",
+        "reference_synteny": f"results/minichromosomes/{wildcards.sample}.reference_synteny.tsv",
     }
     if has_gff(wildcards.sample):
         inputs["gff"] = f"results/normalized/{wildcards.sample}.gff"
@@ -73,6 +74,7 @@ def contig_metrics_args(wildcards):
         f" --telomere-window-bp {config['mchr']['telomere_window_bp']}"
         f" --telomere-min-repeats {config['mchr']['telomere_min_repeats']}"
         f" --core-synteny results/minichromosomes/{wildcards.sample}.core_synteny.tsv"
+        f" --reference-synteny results/minichromosomes/{wildcards.sample}.reference_synteny.tsv"
     )
     if has_gff(wildcards.sample):
         args += f" --gff results/normalized/{wildcards.sample}.gff"

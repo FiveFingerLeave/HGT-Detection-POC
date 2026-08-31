@@ -183,6 +183,39 @@ def test_small_contig_with_no_evidence_is_uncertain():
     assert small["classification"] == "uncertain"
 
 
+def test_reference_core_consensus_overrides_small_size_to_core_like():
+    rows = [
+        make_row(contig_id="core", length_bp=5_000_000, gc_fraction=0.50, repeat_fraction=0.10),
+        make_row(
+            contig_id="small_but_conserved",
+            length_bp=200_000,
+            gc_fraction=0.40,
+            repeat_fraction=0.30,
+            reference_core_consensus=True,
+        ),
+    ]
+    result = classify_contigs(rows, **DEFAULTS)
+    small = next(r for r in result if r["contig_id"] == "small_but_conserved")
+    assert small["classification"] == "core_like"
+
+
+def test_zero_reference_hits_counts_as_an_evidence_line():
+    rows = [
+        make_row(contig_id="core", length_bp=5_000_000, gc_fraction=0.50, repeat_fraction=0.10),
+        make_row(
+            contig_id="small",
+            length_bp=200_000,
+            gc_fraction=0.40,  # 1 evidence line: GC deviation
+            repeat_fraction=0.10,  # matches core, no repeat evidence
+            gene_count=1000,  # matches core density, no gene-poor evidence
+            reference_core_hits=0,  # +1 evidence line: absent from every reference
+        ),
+    ]
+    result = classify_contigs(rows, **DEFAULTS)
+    small = next(r for r in result if r["contig_id"] == "small")
+    assert small["classification"] == "mChr_candidate"
+
+
 def test_no_core_reference_available_is_uncertain():
     rows = [make_row(contig_id="only_small", length_bp=200_000)]
     result = classify_contigs(rows, **DEFAULTS)
@@ -208,9 +241,9 @@ def test_missing_gene_count_does_not_crash_and_skips_that_evidence_line():
 def test_read_write_round_trip(tmp_path: Path) -> None:
     input_tsv = tmp_path / "in.tsv"
     input_tsv.write_text(
-        "isolate_id\tcontig_id\tlength_bp\tgc_fraction\tgene_count\trepeat_fraction\tassembly_unit\trole\ttelomere_start\ttelomere_end\tcore_synteny_coverage\n"
-        "ISO1\tc1\t5000000\t0.5000\t1000\t0.1000\tPrimary Assembly\tassembled-molecule\tTrue\tTrue\t0.0000\n"
-        "ISO1\tmt\t35000\t0.2900\t\t0.0500\tnon-nuclear\tassembled-molecule\tFalse\tFalse\t\n"
+        "isolate_id\tcontig_id\tlength_bp\tgc_fraction\tgene_count\trepeat_fraction\tassembly_unit\trole\ttelomere_start\ttelomere_end\tcore_synteny_coverage\treference_core_hits\treference_core_consensus\n"
+        "ISO1\tc1\t5000000\t0.5000\t1000\t0.1000\tPrimary Assembly\tassembled-molecule\tTrue\tTrue\t0.0000\t3\tTrue\n"
+        "ISO1\tmt\t35000\t0.2900\t\t0.0500\tnon-nuclear\tassembled-molecule\tFalse\tFalse\t\t\t\n"
     )
 
     rows = read_rows(input_tsv)

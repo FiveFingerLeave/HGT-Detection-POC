@@ -1,10 +1,44 @@
+from pathlib import Path
+
 import pandas as pd
+import yaml
 
 configfile: "config/parameters.yaml"
 
 samples = pd.read_csv(
     "config/samples.tsv", sep="\t", dtype=str, keep_default_na=False
 ).set_index("sample", drop=False)
+
+with open("config/references.yaml") as _references_file:
+    references_config = yaml.safe_load(_references_file)
+
+structural_references = references_config["structural"]
+reference_ids = [r["reference_id"] for r in structural_references]
+reference_by_id = {r["reference_id"]: r for r in structural_references}
+consensus_min_hits = references_config["consensus_min_hits"]
+
+known_accessory_by_reference: dict[str, list[str]] = {}
+for _entry in references_config.get("known_accessory_contigs", []):
+    known_accessory_by_reference.setdefault(_entry["reference_id"], []).append(
+        _entry["contig_id"]
+    )
+
+
+def reference_sequence_report(reference_id: str) -> str:
+    return str(Path(reference_by_id[reference_id]["fasta"]).parent / "sequence_report.jsonl")
+
+
+def structural_reference_ids_for_sample(sample: str) -> list[str]:
+    """Structural-tier reference IDs, excluding any reference that IS this
+    sample's own accession (a sample can itself be a panel reference, e.g.
+    Guy11/B71; comparing it to itself would trivially "hit" with 100%
+    identity and inflate its own consensus count)."""
+    own_accession = samples.loc[sample, "assembly_accession"]
+    return [
+        reference_id
+        for reference_id in reference_ids
+        if reference_by_id[reference_id]["accession"] != own_accession
+    ]
 
 
 def sample_fasta(wildcards):
@@ -29,6 +63,7 @@ def sample_sequence_report(wildcards):
 
 include: "rules/headers.smk"
 include: "rules/starfish.smk"
+include: "rules/reference_panel.smk"
 include: "rules/minichromosomes.smk"
 
 

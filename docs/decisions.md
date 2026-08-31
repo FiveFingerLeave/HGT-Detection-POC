@@ -256,6 +256,74 @@ Telomere + geringe Syntenie). `GCA_046718735.1-JAWCTR010000013.1` bleibt
 zusammengehörige Contigs desselben mChr über gegenseitige Homologie
 erkennen) ist die letzte fehlende Komponente aus dem 5-Klassen-Schema.
 
+## 2026-08-31 — Multi-Referenzpanel für Core/Synteny-Konsens
+
+**Entscheidung:** `config/references.yaml` definiert ein Referenzpanel mit
+zwei Qualitätsstufen:
+- `structural` (Chromosomen-nah/Long-Read, für Struktur/Synteny/mChr):
+  70-15 (GCA_000002495.2, einzige mit kuratierter NCBI-Annotation), Guy11
+  (GCA_046718735.1), B71 (GCA_004785725.2), CD156 (GCA_900474475.3,
+  Eleusine-Linie), US71 (GCA_900474175.3, Setaria-Linie).
+- `supplementary` (älter/fragmentiert, nur zur Diversitätserweiterung,
+  nicht für strukturelle Platzierung): BdMeh16 (GCA_001675605.1,
+  Bangladesch-MoT), EI9411 (GCA_001548775.1) und EI9604
+  (GCA_001548785.1, beide zweite Eleusine-Sublinie).
+
+"PH14 oder GY11" (dritte, global kontrastierende Reislinie) wurde auf
+Nutzerwunsch ausgelassen, da keine Accession lokal auffindbar war und
+keine geraten werden sollte.
+
+`workflow/scripts/list_reference_core_contigs.py` bestimmt pro Referenz
+die Core-Contigs (Länge ≥ `core_min_length_bp`, nicht-nukleär
+ausgeschlossen, dokumentierte Akzessorik manuell ausgeschlossen via
+`known_accessory_contigs`). Wichtig: `role` aus dem NCBI-Report ist bei
+nicht-skaffoldierten Contig-Level-Referenzen (CD156, US71) für JEDEN
+Contig `unplaced-scaffold`, unabhängig von der Größe — dort zählt nur die
+Länge.
+
+`workflow/scripts/compute_reference_synteny.py` richtet jedes Isolat
+gegen jede strukturelle Referenz aus (minimap2, Preset `asm20`,
+`--secondary=no`) und zählt `reference_core_hits` (Anzahl Referenzen mit
+Coverage ≥ 0,3 gegen deren Core-Contigs). `reference_core_consensus`
+(≥ `consensus_min_hits`, Default 2) überschreibt die interne
+Größen-Heuristik zu `core_like` — eine mit mehreren unabhängigen
+Referenzgenomen kollineare Sequenz gilt als Teil des konservierten
+Core-Genoms, unabhängig vom Aussehen im eigenen Isolat. Bestätigte 0
+Treffer zählen zusätzlich als Evidenzlinie für Akzessorik/mChr.
+
+**Zwei Bugs während der Entwicklung gefunden und behoben (wichtig für
+Ergebnisinterpretation):**
+
+1. **Selbst-Vergleich-Kontamination:** B71 und Guy11 sind sowohl
+   Test-Isolate als auch Panel-Referenzen. Ein Isolat gegen sich selbst
+   als Referenz zeigt trivial 100 % Identität und hätte den eigenen
+   Konsens künstlich aufgebläht. Fix: `structural_reference_ids_for_sample()`
+   im Snakefile schließt eine Referenz aus, deren `accession` mit der
+   `assembly_accession` des Samples übereinstimmt.
+
+2. **Fehlender Mapping-Qualitäts-/Ziel-Konzentrations-Filter:** B71s
+   1,9-Mb-Contig (`CP060337.1`, vermutetes dokumentiertes
+   Mini-Chromosom) zeigte gegen 70-15/CD156/Guy11 hunderte kurze,
+   über viele verschiedene Zielchromosomen verstreute Alignments mit
+   überwiegend niedriger `mapq` — das Muster eines im Core-Genom
+   mehrfach vorkommenden Repeat-/Transposon-Elements, nicht echter
+   1:1-Syntenie. Die ursprüngliche Coverage-Berechnung summierte das über
+   alle Ziel-Contigs hinweg auf und erzeugte so `reference_core_hits=3`
+   (fälschlich `core_like`). Fix: Coverage wird jetzt als **beste
+   Einzelziel-Coverage** (nicht Summe über alle Ziele) berechnet, und
+   Alignments mit `mapq < 30` werden ausgeschlossen. Nach dem Fix:
+   `reference_core_hits=1`, `consensus=False` → `uncertain` (weder
+   sicher Core noch sicher akzessorisch — angemessen vorsichtig).
+
+**Konsequenz:** Alle künftigen Synteny-Vergleiche (Self- und
+Referenz-basiert) müssen mapq-gefiltert und ziel-konzentriert bewertet
+werden; reine Coverage-Summen über mehrere Ziel-Contigs sind für
+Repeat-reiche Sequenzen nicht aussagekräftig. B71s mutmaßliches
+Mini-Chromosom bleibt nach Korrektur `uncertain`, nicht bestätigt oder
+widerlegt — die Diskrepanz zu "B71 hat ein dokumentiertes
+Mini-Chromosom" ist noch nicht mit der Originalpublikation
+abgeglichen.
+
 ## 2026-08-31 — Starfish über `conda run -n starfish_env`
 
 **Entscheidung:** Die Snakemake-Regel `starfish_annotate_yr` ruft Starfish

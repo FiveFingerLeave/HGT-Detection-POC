@@ -22,6 +22,8 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "telomere_start": False,
             "telomere_end": False,
             "core_synteny_coverage": "",
+            "reference_core_hits": "",
+            "reference_core_consensus": "",
         },
         {
             "isolate_id": "ISO1",
@@ -35,6 +37,8 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "telomere_start": False,
             "telomere_end": False,
             "core_synteny_coverage": "",
+            "reference_core_hits": "",
+            "reference_core_consensus": "",
         },
     ]
 
@@ -174,3 +178,21 @@ def test_calculate_contig_metrics_adds_core_synteny_coverage(tmp_path: Path) -> 
 
     assert rows[0]["core_synteny_coverage"] == 0.75
     assert rows[1]["core_synteny_coverage"] == 0.0
+
+
+def test_calculate_contig_metrics_adds_reference_synteny(tmp_path: Path) -> None:
+    fasta = tmp_path / "genome.fasta"
+    fasta.write_text(">contig1\nACGT\n>contig2\nACGT\n")
+    reference_synteny = tmp_path / "reference_synteny.tsv"
+    reference_synteny.write_text(
+        "contig_id\treference_core_hits\treference_core_consensus\n"
+        "contig1\t3\tTrue\n"
+        "contig2\t0\tFalse\n"
+    )
+
+    rows = calculate_contig_metrics(fasta, "ISO1", reference_synteny=reference_synteny)
+
+    assert rows[0]["reference_core_hits"] == 3
+    assert rows[0]["reference_core_consensus"] is True
+    assert rows[1]["reference_core_hits"] == 0
+    assert rows[1]["reference_core_consensus"] is False

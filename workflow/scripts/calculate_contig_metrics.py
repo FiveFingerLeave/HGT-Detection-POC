@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Calculate per-contig length, GC fraction and gene count as a first step
-towards mini-chromosome (mChr) candidate metrics.
+"""Calculate per-contig length, GC fraction, gene count and repeat fraction
+as a first step towards mini-chromosome (mChr) candidate metrics.
 
-Further columns from the mChr metric table (core_gene_count,
-repeat_fraction, TE_fraction, secreted_protein_count,
-effector_candidate_count, median_depth, depth_ratio_to_core, mchr_score,
-classification) require additional annotation/coverage inputs that are not
-yet available for all isolates and are added once those tools are wired up.
+`repeat_fraction` is the soft-masked base fraction from windowmasker
+(genome-self-content based masking, no curated repeat library). This is a
+coarse repeat-content proxy, not a curated TE-family annotation ("TE_fraction"
+in the target schema) - that requires a tool like RepeatMasker/EDTA with a
+species-appropriate repeat library and is deferred.
+
+Further columns from the mChr metric table (core_gene_count, TE_fraction,
+secreted_protein_count, effector_candidate_count, median_depth,
+depth_ratio_to_core, mchr_score) require additional annotation/coverage
+inputs that are not yet available for all isolates and are added once those
+tools are wired up.
 """
 
 from __future__ import annotations
@@ -62,10 +68,48 @@ def read_gene_counts(gff: Path) -> dict[str, int]:
     return counts
 
 
-def read_assembly_units(sequence_report: Path, id_map: Path) -> dict[str, str]:
-    """Return {new_id: assembly_unit} by joining the NCBI sequence report
-    (keyed on the original accession, e.g. 'non-nuclear' for the
-    mitochondrial genome) through the old_id -> new_id FASTA header mapping.
+def read_masked_fractions(masked_fasta: Path) -> dict[str, float]:
+    """Return {contig_id: fraction of soft-masked (lowercase) bases} from a
+    windowmasker-masked FASTA. Contig order/IDs must match the input FASTA.
+    """
+    fractions: dict[str, list[int]] = {}
+    contig_id: str | None = None
+
+    with masked_fasta.open("r") as infile:
+        for line in infile:
+            if line.startswith(">"):
+                header = line[1:].rstrip("\n")
+                contig_id = header.split(maxsplit=1)[0]
+                fractions[contig_id] = [0, 0]
+                continue
+
+            if contig_id is None:
+                continue
+
+            seq = line.strip()
+            entry = fractions[contig_id]
+            entry[0] += len(seq)
+            entry[1] += sum(1 for base in seq if base.islower())
+
+    return {
+        contig_id: (masked / total if total > 0 else 0.0)
+        for contig_id, (total, masked) in fractions.items()
+    }
+
+
+def read_sequence_report_fields(
+    sequence_report: Path, id_map: Path
+) -> dict[str, dict[str, str]]:
+    """Return {new_id: {"assembly_unit": ..., "role": ...}} by joining the
+    NCBI sequence report (keyed on the original accession) through the
+    old_id -> new_id FASTA header mapping.
+
+    `assembly_unit` flags non-nuclear (e.g. mitochondrial) sequences.
+    `role` distinguishes 'assembled-molecule' (a full chromosome) from
+    'unplaced-scaffold' (sequence the assembler could not anchor to a
+    chromosome, often because it is highly repetitive) - a small, repeat-rich
+    unplaced scaffold can look like an mChr candidate by the numbers but may
+    simply be unassembled/unanchored repetitive sequence.
     """
     old_to_new: dict[str, str] = {}
     with id_map.open("r") as mapfile:
@@ -76,7 +120,7 @@ def read_assembly_units(sequence_report: Path, id_map: Path) -> dict[str, str]:
             old_id, new_id = line.rstrip("\n").split("\t")
             old_to_new[old_id] = new_id
 
-    units: dict[str, str] = {}
+    fields: dict[str, dict[str, str]] = {}
     with sequence_report.open("r") as infile:
         for line in infile:
             if not line.strip():
@@ -85,9 +129,12 @@ def read_assembly_units(sequence_report: Path, id_map: Path) -> dict[str, str]:
             old_id = record.get("genbankAccession")
             new_id = old_to_new.get(old_id)
             if new_id is not None:
-                units[new_id] = record.get("assemblyUnit", "")
+                fields[new_id] = {
+                    "assembly_unit": record.get("assemblyUnit", ""),
+                    "role": record.get("role", ""),
+                }
 
-    return units
+    return fields
 
 
 def calculate_contig_metrics(
@@ -96,21 +143,30 @@ def calculate_contig_metrics(
     gff: Path | None = None,
     sequence_report: Path | None = None,
     id_map: Path | None = None,
+    masked_fasta: Path | None = None,
 ) -> list[dict[str, object]]:
     contig_stats = read_contig_lengths_and_gc(fasta)
     gene_counts = read_gene_counts(gff) if gff is not None else None
-    assembly_units = (
-        read_assembly_units(sequence_report, id_map)
+    sequence_report_fields = (
+        read_sequence_report_fields(sequence_report, id_map)
         if sequence_report is not None and id_map is not None
         else None
+    )
+    masked_fractions = (
+        read_masked_fractions(masked_fasta) if masked_fasta is not None else None
     )
 
     rows = []
     for contig_id, (length_bp, gc_count, acgt_count) in contig_stats.items():
         gc_fraction = gc_count / acgt_count if acgt_count > 0 else ""
         gene_count = gene_counts.get(contig_id, 0) if gene_counts is not None else ""
-        assembly_unit = (
-            assembly_units.get(contig_id, "") if assembly_units is not None else ""
+        report_fields = (
+            sequence_report_fields.get(contig_id, {})
+            if sequence_report_fields is not None
+            else {}
+        )
+        repeat_fraction = (
+            masked_fractions.get(contig_id, "") if masked_fractions is not None else ""
         )
         rows.append(
             {
@@ -119,7 +175,9 @@ def calculate_contig_metrics(
                 "length_bp": length_bp,
                 "gc_fraction": gc_fraction,
                 "gene_count": gene_count,
-                "assembly_unit": assembly_unit,
+                "repeat_fraction": repeat_fraction,
+                "assembly_unit": report_fields.get("assembly_unit", ""),
+                "role": report_fields.get("role", ""),
             }
         )
     return rows
@@ -132,7 +190,9 @@ def write_contig_metrics(rows: list[dict[str, object]], output: Path) -> None:
         "length_bp",
         "gc_fraction",
         "gene_count",
+        "repeat_fraction",
         "assembly_unit",
+        "role",
     ]
     with output.open("w") as outfile:
         outfile.write("\t".join(columns) + "\n")
@@ -170,6 +230,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="old_id/new_id TSV from normalize_fasta_headers.py (required with "
         "--sequence-report)",
     )
+    parser.add_argument(
+        "--masked-fasta",
+        type=Path,
+        default=None,
+        help="windowmasker soft-masked version of --fasta (optional; enables "
+        "repeat_fraction)",
+    )
     parser.add_argument("--output", required=True, type=Path, help="Output TSV path")
     return parser.parse_args(argv)
 
@@ -179,7 +246,12 @@ def main(argv: list[str] | None = None) -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
     rows = calculate_contig_metrics(
-        args.fasta, args.isolate_id, args.gff, args.sequence_report, args.id_map
+        args.fasta,
+        args.isolate_id,
+        args.gff,
+        args.sequence_report,
+        args.id_map,
+        args.masked_fasta,
     )
     write_contig_metrics(rows, args.output)
 

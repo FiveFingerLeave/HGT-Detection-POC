@@ -79,6 +79,71 @@ Core-Gen-arm, stark abweichender GC-Gehalt) — ein Lehrbuchbeispiel für die
 in `Starfish_und_MiniChromosomen_Analyseplan.md` (Abschnitt 11) genannte
 Gefahr der Fehlzuordnung.
 
+## 2026-08-31 — repeat_fraction über windowmasker, TE_fraction vertagt
+
+**Entscheidung:** `repeat_fraction` wird über `windowmasker` (NCBI BLAST+,
+bereits in `starfish_env` installiert) berechnet: Anteil weichmaskierter
+(kleingeschriebener) Basen pro Contig nach dem Standard-Zweischritt-Ablauf
+(`-mk_counts` → `-ustat ... -outfmt fasta`). Das ist eine
+bibliotheksfreie, genomsequenz-basierte Repetitivitäts-Schätzung.
+
+**Begründung:** Ein echtes `TE_fraction` (kuratierte Transposon-Familien,
+z. B. LTR/DNA-Transposon-Klassen) erfordert RepeatMasker/EDTA mit einer
+kuratierten, artspezifischen Repeat-Bibliothek — ein eigenständiges,
+größeres Infrastrukturvorhaben. `windowmasker` liefert ohne zusätzliche
+Bibliothek einen seriösen ersten Repetitivitäts-Proxy. Getestet: Pilot
+zeigt 14,1 % genomweit maskierten Anteil, plausibel für *M. oryzae*.
+
+**Konsequenz:** `TE_fraction` bleibt vorerst unbesetzt und wird erst
+ergänzt, wenn eine RepeatMasker/EDTA-Umgebung mit passender Bibliothek
+aufgesetzt wird. `repeat_fraction` darf nicht mit einer TE-Familienanalyse
+verwechselt werden.
+
+## 2026-08-31 — Erste mChr-Klassifikations-Heuristik
+
+**Entscheidung:** `define_mchr_candidates.py` klassifiziert jeden
+Kern-Contig (nicht `non-nuclear`) relativ zu einer pro Isolat berechneten
+Core-Referenz (längengewichteter Mittelwert von GC und Repeat-Anteil sowie
+Gendichte über Contigs ≥ `core_min_length_bp`, Default 1 Mb):
+
+- `core_like`: Länge ≥ 1 Mb.
+- Contigs ≤ 500 kb erhalten je 1 Evidenzpunkt für: Repeat-Anreicherung
+  ≥ 0,10 über Referenz, GC-Abweichung ≥ 0,03 absolut, Gendichte ≤ 50 % der
+  Referenz (nur wenn `gene_count` verfügbar ist).
+  - ≥2 Evidenzlinien → `mChr_candidate`
+  - genau 1 → `accessory_candidate`
+  - 0 → `uncertain`
+- Größe zwischen 500 kb und 1 Mb, oder keine Core-Referenz im Isolat
+  auffindbar → `uncertain`.
+
+Alle Schwellen liegen in `config/parameters.yaml` (`mchr:`-Sektion).
+
+**Begründung:** Entspricht der in
+`Starfish_und_MiniChromosomen_Analyseplan.md` (C2/C3) geforderten
+Kombination mehrerer unabhängiger Evidenzlinien statt einer einzelnen
+Schwelle, mit den aktuell tatsächlich verfügbaren Metriken.
+
+**Wichtiger Befund/Caveat:** Im Drei-Isolat-Testlauf wurden bei
+`GCA_046718735.1` (Guy11) fünf kleine Contigs (35–244 kb) als
+`accessory_candidate`/`mChr_candidate` markiert (hohe `repeat_fraction`
+von 33–96 %). Alle fünf sind laut NCBI `sequence_report.jsonl` als
+`role: unplaced-scaffold` gekennzeichnet — Sequenzstücke, die der
+Assembler wegen ihrer Repetitivität keinem der 7 Chromosomen zuordnen
+konnte. Das ist eine ebenso plausible Erklärung wie ein echtes
+akzessorisches Element (Fragmentierungs-/Fehlzuordnungsgefahr, siehe
+Analyseplan Abschnitt 11). Deshalb wurde eine `role`-Spalte
+(`assembled-molecule` vs. `unplaced-scaffold`, aus `sequence_report.jsonl`)
+in die Ausgabetabelle aufgenommen, aber bewusst NICHT in die
+Klassifikationslogik eingebaut — sie dient der manuellen Einordnung, nicht
+einer automatischen Ausschlussregel. `GCA_004785725.2` (B71) zeigt keine
+solchen Kandidaten (alle 8 Kern-Contigs `core_like`).
+
+**Konsequenz:** Jede inhaltliche Interpretation eines
+`mChr_candidate`/`accessory_candidate` muss die `role`-Spalte prüfen.
+Ein `unplaced-scaffold`-Kandidat braucht zusätzliche, unabhängige Evidenz
+(z. B. Synteny-Vergleich zu anderen Isolaten oder Read-Coverage), bevor er
+ernsthaft als akzessorisches Chromosom in Betracht gezogen wird.
+
 ## 2026-08-31 — Starfish über `conda run -n starfish_env`
 
 **Entscheidung:** Die Snakemake-Regel `starfish_annotate_yr` ruft Starfish

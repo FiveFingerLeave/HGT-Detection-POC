@@ -16,7 +16,9 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "length_bp": 8,
             "gc_fraction": 0.5,
             "gene_count": "",
+            "repeat_fraction": "",
             "assembly_unit": "",
+            "role": "",
         },
         {
             "isolate_id": "ISO1",
@@ -24,7 +26,9 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "length_bp": 8,
             "gc_fraction": 1.0,
             "gene_count": "",
+            "repeat_fraction": "",
             "assembly_unit": "",
+            "role": "",
         },
     ]
 
@@ -62,8 +66,8 @@ def test_calculate_contig_metrics_flags_non_nuclear_contig(tmp_path: Path) -> No
     id_map.write_text("old_id\tnew_id\nCP1\tISO1-CP1\nMT1\tISO1-MT1\n")
     sequence_report = tmp_path / "sequence_report.jsonl"
     sequence_report.write_text(
-        '{"genbankAccession": "CP1", "assemblyUnit": "Primary Assembly"}\n'
-        '{"genbankAccession": "MT1", "assemblyUnit": "non-nuclear"}\n'
+        '{"genbankAccession": "CP1", "assemblyUnit": "Primary Assembly", "role": "assembled-molecule"}\n'
+        '{"genbankAccession": "MT1", "assemblyUnit": "non-nuclear", "role": "assembled-molecule"}\n'
     )
 
     rows = calculate_contig_metrics(
@@ -72,3 +76,36 @@ def test_calculate_contig_metrics_flags_non_nuclear_contig(tmp_path: Path) -> No
 
     assert rows[0]["assembly_unit"] == "Primary Assembly"
     assert rows[1]["assembly_unit"] == "non-nuclear"
+
+
+def test_calculate_contig_metrics_flags_unplaced_scaffold_role(tmp_path: Path) -> None:
+    fasta = tmp_path / "genome.fasta"
+    fasta.write_text(">ISO1-A\nACGT\n>ISO1-B\nACGT\n")
+    id_map = tmp_path / "id_map.tsv"
+    id_map.write_text("old_id\tnew_id\nA\tISO1-A\nB\tISO1-B\n")
+    sequence_report = tmp_path / "sequence_report.jsonl"
+    sequence_report.write_text(
+        '{"genbankAccession": "A", "assemblyUnit": "Primary Assembly", "role": "assembled-molecule"}\n'
+        '{"genbankAccession": "B", "assemblyUnit": "Primary Assembly", "role": "unplaced-scaffold"}\n'
+    )
+
+    rows = calculate_contig_metrics(
+        fasta, "ISO1", sequence_report=sequence_report, id_map=id_map
+    )
+
+    assert rows[0]["role"] == "assembled-molecule"
+    assert rows[1]["role"] == "unplaced-scaffold"
+
+
+def test_calculate_contig_metrics_adds_repeat_fraction_from_masked_fasta(
+    tmp_path: Path,
+) -> None:
+    fasta = tmp_path / "genome.fasta"
+    fasta.write_text(">contig1\nACGTACGT\n>contig2\nACGTACGT\n")
+    masked_fasta = tmp_path / "genome.masked.fasta"
+    masked_fasta.write_text(">contig1\nACGTacgt\n>contig2\nACGTACGT\n")
+
+    rows = calculate_contig_metrics(fasta, "ISO1", masked_fasta=masked_fasta)
+
+    assert rows[0]["repeat_fraction"] == 0.5
+    assert rows[1]["repeat_fraction"] == 0.0

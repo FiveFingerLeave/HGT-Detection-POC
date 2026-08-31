@@ -16,3 +16,19 @@ starfish:
   proteins: /home/flori/miniforge3/envs/starfish_env/db/YRsuperfamRefs.faa
   idtag: YR
   threads: 6
+
+# windowmasker (NCBI BLAST+) is already installed in starfish_env. It gives
+# a library-free, genome-self-content repeat_fraction proxy - not a curated
+# TE-family annotation (see workflow/scripts/calculate_contig_metrics.py).
+repeat_masking:
+  conda_env: starfish_env
+
+# First-pass, provisional mChr classification thresholds
+# (workflow/scripts/define_mchr_candidates.py). Dataset-dependent; expect to
+# recalibrate as more isolates and evidence types are added.
+mchr:
+  core_min_length_bp: 1000000
+  small_max_length_bp: 500000
+  gc_deviation_threshold: 0.03
+  repeat_enrichment_threshold: 0.10
+  gene_density_ratio_threshold: 0.5

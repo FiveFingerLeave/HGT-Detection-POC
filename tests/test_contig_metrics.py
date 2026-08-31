@@ -21,6 +21,7 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "role": "",
             "telomere_start": False,
             "telomere_end": False,
+            "core_synteny_coverage": "",
         },
         {
             "isolate_id": "ISO1",
@@ -33,6 +34,7 @@ def test_calculate_contig_metrics_without_gff(tmp_path: Path) -> None:
             "role": "",
             "telomere_start": False,
             "telomere_end": False,
+            "core_synteny_coverage": "",
         },
     ]
 
@@ -158,3 +160,17 @@ def test_calculate_contig_metrics_below_min_repeats_is_not_a_telomere(
     )
 
     assert rows[0]["telomere_start"] is False
+
+
+def test_calculate_contig_metrics_adds_core_synteny_coverage(tmp_path: Path) -> None:
+    fasta = tmp_path / "genome.fasta"
+    fasta.write_text(">contig1\nACGT\n>contig2\nACGT\n")
+    core_synteny = tmp_path / "core_synteny.tsv"
+    core_synteny.write_text(
+        "contig_id\tcore_synteny_coverage\ncontig1\t0.7500\ncontig2\t0.0000\n"
+    )
+
+    rows = calculate_contig_metrics(fasta, "ISO1", core_synteny=core_synteny)
+
+    assert rows[0]["core_synteny_coverage"] == 0.75
+    assert rows[1]["core_synteny_coverage"] == 0.0

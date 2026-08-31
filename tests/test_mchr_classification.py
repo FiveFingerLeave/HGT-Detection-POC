@@ -79,7 +79,7 @@ def test_small_contig_with_one_evidence_line_is_accessory_region():
     assert small["classification"] == "accessory_region"
 
 
-def test_small_contig_with_two_evidence_lines_and_both_telomeres_is_high_confidence():
+def test_small_contig_with_evidence_telomeres_and_low_synteny_is_high_confidence():
     rows = [
         make_row(contig_id="core", length_bp=5_000_000, gc_fraction=0.50, repeat_fraction=0.10),
         make_row(
@@ -90,11 +90,69 @@ def test_small_contig_with_two_evidence_lines_and_both_telomeres_is_high_confide
             gene_count=1000,
             telomere_start=True,
             telomere_end=True,
+            core_synteny_coverage=0.0,
         ),
     ]
     result = classify_contigs(rows, **DEFAULTS)
     small = next(r for r in result if r["contig_id"] == "small")
     assert small["classification"] == "high_confidence_mChr"
+
+
+def test_small_contig_with_telomeres_but_missing_synteny_data_stays_candidate():
+    rows = [
+        make_row(contig_id="core", length_bp=5_000_000, gc_fraction=0.50, repeat_fraction=0.10),
+        make_row(
+            contig_id="small",
+            length_bp=200_000,
+            gc_fraction=0.40,
+            repeat_fraction=0.30,
+            gene_count=1000,
+            telomere_start=True,
+            telomere_end=True,
+            # core_synteny_coverage intentionally omitted (unknown)
+        ),
+    ]
+    result = classify_contigs(rows, **DEFAULTS)
+    small = next(r for r in result if r["contig_id"] == "small")
+    assert small["classification"] == "mChr_candidate"
+
+
+def test_small_contig_with_telomeres_but_high_synteny_stays_candidate():
+    rows = [
+        make_row(contig_id="core", length_bp=5_000_000, gc_fraction=0.50, repeat_fraction=0.10),
+        make_row(
+            contig_id="small",
+            length_bp=200_000,
+            gc_fraction=0.40,
+            repeat_fraction=0.30,
+            gene_count=1000,
+            telomere_start=True,
+            telomere_end=True,
+            core_synteny_coverage=0.3,  # below veto (0.5) but not "low" (0.1)
+        ),
+    ]
+    result = classify_contigs(rows, **DEFAULTS)
+    small = next(r for r in result if r["contig_id"] == "small")
+    assert small["classification"] == "mChr_candidate"
+
+
+def test_high_core_synteny_vetoes_to_uncertain_regardless_of_evidence():
+    rows = [
+        make_row(contig_id="core", length_bp=5_000_000, gc_fraction=0.50, repeat_fraction=0.10),
+        make_row(
+            contig_id="small",
+            length_bp=200_000,
+            gc_fraction=0.40,
+            repeat_fraction=0.30,
+            gene_count=1000,
+            telomere_start=True,
+            telomere_end=True,
+            core_synteny_coverage=0.9,  # broad match to a core contig
+        ),
+    ]
+    result = classify_contigs(rows, **DEFAULTS)
+    small = next(r for r in result if r["contig_id"] == "small")
+    assert small["classification"] == "uncertain"
 
 
 def test_small_contig_with_two_evidence_lines_and_one_telomere_stays_candidate():
@@ -150,9 +208,9 @@ def test_missing_gene_count_does_not_crash_and_skips_that_evidence_line():
 def test_read_write_round_trip(tmp_path: Path) -> None:
     input_tsv = tmp_path / "in.tsv"
     input_tsv.write_text(
-        "isolate_id\tcontig_id\tlength_bp\tgc_fraction\tgene_count\trepeat_fraction\tassembly_unit\trole\ttelomere_start\ttelomere_end\n"
-        "ISO1\tc1\t5000000\t0.5000\t1000\t0.1000\tPrimary Assembly\tassembled-molecule\tTrue\tTrue\n"
-        "ISO1\tmt\t35000\t0.2900\t\t0.0500\tnon-nuclear\tassembled-molecule\tFalse\tFalse\n"
+        "isolate_id\tcontig_id\tlength_bp\tgc_fraction\tgene_count\trepeat_fraction\tassembly_unit\trole\ttelomere_start\ttelomere_end\tcore_synteny_coverage\n"
+        "ISO1\tc1\t5000000\t0.5000\t1000\t0.1000\tPrimary Assembly\tassembled-molecule\tTrue\tTrue\t0.0000\n"
+        "ISO1\tmt\t35000\t0.2900\t\t0.0500\tnon-nuclear\tassembled-molecule\tFalse\tFalse\t\n"
     )
 
     rows = read_rows(input_tsv)

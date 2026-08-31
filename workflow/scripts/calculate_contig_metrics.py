@@ -15,11 +15,17 @@ species-appropriate repeat library and is deferred.
 assembly captured the true chromosome end there, per
 Starfish_und_MiniChromosomen_Analyseplan.md.
 
+`core_synteny_coverage` is the fraction of a contig's length covered by
+minimap2 self-alignment blocks to a *different*, core-sized contig of the
+same isolate (see compute_core_synteny.py) - high values indicate the
+contig is likely a fragment/duplicate of a core chromosome rather than a
+distinct element.
+
 Further columns from the mChr metric table (core_gene_count, TE_fraction,
 secreted_protein_count, effector_candidate_count, median_depth,
-depth_ratio_to_core, mchr_score, core-synteny) require additional
-annotation/coverage/alignment inputs that are not yet available for all
-isolates and are added once those tools are wired up.
+depth_ratio_to_core, mchr_score) require additional annotation/coverage
+inputs that are not yet available for all isolates and are added once
+those tools are wired up.
 """
 
 from __future__ import annotations
@@ -169,6 +175,19 @@ def read_telomere_flags(
     return flags
 
 
+def read_core_synteny(core_synteny: Path) -> dict[str, float]:
+    """Read {contig_id: core_synteny_coverage} from compute_core_synteny.py output."""
+    coverage: dict[str, float] = {}
+    with core_synteny.open("r") as infile:
+        next(infile)  # header
+        for line in infile:
+            if not line.strip():
+                continue
+            contig_id, value = line.rstrip("\n").split("\t")
+            coverage[contig_id] = float(value)
+    return coverage
+
+
 def read_sequence_report_fields(
     sequence_report: Path, id_map: Path
 ) -> dict[str, dict[str, str]]:
@@ -218,6 +237,7 @@ def calculate_contig_metrics(
     masked_fasta: Path | None = None,
     telomere_window_bp: int = 1000,
     telomere_min_repeats: int = 5,
+    core_synteny: Path | None = None,
 ) -> list[dict[str, object]]:
     contig_stats = read_contig_lengths_and_gc(fasta)
     gene_counts = read_gene_counts(gff) if gff is not None else None
@@ -230,6 +250,9 @@ def calculate_contig_metrics(
         read_masked_fractions(masked_fasta) if masked_fasta is not None else None
     )
     telomere_flags = read_telomere_flags(fasta, telomere_window_bp, telomere_min_repeats)
+    core_synteny_coverage = (
+        read_core_synteny(core_synteny) if core_synteny is not None else None
+    )
 
     rows = []
     for contig_id, (length_bp, gc_count, acgt_count) in contig_stats.items():
@@ -244,6 +267,11 @@ def calculate_contig_metrics(
             masked_fractions.get(contig_id, "") if masked_fractions is not None else ""
         )
         telomere_start, telomere_end = telomere_flags.get(contig_id, (False, False))
+        synteny = (
+            core_synteny_coverage.get(contig_id, "")
+            if core_synteny_coverage is not None
+            else ""
+        )
         rows.append(
             {
                 "isolate_id": isolate_id,
@@ -256,6 +284,7 @@ def calculate_contig_metrics(
                 "role": report_fields.get("role", ""),
                 "telomere_start": telomere_start,
                 "telomere_end": telomere_end,
+                "core_synteny_coverage": synteny,
             }
         )
     return rows
@@ -273,6 +302,7 @@ def write_contig_metrics(rows: list[dict[str, object]], output: Path) -> None:
         "role",
         "telomere_start",
         "telomere_end",
+        "core_synteny_coverage",
     ]
     with output.open("w") as outfile:
         outfile.write("\t".join(columns) + "\n")
@@ -331,6 +361,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "(default: 5; real M. oryzae telomeres in test data showed 18-31 vs. "
         "0-1 for non-telomeric ends)",
     )
+    parser.add_argument(
+        "--core-synteny",
+        type=Path,
+        default=None,
+        help="compute_core_synteny.py output TSV (optional; enables core_synteny_coverage)",
+    )
     parser.add_argument("--output", required=True, type=Path, help="Output TSV path")
     return parser.parse_args(argv)
 
@@ -348,6 +384,7 @@ def main(argv: list[str] | None = None) -> int:
         args.masked_fasta,
         args.telomere_window_bp,
         args.telomere_min_repeats,
+        args.core_synteny,
     )
     write_contig_metrics(rows, args.output)
 

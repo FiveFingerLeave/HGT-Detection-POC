@@ -212,6 +212,50 @@ basiert aktuell nur auf Größe, nicht auf Syntenie. Diese sind der
 nächste geplante Ausbauschritt und erfordern einen Aligner
 (minimap2/nucmer), der noch nicht eingebunden ist.
 
+## 2026-08-31 — Core-Synteny per minimap2-Selbst-Alignment
+
+**Entscheidung:** Neue Regeln `align_genome_self` (minimap2, Preset
+`asm5`, `--secondary=yes -N 5`, bereits in `starfish_env` vorhanden) und
+`compute_core_synteny.py` berechnen pro Contig `core_synteny_coverage`:
+den Anteil seiner Länge, der mit einem ANDEREN, core-großen Contig
+desselben Isolats kollinear ist (gemergte Alignment-Intervalle, triviale
+Self-Hits ausgeschlossen).
+
+`define_mchr_candidates.py` nutzt das zweifach:
+- **Veto:** `core_synteny_coverage ≥ 0.5` erzwingt `uncertain`, unabhängig
+  von anderer Evidenz (breite Kollinearität zu einem Core-Chromosom
+  spricht für Assembly-Fragment/Duplikat, nicht für ein eigenständiges
+  Element).
+- **Voraussetzung für `high_confidence_mChr`:** zusätzlich zu ≥2
+  Evidenzlinien und Telomeren an beiden Enden muss `core_synteny_coverage
+  < 0.1` sein (Kriterium "geringe Core-Syntenie" aus dem Nutzerschema).
+
+**Begründung:** Ergänzt das letzte fehlende Kriterium aus dem
+Nutzer-Schema für `high_confidence_mChr`. Ohne Synteny-Check hätte ein
+großes, aber schlicht dupliziertes Stück eines Core-Chromosoms fälschlich
+als eigenständiger mChr-Kandidat durchgehen können.
+
+**Beobachtung im Drei-Isolat-Testlauf:** Bei `GCA_046718735.1` (Guy11)
+richten sich die fünf `unplaced-scaffold`-Contigs (JAWCTR...) fast
+ausschließlich **untereinander** aus, nicht gegen die 7 echten
+Core-Chromosomen (`core_synteny_coverage = 0.0` für alle). Das bestätigt
+"geringe Core-Syntenie" — deutet aber gleichzeitig an, dass diese fünf
+Scaffolds möglicherweise redundante/überlappende Assemblierungsversuche
+derselben repetitiven Region sind, nicht fünf unabhängige Elemente. Diese
+Mutual-Redundanz zwischen NICHT-Core-Contigs wird von
+`compute_core_synteny.py` bewusst nicht erkannt (nur Kollinearität zu
+core-großen Contigs zählt) — das ist die separate, noch offene
+Fragmentierungsprüfung aus dem Nutzerschema.
+
+**Ergebnis:** Kein Contig im aktuellen Datensatz erreicht
+`high_confidence_mChr` (keiner erfüllt gleichzeitig Evidenz + beidseitige
+Telomere + geringe Syntenie). `GCA_046718735.1-JAWCTR010000013.1` bleibt
+`mChr_candidate` (Syntenie niedrig bestätigt, aber keine Telomere).
+
+**Noch offen:** Fragmentierungsprüfung (mehrere unverbundene, aber
+zusammengehörige Contigs desselben mChr über gegenseitige Homologie
+erkennen) ist die letzte fehlende Komponente aus dem 5-Klassen-Schema.
+
 ## 2026-08-31 — Starfish über `conda run -n starfish_env`
 
 **Entscheidung:** Die Snakemake-Regel `starfish_annotate_yr` ruft Starfish

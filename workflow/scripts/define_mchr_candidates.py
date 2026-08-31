@@ -18,27 +18,35 @@ intentional gray zone ("uncertain") rather than being forced into either
 class.
 
 Classes:
-- core_like: contig length at/above the core threshold. (The target
-  definition also requires broad core synteny; that check is not yet
-  wired up, so this is size-based only for now.)
+- core_like: contig length at/above the core threshold. (Size-based only;
+  does not itself require broad core synteny.)
 - high_confidence_mChr: below the small-contig threshold with >=2
   independent lines of supporting evidence (repeat-enriched, GC-deviant,
-  gene-poor) AND telomeric repeats detected at both ends (a complete,
-  single chromosomal contig). NOTE: the full biological definition also
-  wants low core synteny and explicit long-read structural support: those
-  are not yet checked here, so treat this as a partial proxy, not a final
-  call.
+  gene-poor), telomeric repeats at both ends (a complete, single
+  chromosomal contig), AND low core-synteny coverage (< --core-synteny-low-
+  threshold, i.e. not a broad collinear match to a core chromosome). NOTE:
+  explicit long-read structural support beyond telomere completeness is
+  not separately checked; treat this as a partial proxy, not a final call.
 - mChr_candidate: below the small-contig threshold with >=2 supporting
-  evidence lines, but telomeres are missing/incomplete at one or both ends.
+  evidence lines, but telomeres are missing/incomplete and/or core-synteny
+  coverage is not confirmed low.
 - accessory_region: below the small-contig threshold with exactly 1
   supporting evidence line.
 - uncertain: below the small-contig threshold with no supporting evidence,
-  or in the gray zone between the two length thresholds, or when no core
+  in the gray zone between the two length thresholds, when no core
   reference could be established for the isolate (e.g. a single-contig
-  assembly, or all contigs are non-nuclear). Also covers likely assembly
-  fragments/repeat contigs that cannot yet be told apart from a true mChr.
+  assembly, or all contigs are non-nuclear), or when core-synteny coverage
+  is at/above --core-synteny-veto-coverage (broad collinearity with a core
+  chromosome - more likely an assembly fragment/duplicate of that
+  chromosome than a distinct element; this veto overrides any other
+  evidence). Also covers likely assembly fragments/repeat contigs that
+  cannot yet be told apart from a true mChr.
 - excluded_non_nuclear: assembly_unit indicates the mitochondrial/
   non-nuclear genome; not part of the core/accessory/mChr scheme.
+
+Core-synteny coverage (see compute_core_synteny.py) does not yet detect
+redundancy between two non-core contigs (e.g. two small scaffolds that are
+mutual duplicates) - only collinearity with a core-sized contig.
 """
 
 from __future__ import annotations
@@ -58,6 +66,7 @@ COLUMNS = [
     "role",
     "telomere_start",
     "telomere_end",
+    "core_synteny_coverage",
     "classification",
 ]
 
@@ -83,6 +92,9 @@ def read_rows(path: Path) -> list[dict[str, object]]:
                     "role": raw["role"],
                     "telomere_start": raw["telomere_start"] == "True",
                     "telomere_end": raw["telomere_end"] == "True",
+                    "core_synteny_coverage": _parse_optional_float(
+                        raw["core_synteny_coverage"]
+                    ),
                 }
             )
         return rows
@@ -102,6 +114,8 @@ def classify_contigs(
     gc_deviation_threshold: float,
     repeat_enrichment_threshold: float,
     gene_density_ratio_threshold: float,
+    core_synteny_veto_coverage: float = 0.5,
+    core_synteny_low_threshold: float = 0.1,
 ) -> list[dict[str, object]]:
     rows_by_isolate: dict[str, list[dict[str, object]]] = {}
     for row in rows:
@@ -141,6 +155,13 @@ def classify_contigs(
                 row["classification"] = "core_like"
             elif row["length_bp"] > small_max_length_bp or not has_reference:
                 row["classification"] = "uncertain"
+            elif (
+                row.get("core_synteny_coverage") is not None
+                and row["core_synteny_coverage"] >= core_synteny_veto_coverage
+            ):
+                # Broad collinear match to a core chromosome: more likely an
+                # assembly fragment/duplicate of it than a distinct element.
+                row["classification"] = "uncertain"
             else:
                 evidence = 0
                 if (
@@ -164,8 +185,16 @@ def classify_contigs(
                     if density / reference_gene_density <= gene_density_ratio_threshold:
                         evidence += 1
 
+                has_both_telomeres = bool(row.get("telomere_start")) and bool(
+                    row.get("telomere_end")
+                )
+                has_low_synteny = (
+                    row.get("core_synteny_coverage") is not None
+                    and row["core_synteny_coverage"] < core_synteny_low_threshold
+                )
+
                 if evidence >= 2:
-                    if row.get("telomere_start") and row.get("telomere_end"):
+                    if has_both_telomeres and has_low_synteny:
                         row["classification"] = "high_confidence_mChr"
                     else:
                         row["classification"] = "mChr_candidate"
@@ -205,6 +234,20 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--gc-deviation-threshold", type=float, default=0.03)
     parser.add_argument("--repeat-enrichment-threshold", type=float, default=0.10)
     parser.add_argument("--gene-density-ratio-threshold", type=float, default=0.5)
+    parser.add_argument(
+        "--core-synteny-veto-coverage",
+        type=float,
+        default=0.5,
+        help="core_synteny_coverage at/above this forces 'uncertain' regardless of "
+        "other evidence (default: 0.5)",
+    )
+    parser.add_argument(
+        "--core-synteny-low-threshold",
+        type=float,
+        default=0.1,
+        help="core_synteny_coverage must be below this to qualify for "
+        "high_confidence_mChr (default: 0.1)",
+    )
     return parser.parse_args(argv)
 
 
@@ -220,6 +263,8 @@ def main(argv: list[str] | None = None) -> int:
         args.gc_deviation_threshold,
         args.repeat_enrichment_threshold,
         args.gene_density_ratio_threshold,
+        args.core_synteny_veto_coverage,
+        args.core_synteny_low_threshold,
     )
     write_rows(classified, args.output)
 

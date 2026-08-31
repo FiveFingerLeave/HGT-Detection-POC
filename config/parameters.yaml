@@ -23,6 +23,17 @@ starfish:
 repeat_masking:
   conda_env: starfish_env
 
+# minimap2 is already installed in starfish_env. Used for a per-isolate
+# self-vs-self genome alignment (workflow/scripts/compute_core_synteny.py)
+# to check whether a small contig shows broad collinearity with a core
+# chromosome of the same isolate. asm5 = assembly-to-assembly, ~5%
+# divergence preset, appropriate for same-genome/same-species alignment.
+alignment:
+  conda_env: starfish_env
+  minimap2_preset: asm5
+  minimap2_num_secondary: 5
+  threads: 4
+
 # First-pass, provisional mChr classification thresholds
 # (workflow/scripts/define_mchr_candidates.py). Dataset-dependent; expect to
 # recalibrate as more isolates and evidence types are added.
@@ -45,3 +56,11 @@ mchr:
   # tandem repeat units vs. 0-1 for non-telomeric ends - clear separation.
   telomere_window_bp: 1000
   telomere_min_repeats: 5
+  # core_synteny_coverage (fraction of a contig's length collinear with a
+  # different, core-sized contig via minimap2 self-alignment, see
+  # compute_core_synteny.py). >= veto forces "uncertain" (likely a core
+  # chromosome fragment/duplicate, not a distinct element); < low_threshold
+  # is required (together with >=2 evidence lines and telomeres at both
+  # ends) for high_confidence_mChr.
+  core_synteny_veto_coverage: 0.5
+  core_synteny_low_threshold: 0.1

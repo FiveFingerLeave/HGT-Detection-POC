@@ -31,6 +31,27 @@ Fehlermeldung ab, falls der gewählte Separator im Isolat-Namen selbst
 vorkommt. `starfish annotate` wird konsequent mit `--separator` aufgerufen,
 damit FASTA-Normalisierung und Starfish-Parsing konsistent bleiben.
 
+## 2026-08-31 — GFF ist pro Isolat optional
+
+**Entscheidung:** `config/samples.tsv` erlaubt eine leere `gff`-Spalte.
+`normalize_gff_seqids` und `validate_fasta_gff_ids` laufen nur für Isolate,
+die tatsächlich eine GFF-Datei angeben; `starfish_annotate_yr` läuft für
+diese Isolate ohne `--gff` (rein de-novo via MetaEuk/HMM).
+
+**Begründung:** Von 40 bisher heruntergeladenen *M. oryzae*-Assemblies hat
+nur `GCA_004346965.1` (der Pilot) eine NCBI-Genannotation als GFF; alle
+anderen liegen nur als FASTA + GenBank-Flatfile vor. Für die geplante
+Skalierung auf viele Isolate ist das voraussichtlich der Regelfall, nicht
+die Ausnahme. Ein Zwang zu vorhandener GFF hätte die Multi-Isolat-Pipeline
+faktisch blockiert.
+
+**Konsequenz:** Für den Drei-Isolat-Pilot wurden zwei zusätzliche,
+wirtskontrastierende Isolate ohne GFF ergänzt: `GCA_004785725.2` (B71,
+*Triticum aestivum*, Weizenblast-Referenzstamm) und `GCA_046718735.1`
+(Guy11, *Oryza sativa*, meistgenutzter Laborstamm). Ergebnis: 13 (Pilot,
+Fingerhirse), 12 (B71, Weizen) und 16 (Guy11, Reis) HMM-validierte
+YR-Kandidaten, keine Header-Warnungen bei keinem der drei Isolate.
+
 ## 2026-08-31 — Starfish über `conda run -n starfish_env`
 
 **Entscheidung:** Die Snakemake-Regel `starfish_annotate_yr` ruft Starfish

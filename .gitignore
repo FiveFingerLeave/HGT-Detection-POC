@@ -47,3 +47,6 @@ __pycache__/
 # Zugangsdaten und Geheimnisse
 .env
 *.key
+
+# Windows/NTFS Metadaten (z. B. bei Dateien via WSL-Mount heruntergeladen)
+*:Zone.Identifier

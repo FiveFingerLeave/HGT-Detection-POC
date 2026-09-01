@@ -25,7 +25,13 @@ rule cluster_and_score:
         candidate="results/clustering/candidate_pav_matrix.tsv",
         host_labels="config/samples.tsv",
     output:
-        "results/clustering/ari_summary.tsv",
+        ari_summary="results/clustering/ari_summary.tsv",
+        # Per-region ARI (candidate matrix only): a more sensitive,
+        # targeted complement to the whole-matrix ARI above, since a
+        # single discordant region can be diluted out of an aggregate
+        # PCA/k-means score by several unrelated candidate regions - see
+        # docs/decisions.md.
+        per_region_ari="results/clustering/candidate_per_region_ari.tsv",
     params:
         k=config["clustering"]["k"],
         n_components=config["clustering"]["n_components"],
@@ -38,5 +44,6 @@ rule cluster_and_score:
         "--core {input.core} --candidate {input.candidate} "
         "--host-labels {input.host_labels} "
         "--k {params.k} --n-components {params.n_components} "
-        "--output {output} "
+        "--output {output.ari_summary} "
+        "--per-region-output {output.per_region_ari} "
         "> {log} 2>&1"

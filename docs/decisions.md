@@ -141,6 +141,47 @@ aktuellen, wörtlich im Dokument beschriebenen Methode **nicht robust
 erfüllt** — das muss vor einer Förderzusage/Antragstellung transparent
 kommuniziert werden, nicht durch günstige Parameterwahl verdeckt werden.
 
+## 2026-09-01 — Pro-Region-ARI implementiert und direkt gegen aggregierte Methode verglichen
+
+**Entscheidung:** `cluster_and_score.py` bekommt eine neue Funktion
+`per_region_ari()`: statt einer PCA über die gesamte Kandidaten-Matrix
+wird für **jede Kandidaten-Region einzeln** der ARI zwischen ihrem
+Präsenz/Abwesenheits-Muster und der bekannten Wirtslinie berechnet
+(fehlende/"uncertain"-Werte werden pro Region ausgeschlossen, nicht
+geschätzt). `validate_clustering_synthetic.py` führt jetzt beide Methoden
+(A = aggregiertes PCA/k-means-ARI wie im Dokument beschrieben, B =
+Pro-Region-ARI) auf denselben synthetischen Daten aus und vergleicht sie
+direkt. Die neue Ausgabe `results/clustering/candidate_per_region_ari.tsv`
+steht auch im echten Pipeline-Lauf zur Verfügung
+(`workflow/rules/cluster.smk`).
+
+**Ergebnis des direkten Vergleichs (Monte-Carlo, 20 Wiederholungen):**
+
+| Szenario | Betroffene Isolate | Methode A (aggregiert) | Methode B (Pro-Region) |
+|---|---|---|---|
+| 5 Kandidatenregionen, 30 % Empfänger | 12/40 | 30 % Erkennungsrate | **95 %** Erkennungsrate |
+| 30 Kandidatenregionen, 15 % Empfänger (wörtliche Dokument-Parameter) | 6/40 | **0 %** Erkennungsrate | **70 %** Erkennungsrate |
+
+**Wichtiger methodischer Nebenbefund:** Bei 4 Wirtslinien, aber einem nur
+binären (0/1) Merkmal pro Region, kann der Pro-Region-ARI strukturell
+**nicht** nahe 1,0 liegen — nach dem Schubfachprinzip müssen mindestens
+zwei der vier Linien zufällig denselben Bit-Wert teilen, auch ganz ohne
+HGT (bei den obigen Läufen: "saubere" Regionen liegen im Schnitt bei ARI
+≈ 0,38–0,39). Aussagekräftig ist daher nicht der Absolutwert, sondern der
+**relative** Abstand: liegt die tatsächlich manipulierte Region klar unter
+dem Durchschnitt der übrigen Regionen? Das ist der Fall (0,17–0,26 vs.
+0,38–0,39) und wird über die Erkennungsrate ("korrekt als
+diskordanteste Region identifiziert") gemessen, nicht über einen
+absoluten Schwellenwert.
+
+**Konsequenz:** Der Pro-Region-Test ist bei beiden getesteten Szenarien
+deutlich sensitiver als der aggregierte Ansatz, erreicht aber selbst bei
+den Dokument-eigenen Parametern (30 Regionen, nur 6 betroffene Isolate)
+nur 70 % Erkennungsrate — ebenfalls kein Selbstläufer. Für den echten
+POC-Lauf empfiehlt sich, `candidate_per_region_ari.tsv` als primäres
+Diagnosewerkzeug zu verwenden und `ari_summary.tsv` (aggregiert) nur
+ergänzend, nicht umgekehrt.
+
 ## 2026-09-01 — R-Umgebung für Power-Analyse noch nicht eingerichtet
 
 **Entscheidung:** `power_analysis/glmm_power_sim.R` wurde 1:1 aus dem

@@ -47,6 +47,16 @@ alignment:
   # that motivated this (a repeat family inflating apparent core synteny).
   min_mapq: 30
 
+# Assembly-level QC (BUSCO completeness + QUAST contiguity), establishing a
+# comparable quality baseline across the pilot isolates and the reference
+# panel. Assembly-only: no raw reads are available for any of these genomes
+# (already-assembled NCBI submissions), so no read-QC/assembly/polishing
+# step is applicable here.
+qc:
+  conda_env: qc_env
+  busco_lineage: sordariomycetes_odb10
+  threads: 4
+
 # First-pass, provisional mChr classification thresholds
 # (workflow/scripts/define_mchr_candidates.py). Dataset-dependent; expect to
 # recalibrate as more isolates and evidence types are added.

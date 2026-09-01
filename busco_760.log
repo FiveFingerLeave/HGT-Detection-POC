@@ -1,0 +1,136 @@
+2026-08-31 22:05:52 DEBUG:busco.run_BUSCO	Command line: /home/flori/miniforge3/envs/qc_env/bin/busco -i assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna -o GCA_004346965.1 --out_path /tmp/busco_qc_test -l sordariomycetes_odb10 -m genome -c 4 -f
+2026-08-31 22:05:52 INFO:busco.run_BUSCO	***** Start a BUSCO v5.8.3 analysis, current time: 08/31/2026 22:05:52 *****
+2026-08-31 22:05:52 DEBUG:busco.ConfigManager	Getting config file
+2026-08-31 22:05:52 INFO:busco.ConfigManager	Configuring BUSCO with local environment
+2026-08-31 22:05:52 INFO:busco.BuscoConfig	Running genome mode
+2026-08-31 22:05:52 INFO:busco.BuscoDownloadManager	Downloading information on latest versions of BUSCO data...
+2026-08-31 22:05:54 DEBUG:busco.BuscoConfig	State of BUSCO config before run:
+2026-08-31 22:05:54 DEBUG:busco.BuscoConfig	{'_allow_no_value': False,
+ '_comment_prefixes': ('#', ';'),
+ '_converters': <configparser.ConverterMapping object at 0x79f0bedbe320>,
+ '_defaults': {},
+ '_delimiters': ('=', ':'),
+ '_dict': <class 'dict'>,
+ '_empty_lines_in_values': True,
+ '_inline_comment_prefixes': (),
+ '_input_filepath': 'assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna',
+ '_interpolation': <configparser.BasicInterpolation object at 0x79f13cc7f8b0>,
+ '_mode': 'genome',
+ '_optcre': re.compile('\n        (?P<option>                        # very permissive!\n            (?:(?!=|:)\\S)*             # non-delimiter non-whitespace\n            (?:\\s+(?:(?!=|:)\\S)+)*)    # optionally more wor, re.VERBOSE),
+ '_proxies': {'DEFAULT': <Section: DEFAULT>,
+              'augustus': <Section: augustus>,
+              'bbtools': <Section: bbtools>,
+              'busco_run': <Section: busco_run>,
+              'etraining': <Section: etraining>,
+              'gff2gbSmallDNA.pl': <Section: gff2gbSmallDNA.pl>,
+              'hmmsearch': <Section: hmmsearch>,
+              'makeblastdb': <Section: makeblastdb>,
+              'metaeuk': <Section: metaeuk>,
+              'miniprot': <Section: miniprot>,
+              'new_species.pl': <Section: new_species.pl>,
+              'optimize_augustus.pl': <Section: optimize_augustus.pl>,
+              'prodigal': <Section: prodigal>,
+              'sepp': <Section: sepp>,
+              'tblastn': <Section: tblastn>},
+ '_sections': {'augustus': {'command': '', 'path': ''},
+               'bbtools': {'command': '', 'path': ''},
+               'busco_run': {'auto-lineage': 'False',
+                             'auto-lineage-euk': 'False',
+                             'auto-lineage-prok': 'False',
+                             'batch_mode': 'False',
+                             'cpu': '4',
+                             'datasets_version': 'odb10',
+                             'download_base_url': 'https://busco-data.ezlab.org/v5/data/',
+                             'download_path': '/home/flori/promotion/barragan/busco_downloads',
+                             'force': 'True',
+                             'in': '/home/flori/promotion/barragan/assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna',
+                             'lineage_dataset': 'sordariomycetes_odb10',
+                             'main_out': '/tmp/busco_qc_test/GCA_004346965.1',
+                             'mode': 'genome',
+                             'offline': 'False',
+                             'opt-out-run-stats': 'False',
+                             'out': 'GCA_004346965.1',
+                             'out_path': '/tmp/busco_qc_test',
+                             'quiet': 'False',
+                             'restart': 'False',
+                             'skip_bbtools': 'False',
+                             'tar': 'False',
+                             'use_augustus': 'False',
+                             'use_metaeuk': 'False',
+                             'use_miniprot': 'False'},
+               'etraining': {'command': '', 'path': ''},
+               'gff2gbSmallDNA.pl': {'command': '', 'path': ''},
+               'hmmsearch': {'command': '', 'path': ''},
+               'makeblastdb': {'command': '', 'path': ''},
+               'metaeuk': {'command': '', 'path': ''},
+               'miniprot': {'command': '', 'path': ''},
+               'new_species.pl': {'command': '', 'path': ''},
+               'optimize_augustus.pl': {'command': '', 'path': ''},
+               'prodigal': {'command': '', 'path': ''},
+               'sepp': {'command': '', 'path': ''},
+               'tblastn': {'command': '', 'path': ''}},
+ '_strict': True,
+ 'conf_file': 'local environment',
+ 'default_section': 'DEFAULT',
+ 'downloader': <busco.BuscoDownloadManager.BuscoDownloadManager object at 0x79f0bedbe110>,
+ 'main_out': '/tmp/busco_qc_test/GCA_004346965.1',
+ 'params': {'augustus_parameters': None,
+            'augustus_species': None,
+            'auto-lineage': False,
+            'auto-lineage-euk': False,
+            'auto-lineage-prok': False,
+            'config_file': None,
+            'contig_break': None,
+            'cpu': 4,
+            'datasets_version': None,
+            'download': '==SUPPRESS==',
+            'download_base_url': None,
+            'download_path': None,
+            'evalue': None,
+            'force': True,
+            'help': '==SUPPRESS==',
+            'in': 'assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna',
+            'limit': None,
+            'lineage_dataset': 'sordariomycetes_odb10',
+            'list_datasets': '==SUPPRESS==',
+            'long': False,
+            'metaeuk_parameters': None,
+            'metaeuk_rerun_parameters': None,
+            'mode': 'genome',
+            'offline': False,
+            'opt-out-run-stats': False,
+            'out': 'GCA_004346965.1',
+            'out_path': '/tmp/busco_qc_test',
+            'quiet': False,
+            'restart': False,
+            'scaffold_composition': False,
+            'skip_bbtools': False,
+            'tar': False,
+            'use_augustus': False,
+            'use_metaeuk': False,
+            'use_miniprot': False,
+            'version': '==SUPPRESS=='},
+ 'run_stats': {'cpu': 4,
+               'force': True,
+               'input_file_size': 43237629,
+               'lineage_dataset': ['sordariomycetes_odb10'],
+               'mode': 'genome'}}
+2026-08-31 22:05:54 INFO:busco.BuscoRunner	Input file is /home/flori/promotion/barragan/assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna
+2026-08-31 22:05:54 INFO:busco.BuscoDownloadManager	Downloading file 'https://busco-data.ezlab.org/v5/data/lineages/sordariomycetes_odb10.2024-01-08.tar.gz'
+2026-08-31 22:06:18 DEBUG:busco.BuscoDownloadManager	md5 hash is d2eaf7b7dcdc98c696193200a64f680b
+2026-08-31 22:06:18 INFO:busco.BuscoDownloadManager	Decompressing file '/home/flori/promotion/barragan/busco_downloads/lineages/sordariomycetes_odb10.tar.gz'
+2026-08-31 22:06:24 DEBUG:busco.analysis.BuscoAnalysis	Check all required tools are accessible...
+2026-08-31 22:06:24 DEBUG:busco.analysis.BuscoAnalysis	Checking dataset for HMM profiles
+2026-08-31 22:06:25 INFO:busco.analysis.BuscoAnalysis	Running BUSCO using lineage dataset sordariomycetes_odb10 (eukaryota, 2024-01-08)
+2026-08-31 22:06:25 INFO:busco.busco_tools.Toolset	Running 1 job(s) on bbtools, starting at 08/31/2026 22:06:25
+2026-08-31 22:06:25 DEBUG:busco.busco_tools.Toolset	cmd call: stats.sh format=2 in=/home/flori/promotion/barragan/assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna n=10
+2026-08-31 22:06:25 INFO:busco.busco_tools.Toolset	[bbtools]	1 of 1 task(s) completed
+2026-08-31 22:06:25 DEBUG:busco.busco_tools.base	Tool: miniprot_index
+2026-08-31 22:06:25 DEBUG:busco.busco_tools.base	Version: 0.18-r281
+2026-08-31 22:06:25 INFO:busco.busco_tools.Toolset	Running 1 job(s) on miniprot_index, starting at 08/31/2026 22:06:25
+2026-08-31 22:06:26 DEBUG:busco.busco_tools.Toolset	cmd call: miniprot -t 4 -d /tmp/busco_qc_test/GCA_004346965.1/run_sordariomycetes_odb10/miniprot_output/ref.mpi /home/flori/promotion/barragan/assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna
+2026-08-31 22:06:26 INFO:busco.busco_tools.Toolset	[miniprot_index]	1 of 1 task(s) completed
+2026-08-31 22:06:27 DEBUG:busco.busco_tools.base	Tool: miniprot_align
+2026-08-31 22:06:27 DEBUG:busco.busco_tools.base	Version: 0.18-r281
+2026-08-31 22:06:27 INFO:busco.busco_tools.Toolset	Running 1 job(s) on miniprot_align, starting at 08/31/2026 22:06:27
+2026-08-31 22:06:27 DEBUG:busco.busco_tools.Toolset	cmd call: miniprot --trans -u -I --outs 0.95 -t 4 --gff /tmp/busco_qc_test/GCA_004346965.1/run_sordariomycetes_odb10/miniprot_output/ref.mpi /home/flori/promotion/barragan/busco_downloads/lineages/sordariomycetes_odb10/refseq_db.faa

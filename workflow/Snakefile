@@ -61,10 +61,27 @@ def sample_sequence_report(wildcards):
     return samples.loc[wildcards.sample, "sequence_report"]
 
 
+# Assembly-level QC baseline covers every genome we have an assembly for:
+# the pilot isolates (their original, un-normalized FASTA - header renaming
+# is irrelevant to assembly-level QC) plus the full reference panel.
+qc_genomes: dict[str, str] = {}
+qc_tiers: dict[str, str] = {}
+for _sample_id in config["pilot_samples"]:
+    qc_genomes[_sample_id] = samples.loc[_sample_id, "fasta"]
+    qc_tiers[_sample_id] = "pilot"
+for _ref in structural_references:
+    qc_genomes[_ref["reference_id"]] = _ref["fasta"]
+    qc_tiers[_ref["reference_id"]] = "structural"
+for _ref in references_config.get("supplementary", []):
+    qc_genomes[_ref["reference_id"]] = _ref["fasta"]
+    qc_tiers[_ref["reference_id"]] = "supplementary"
+
+
 include: "rules/headers.smk"
 include: "rules/starfish.smk"
 include: "rules/reference_panel.smk"
 include: "rules/minichromosomes.smk"
+include: "rules/assembly_qc.smk"
 
 
 rule all:
@@ -74,3 +91,4 @@ rule all:
             sample=config["pilot_samples"],
         ),
         "results/minichromosomes/contig_metrics.tsv",
+        "results/qc/assembly_qc_summary.tsv",

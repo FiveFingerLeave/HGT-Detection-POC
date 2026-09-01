@@ -1,1 +1,6 @@
 sample_id	host_lineage	read1	read2
+MZ5-1-6	Eleusine_coracana	data/isolates_poc/SRR8258940_1.fastq.gz	data/isolates_poc/SRR8258940_2.fastq.gz
+E34	Eleusine_coracana	data/isolates_poc/SRR9972916_1.fastq.gz	data/isolates_poc/SRR9972916_2.fastq.gz
+TH3	Oryza_sativa	data/isolates_poc/DRR059890_1.fastq.gz	data/isolates_poc/DRR059890_2.fastq.gz
+U167	Digitaria_sanguinalis	data/isolates_poc/SRR14705972_1.fastq.gz	data/isolates_poc/SRR14705972_2.fastq.gz
+Py13.1.023	Triticum_aestivum	data/isolates_poc/SRR40320334_1.fastq.gz	data/isolates_poc/SRR40320334_2.fastq.gz

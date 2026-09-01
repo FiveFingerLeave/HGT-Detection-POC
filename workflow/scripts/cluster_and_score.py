@@ -86,8 +86,21 @@ def cluster_and_score(
     pav_matrix: pd.DataFrame, host_labels: pd.Series, k: int, n_components: int = 10
 ) -> tuple["pd.Series | None", "pd.Series | None", float]:
     """Return (pca_coords, cluster_labels, ari). None/nan if the matrix has
-    too few isolates or regions to cluster meaningfully."""
-    n_isolates, n_regions = pav_matrix.shape
+    too few isolates or regions to cluster meaningfully.
+
+    Real PAV calls (unlike the clean synthetic 0/1 fixtures) include
+    "uncertain" calls encoded as NaN (ambiguous breadth/depth - see
+    pav_call.py) whenever an isolate's coverage of a region doesn't clearly
+    cross either threshold. sklearn's PCA rejects NaN outright, so any
+    region that is NaN for every isolate is dropped (it carries no
+    information), and remaining NaNs are imputed with that region's mean
+    presence frequency across the other isolates - a neutral, standard
+    treatment for missing genotype-style calls.
+    """
+    matrix = pav_matrix.dropna(axis=1, how="all")
+    matrix = matrix.fillna(matrix.mean())
+
+    n_isolates, n_regions = matrix.shape
     if n_isolates < 2 or n_regions < 1:
         return None, None, float("nan")
 
@@ -96,7 +109,7 @@ def cluster_and_score(
         return None, None, float("nan")
 
     pca = PCA(n_components=max_components)
-    coords = pca.fit_transform(pav_matrix.values)
+    coords = pca.fit_transform(matrix.values)
 
     k = min(k, n_isolates)
     clusters = KMeans(n_clusters=k, n_init=10, random_state=0).fit_predict(coords)

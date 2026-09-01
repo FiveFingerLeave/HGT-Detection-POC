@@ -29,6 +29,15 @@ data/references/*.gff3
 *.dmnd
 *.mmi
 
+# bwa-mem2/samtools/faidx Indexdateien (regenerierbar, teils >1 GB)
+*.fa.0123
+*.fa.amb
+*.fa.ann
+*.fa.bwt.2bit.64
+*.fa.pac
+*.fai
+*.paf
+
 # Automatisch erzeugte Ergebnis- und temporäre Dateien
 results/
 logs/

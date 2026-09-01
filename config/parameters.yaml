@@ -1,6 +1,9 @@
 mapping:
   conda_env: barragan-mapping
   threads: 8
+  # minimap2 preset for long-read isolate mapping; see
+  # config/samples_longread.tsv "platform" column (nanopore -> map-ont,
+  # pacbio -> map-pb), resolved per-sample in workflow/rules/mapping.smk.
 
 # PAV thresholds (Section 1 of the POC guideline). Starting values from the
 # guideline; calibrate against known mini-chromosome regions (mChrA,
@@ -12,9 +15,15 @@ pav:
   absent_breadth: 0.15
 
 starfish:
-  conda_env: barragan-starfish
+  # Reusing the existing starfish_env from earlier project work (already
+  # has starfish, minimap2, metaeuk, hmmer) rather than building a
+  # redundant new environment from envs/starfish.yaml.
+  conda_env: starfish_env
+  profile: /home/flori/miniforge3/envs/starfish_env/db/YRsuperfams.p1-512.hmm
+  proteins: /home/flori/miniforge3/envs/starfish_env/db/YRsuperfamRefs.faa
   idtag: YR
   threads: 8
+  separator: "-"
 
 clustering:
   k: 4 # number of known host lineages (rice, wheat, finger millet, wild grass)

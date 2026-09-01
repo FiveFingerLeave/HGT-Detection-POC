@@ -61,9 +61,29 @@ scenarios <- list(
 
 results <- lapply(scenarios, function(s) do.call(power_for_scenario, s))
 
+# NOTE: summary.powerSim's data.frame has columns
+# successes/trials/mean/lower/upper - NOT "Power" (a bug in the guideline's
+# original snippet: summary(x)$Power is always NULL, so sprintf silently
+# returned character(0) and nothing printed). Also note this is an
+# "observed power" calculation, not power for the guideline's stated
+# effect_rr specifically: powerSim() is never told a target effect size,
+# so it tests whatever coefficient glmmTMB happened to estimate from the
+# ONE simulated dataset built with that effect_rr - a known-biased,
+# high-variance shortcut (simr itself warns "this appears to be an
+# 'observed power' calculation"). A proper fix (explicitly overriding
+# fixef() to the target effect before powerSim) was attempted and found
+# incompatible with this simr/glmmTMB combination (simr 1.0.7's fixef<-
+# dispatches to an S4 generic that glmmTMB objects don't support - see
+# docs/decisions.md). Treat these numbers as a rough, optimistic-biased
+# approximation, not a rigorous power analysis.
 cat("\nPower for the Donor x Starship interaction effect, by scenario:\n")
 for (name in names(results)) {
-  cat(sprintf("  %-13s %s\n", name, summary(results[[name]])$Power))
+  s <- summary(results[[name]])
+  cat(sprintf(
+    "  %-13s %.1f%% (%.1f - %.1f%%), %d/%d sims succeeded\n",
+    name, 100 * s$mean, 100 * s$lower, 100 * s$upper,
+    s$successes, s$trials
+  ))
 }
 cat("\nFeasibility checklist (Section 4 of the guideline):\n")
 cat("  - Power >= 80% for main effects in the moderate scenario?\n")

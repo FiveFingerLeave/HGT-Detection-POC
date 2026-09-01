@@ -54,7 +54,7 @@ rule pav_call:
 
 rule combine_pav_calls:
     input:
-        expand("results/pav_calls/{sample}.pav.tsv", sample=sample_ids),
+        expand("results/pav_calls/{sample}.pav.tsv", sample=all_sample_ids),
     output:
         "results/pav_calls/candidate_table.tsv",
     shell:

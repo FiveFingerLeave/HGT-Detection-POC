@@ -1,6 +1,23 @@
 # Section 3 of the POC guideline: core vs. candidate PAV matrices, PCA +
 # k-means clustering, Adjusted Rand Index against host-lineage labels.
 
+rule combine_host_labels:
+    # Short-read (config/samples.tsv) and long-read (config/samples_longread.tsv)
+    # isolates carry host_lineage in separate tables; clustering needs one
+    # unified sample_id -> host_lineage lookup covering every mapped sample.
+    input:
+        short="config/samples.tsv",
+        long="config/samples_longread.tsv",
+    output:
+        "results/clustering/host_labels.tsv",
+    run:
+        import pandas as pd
+
+        short_df = pd.read_csv(input.short, sep="\t", dtype=str)[["sample_id", "host_lineage"]]
+        long_df = pd.read_csv(input.long, sep="\t", dtype=str)[["sample_id", "host_lineage"]]
+        pd.concat([short_df, long_df], ignore_index=True).to_csv(output[0], sep="\t", index=False)
+
+
 rule build_pav_matrices:
     input:
         candidate_table="results/pav_calls/candidate_table.tsv",
@@ -23,7 +40,7 @@ rule cluster_and_score:
     input:
         core="results/clustering/core_pav_matrix.tsv",
         candidate="results/clustering/candidate_pav_matrix.tsv",
-        host_labels="config/samples.tsv",
+        host_labels="results/clustering/host_labels.tsv",
     output:
         ari_summary="results/clustering/ari_summary.tsv",
         # Per-region ARI (candidate matrix only): a more sensitive,

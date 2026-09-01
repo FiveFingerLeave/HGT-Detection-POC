@@ -17,6 +17,22 @@ def test_cluster_and_score_recovers_perfect_lineage_structure():
     assert ari > 0.9
 
 
+def test_cluster_and_score_imputes_nan_instead_of_crashing():
+    # Real PAV calls include "uncertain" (NaN) entries that sklearn's PCA
+    # rejects outright; cluster_and_score must impute rather than crash,
+    # and an all-NaN region must be dropped rather than imputed as NaN.
+    lineage_a = pd.DataFrame(np.tile([1, 1, 0, 0, float("nan")], (10, 1)))
+    lineage_b = pd.DataFrame(np.tile([0, 0, 1, 1, float("nan")], (10, 1)))
+    matrix = pd.concat([lineage_a, lineage_b], ignore_index=True)
+    matrix.iloc[0, 0] = float("nan")
+    labels = pd.Series(["A"] * 10 + ["B"] * 10)
+
+    _, clusters, ari = cluster_and_score(matrix, labels, k=2, n_components=2)
+
+    assert clusters is not None
+    assert ari > 0.9
+
+
 def test_cluster_and_score_handles_too_few_isolates():
     matrix = pd.DataFrame([[1, 0, 1]])
     labels = pd.Series(["A"])

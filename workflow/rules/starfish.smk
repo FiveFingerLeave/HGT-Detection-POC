@@ -1,57 +1,61 @@
-def starfish_annotate_input(wildcards):
-    inputs = {"fasta": f"results/normalized/{wildcards.sample}.fna"}
-    if has_gff(wildcards.sample):
-        inputs["validated"] = f"results/normalized/{wildcards.sample}.validated.ok"
-        inputs["gff"] = f"results/normalized/{wildcards.sample}.gff"
-    return inputs
+# Section 2 of the POC guideline: structure-based Starship detection.
+# Runs over every genome (reference panel + any isolate assemblies) listed
+# in data/references/panel_manifest.tsv - add isolate assemblies there too
+# once available, or extend with a second manifest for data/isolates_poc/.
 
-
-def starfish_gff_source(wildcards):
-    return f"results/normalized/{wildcards.sample}.gff" if has_gff(wildcards.sample) else ""
-
-
-def starfish_gff_args(wildcards):
-    if not has_gff(wildcards.sample):
-        return ""
-    return f"--gff results/starfish/{wildcards.sample}/{wildcards.sample}_gff.tsv"
-
-
-rule starfish_annotate_yr:
+rule starfish_annotate:
     input:
-        unpack(starfish_annotate_input),
+        assembly=lambda wc: references.set_index("reference_id").loc[wc.genome_id, "fasta"],
+        gff=lambda wc: references.set_index("reference_id").loc[wc.genome_id, "gff"],
     output:
-        gff="results/starfish/{sample}/{sample}_YR.filt.gff",
-        fasta="results/starfish/{sample}/{sample}_YR.filt.fas",
+        directory("results/starfish/{genome_id}"),
     params:
-        assembly_table="results/starfish/{sample}/{sample}_assembly.tsv",
-        gff_table="results/starfish/{sample}/{sample}_gff.tsv",
-        gff_source=starfish_gff_source,
-        gff_args=starfish_gff_args,
-        outdir="results/starfish/{sample}",
-        tempdir="results/starfish/{sample}/tmp",
-        profile=config["starfish"]["profile"],
-        proteins=config["starfish"]["proteins"],
-        idtag=config["starfish"]["idtag"],
         conda_env=config["starfish"]["conda_env"],
-        separator=config["separator"],
+        idtag=config["starfish"]["idtag"],
+        threads=config["starfish"]["threads"],
     log:
-        "logs/starfish/{sample}_annotate.log",
-    threads: config["starfish"]["threads"]
+        "logs/starfish/{genome_id}_annotate.log",
     shell:
-        "mkdir -p {params.outdir} {params.tempdir} && "
-        "printf '%s\\t%s\\n' {wildcards.sample} {input.fasta} > {params.assembly_table} && "
-        "if [ -n '{params.gff_source}' ]; then "
-        "printf '%s\\t%s\\n' {wildcards.sample} {params.gff_source} > {params.gff_table}; "
-        "fi && "
-        "conda run -n {params.conda_env} starfish annotate "
-        "--assembly {params.assembly_table} "
-        "--profile {params.profile} "
-        "--proteins {params.proteins} "
-        "--prefix {wildcards.sample}_YR "
-        "--idtag {params.idtag} "
-        "--outdir {params.outdir} "
-        "--tempdir {params.tempdir} "
-        "--threads {threads} "
-        "--separator '{params.separator}' "
-        "{params.gff_args} "
+        "conda run -n {params.conda_env} starfish annotate -T {params.threads} "
+        "-x {wildcards.genome_id} -i {params.idtag} "
+        "-a {input.assembly} -g {input.gff} "
+        "-o {output} "
+        "> {log} 2>&1"
+
+
+rule starfish_insert:
+    input:
+        "results/starfish/{genome_id}",
+    output:
+        directory("results/starfish/{genome_id}.inserts"),
+    params:
+        conda_env=config["starfish"]["conda_env"],
+    log:
+        "logs/starfish/{genome_id}_insert.log",
+    shell:
+        "conda run -n {params.conda_env} starfish insert -x {wildcards.genome_id} "
+        "-a {input}/{wildcards.genome_id}.starships.bed "
+        "-o {output} "
+        "> {log} 2>&1"
+
+
+rule stargraph_build:
+    input:
+        assemblies=references["fasta"].tolist(),
+        starships=expand(
+            "results/starfish/{genome_id}", genome_id=reference_ids
+        ),
+    output:
+        directory("results/starfish/pangenome_graph"),
+    params:
+        conda_env=config["starfish"]["conda_env"],
+    log:
+        "logs/starfish/stargraph_build.log",
+    shell:
+        # Stargraph is not on conda/bioconda - install from
+        # https://github.com/egluckthaler/stargraph into {params.conda_env} first.
+        "conda run -n {params.conda_env} stargraph build "
+        "--assemblies {input.assemblies} "
+        "--starships {input.starships}/*.bed "
+        "-o {output} "
         "> {log} 2>&1"

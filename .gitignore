@@ -2,6 +2,12 @@
 assemblies/
 raw_data/
 reads/
+data/isolates_poc/
+data/references/*.fa
+data/references/*.fasta
+data/references/*.fna
+data/references/*.gff
+data/references/*.gff3
 *.fastq
 *.fastq.gz
 *.fq
@@ -11,7 +17,7 @@ reads/
 *.cram
 *.crai
 
-# Große Bioinformatikdateien
+# Große Bioinformatikdateien (überall im Projekt)
 *.fna
 *.fa
 *.fasta
@@ -31,10 +37,8 @@ temp/
 tmp/
 .snakemake/
 .pytest_cache/
-
-# Projektspezifische lokale Rohdaten-/Werkzeugordner
-data/
-starfish/
+busco_downloads/
+*.log
 
 # Python- und Editor-Artefakte
 __pycache__/

@@ -1,94 +1,25 @@
-from pathlib import Path
-
 import pandas as pd
-import yaml
 
 configfile: "config/parameters.yaml"
 
 samples = pd.read_csv(
     "config/samples.tsv", sep="\t", dtype=str, keep_default_na=False
-).set_index("sample", drop=False)
+)
+references = pd.read_csv(
+    "data/references/panel_manifest.tsv", sep="\t", dtype=str, keep_default_na=False
+)
 
-with open("config/references.yaml") as _references_file:
-    references_config = yaml.safe_load(_references_file)
-
-structural_references = references_config["structural"]
-reference_ids = [r["reference_id"] for r in structural_references]
-reference_by_id = {r["reference_id"]: r for r in structural_references}
-consensus_min_hits = references_config["consensus_min_hits"]
-
-known_accessory_by_reference: dict[str, list[str]] = {}
-for _entry in references_config.get("known_accessory_contigs", []):
-    known_accessory_by_reference.setdefault(_entry["reference_id"], []).append(
-        _entry["contig_id"]
-    )
+sample_ids = samples["sample_id"].tolist()
+reference_ids = references["reference_id"].tolist()
 
 
-def reference_sequence_report(reference_id: str) -> str:
-    return str(Path(reference_by_id[reference_id]["fasta"]).parent / "sequence_report.jsonl")
-
-
-def structural_reference_ids_for_sample(sample: str) -> list[str]:
-    """Structural-tier reference IDs, excluding any reference that IS this
-    sample's own accession (a sample can itself be a panel reference, e.g.
-    Guy11/B71; comparing it to itself would trivially "hit" with 100%
-    identity and inflate its own consensus count)."""
-    own_accession = samples.loc[sample, "assembly_accession"]
-    return [
-        reference_id
-        for reference_id in reference_ids
-        if reference_by_id[reference_id]["accession"] != own_accession
-    ]
-
-
-def sample_fasta(wildcards):
-    return samples.loc[wildcards.sample, "fasta"]
-
-
-def has_gff(sample: str) -> bool:
-    return samples.loc[sample, "gff"].strip() != ""
-
-
-def sample_gff(wildcards):
-    return samples.loc[wildcards.sample, "gff"]
-
-
-def has_sequence_report(sample: str) -> bool:
-    return samples.loc[sample, "sequence_report"].strip() != ""
-
-
-def sample_sequence_report(wildcards):
-    return samples.loc[wildcards.sample, "sequence_report"]
-
-
-# Assembly-level QC baseline covers every genome we have an assembly for:
-# the pilot isolates (their original, un-normalized FASTA - header renaming
-# is irrelevant to assembly-level QC) plus the full reference panel.
-qc_genomes: dict[str, str] = {}
-qc_tiers: dict[str, str] = {}
-for _sample_id in config["pilot_samples"]:
-    qc_genomes[_sample_id] = samples.loc[_sample_id, "fasta"]
-    qc_tiers[_sample_id] = "pilot"
-for _ref in structural_references:
-    qc_genomes[_ref["reference_id"]] = _ref["fasta"]
-    qc_tiers[_ref["reference_id"]] = "structural"
-for _ref in references_config.get("supplementary", []):
-    qc_genomes[_ref["reference_id"]] = _ref["fasta"]
-    qc_tiers[_ref["reference_id"]] = "supplementary"
-
-
-include: "rules/headers.smk"
+include: "rules/mapping.smk"
+include: "rules/pav.smk"
 include: "rules/starfish.smk"
-include: "rules/reference_panel.smk"
-include: "rules/minichromosomes.smk"
-include: "rules/assembly_qc.smk"
+include: "rules/cluster.smk"
 
 
 rule all:
     input:
-        expand(
-            "results/starfish/{sample}/{sample}_YR.filt.gff",
-            sample=config["pilot_samples"],
-        ),
-        "results/minichromosomes/contig_metrics.tsv",
-        "results/qc/assembly_qc_summary.tsv",
+        (["results/pav_calls/candidate_table.tsv"] if sample_ids else []),
+        (["results/clustering/ari_summary.tsv"] if sample_ids else []),

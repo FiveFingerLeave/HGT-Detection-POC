@@ -1,0 +1,8 @@
+name: barragan-r
+channels:
+  - conda-forge
+dependencies:
+  - r-base
+  - r-glmmtmb
+  - r-simr
+  - r-lme4

@@ -1,0 +1,15 @@
+name: barragan-starfish
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - starfish
+  - metaeuk
+  - hmmer
+  - mmseqs2
+  - blast
+  - samtools
+  - minimap2
+# Stargraph (pan-genomic graph consistency check, Section 2 of the POC
+# guideline) is not on conda/bioconda as of writing - install from source:
+# https://github.com/egluckthaler/stargraph

@@ -1,0 +1,92 @@
+Assembly Accession	Organism Name	Assembly Name	Assembly Level	Assembly Assembly Method	Assembly Sequencing Tech	Assembly BioProject Accession	Assembly BioSample Accession	Assembly Release Date	Assembly Submitter	Assembly Stats Total Sequence Length	Assembly Stats Number of Contigs	Assembly Stats Contig N50	Assembly Stats Scaffold N50	Assembly Stats Genome Coverage
+GCA_002368475.1	Pyricularia oryzae	ASM236847v1	Contig	Celera Assembler v. June-2016	PacBio	PRJNA354811	SAMN06050152	2017-09-26	Fujian Agriculture and Forestry University	43846566	54	4134126	4134126	247
+GCA_002368485.1	Pyricularia oryzae	ASM236848v1	Contig	Celera Assembler v. June-2016	PacBio	PRJNA354811	SAMN06050153	2017-09-26	Fujian Agriculture and Forestry University	42869699	56	3275692	3275692	108
+GCA_003015475.2	Pyricularia oryzae	ASM301547v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050065	2021-09-24	Fujian Agriculture and Forestry University	44970614	13	5503597	5503597	202
+GCA_003015815.2	Pyricularia oryzae	ASM301581v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050081	2021-09-24	Fujian Agriculture and Forestry University	43369826	13	5454130	5454130	159
+GCA_003015975.2	Pyricularia oryzae	ASM301597v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050092	2021-09-24	Fujian Agriculture and Forestry University	44637475	10	5637639	5637639	205
+GCA_003016745.2	Pyricularia oryzae	ASM301674v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050113	2021-09-24	Fujian Agriculture and Forestry University	46284791	16	6161260	6161260	144
+GCA_004346965.1	Pyricularia oryzae	ASM434696v1	Complete Genome	HGAP v. 3	PacBio RSII; Illumina MiSeq	PRJNA507314	SAMN10491321	2019-03-12	Academia Sinica	42703282	7	6129159	6129159	250
+GCA_004785725.2	Pyricularia oryzae	ASM478572v2	Chromosome	Canu v. 1.9	Oxford Nanopore MiniION	PRJNA355407	SAMN06076154	2021-03-15	Kansas State University	44811409	10	6474281	6668242	280
+GCA_011799905.1	Pyricularia oryzae	ASM1179990v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340662	2020-03-31	Fujian Agriculture and Forestry University	43369826	13	5454130	5454130	159
+GCA_011799915.1	Pyricularia oryzae	ASM1179991v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340660	2020-03-31	Fujian Agriculture and Forestry University	46284791	16	6161260	6161260	144
+GCA_011799925.1	Pyricularia oryzae	ASM1179992v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340661	2020-03-31	Fujian Agriculture and Forestry University	44637475	10	5637639	5637639	205
+GCA_011799965.1	Pyricularia oryzae	ASM1179996v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340659	2020-03-31	Fujian Agriculture and Forestry University	44970614	13	5503597	5503597	202
+GCA_012272995.1	Pyricularia oryzae	ASM1227299v1	Complete Genome	Canu v. 2.0	Oxford Nanopore MiniION	PRJNA579424	SAMN14533965	2020-04-12	University of Kentucky	45612971	9	6155580	6155580	50
+GCA_021442365.1	Pyricularia oryzae	FMB_K23123	Contig	SPAdes v. 3.11.1; Canu v. 1.6	PacBio; Illumina MiSeq	PRJNA418767	SAMN08033374	2022-01-12	University of Bedfordshire	42583001	21	5380831	5380831	244
+GCA_021764705.1	Pyricularia oryzae	ASM2176470v1	Chromosome	NextDenovo v. v2.4	Oxford Nanopore; Illumina NextSeq	PRJNA799857	SAMN25211060	2022-02-01	Huazhong Agricultural University	45746719	14	5527333	7493747	210
+GCA_021845515.1	Pyricularia oryzae	ASM2184551v1	Contig	Celera Assembler v. 1.6; SPAdes v. 3.5	PacBio; Illumina MiSeq	PRJNA418767	SAMN12142210	2022-02-01	University of Bedfordshire	44150490	31	4729682	4729682	275
+GCA_025473255.1	Pyricularia oryzae	ASM2547325v1	Scaffold	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714328	2022-09-28	Kansas state University	45519630	124	3333742	3333742	58.6
+GCA_025473265.1	Pyricularia oryzae	ASM2547326v1	Contig	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714326	2022-09-28	Kansas state University	44674728	64	3420154	3420154	56.67
+GCA_025473275.1	Pyricularia oryzae	ASM2547327v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714324	2022-09-28	Kansas state University	44459350	73	4188193	4188193	50.15
+GCA_025473285.1	Pyricularia oryzae	ASM2547328v1	Contig	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714327	2022-09-28	Kansas state University	44722005	88	2984647	2984647	31.64
+GCA_025473295.1	Pyricularia oryzae	ASM2547329v1	Scaffold	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714325	2022-09-28	Kansas state University	45007896	136	1562235	1562235	25.21
+GCA_025473435.1	Pyricularia oryzae	ASM2547343v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714323	2022-09-28	Kansas state University	44462687	24	5150716	5150716	61.66
+GCA_025473445.1	Pyricularia oryzae	ASM2547344v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714322	2022-09-28	Kansas state University	44393497	33	4365759	4365759	117.14
+GCA_025473575.1	Pyricularia oryzae	ASM2547357v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714321	2022-09-28	Kansas state University	44816243	182	1337757	1337757	16.12
+GCA_025727595.1	Pyricularia oryzae	ASM2572759v1	Contig	MaSuRCA v. 3.3.3	Oxford Nanopore MinION; Illumina	PRJNA881958	SAMN30921126	2022-10-17	The Sainsbury Laboratory	47905671	39	3032991	3032991	235
+GCA_026170115.1	Pyricularia oryzae	Rep1-bas4#3	Contig	CANU v. 2.0	Oxford Nanopore MinION	PRJNA753862	SAMN29985040	2022-11-14	Kansas state University	45835137	204	1845737	1845737	22.52
+GCA_026261775.1	Pyricularia oryzae	ZM1-2.v0.43	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA849498	SAMN29254577	2022-12-02	Kansas State University	44974979	12	6045076	6045076	60
+GCA_030512215.1	Pyricularia oryzae	TGR2_hybrid_assembly	Chromosome	SPAdes v. 3.14	PacBio RSII	PRJNA825294	SAMN27511241	2023-07-26	National Science and Technology Development Agency	38916680	3234	152159	5827256	80
+GCA_030718865.1	Pyricularia oryzae	ASM3071886v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1002604	SAMN36849576	2023-08-14	Kansas State University	41682104	9	6136143	6306421	150
+GCA_036172685.1	Pyricularia oryzae	TF05-1MC7Ref1	Chromosome	Canu v. 2.0	Oxford Nanopore MinION	PRJNA750760	SAMN36850036	2024-01-31	Kansas State University	45513680	11	6099538	6099538	100
+GCA_036493215.1	Pyricularia oryzae	Br48_v3	Complete Genome	HGAP, CLC Genomics workbench v. 11.0.1	PacBio2; Illumina MiSeq;Illumina HiSeq	PRJDB14561	SAMD00549507	2023-08-24	Cell function and structure, Graduate School of Agricultural Sciences, Kobe University	42501442	7	6276809	6276809	250
+GCA_043231905.1	Pyricularia oryzae	KSU_PyrO_219_1	Chromosome	Canu v. 2.2.1	Oxford Nanopore MinION	PRJNA1006359	SAMN37099171	2024-10-16	Kansas State University	46767474	13	6382644	6382644	149.3
+GCA_043231915.1	Pyricularia oryzae	KSU_PyrO_137_1	Chromosome	Canu v. 2.2.1	Oxford Nanopore MinION	PRJNA1006359	SAMN37099170	2024-10-16	Kansas State University	44200050	9	5522887	5740312	62.1
+GCA_043231925.1	Pyricularia oryzae	KSU_PyrO_135_1	Chromosome	Canu v. 1.9	Oxford Nanopore MinION	PRJNA1006359	SAMN37099169	2024-10-16	Kansas State University	44468491	10	5950546	5950546	131.9
+GCA_046718735.1	Pyricularia oryzae	KSU_PyrO_Guy11_1	Chromosome	Canu v. 2.2.1	Oxford Nanopore MinION	PRJNA1006359	SAMN37608890	2025-01-17	Kansas State University	42607926	14	5802300	6590161	86.6
+GCA_049735435.1	Pyricularia oryzae	ASM4973543v1	Complete Genome	HiCanu v. 2.2	PacBio SequelI	PRJNA1210831	SAMN46257954	2025-04-17	Chinese Academy of Sciences	43463497	7	6853756	6853756	173
+GCA_050140945.1	Pyricularia oryzae	ASM5014094v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111389	2025-05-05	Fujian Agriculture and Forestry University	42650632	119	5436533	5436533	150
+GCA_050140955.1	Pyricularia oryzae	ASM5014095v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43143353	2025-05-05	Fujian Agriculture and Forestry University	41891141	83	5443991	5443991	100
+GCA_050140975.1	Pyricularia oryzae	ASM5014097v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111390	2025-05-05	Fujian Agriculture and Forestry University	41386469	79	4806363	4806363	130
+GCA_050141065.1	Pyricularia oryzae	ASM5014106v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111387	2025-05-05	Fujian Agriculture and Forestry University	42559394	105	4793887	4793887	170
+GCA_050141075.1	Pyricularia oryzae	ASM5014107v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111386	2025-05-05	Fujian Agriculture and Forestry University	41779481	67	5444627	5444627	120
+GCA_050141105.1	Pyricularia oryzae	ASM5014110v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111388	2025-05-05	Fujian Agriculture and Forestry University	35218470	120	4785008	4785008	140
+GCA_050141145.1	Pyricularia oryzae	ASM5014114v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111385	2025-05-05	Fujian Agriculture and Forestry University	41617990	106	4953908	4953908	90
+GCA_050141165.1	Pyricularia oryzae	ASM5014116v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111384	2025-05-05	Fujian Agriculture and Forestry University	40376776	66	4779076	4779076	110
+GCA_050141175.1	Pyricularia oryzae	ASM5014117v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111383	2025-05-05	Fujian Agriculture and Forestry University	46018840	145	5867634	5867634	140
+GCA_050141245.1	Pyricularia oryzae	ASM5014124v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111382	2025-05-05	Fujian Agriculture and Forestry University	40816409	58	5904295	5904295	120
+GCA_050141255.1	Pyricularia oryzae	ASM5014125v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111380	2025-05-05	Fujian Agriculture and Forestry University	48373624	112	4608212	4608212	110
+GCA_050141285.1	Pyricularia oryzae	ASM5014128v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111379	2025-05-05	Fujian Agriculture and Forestry University	49011405	112	4300898	4300898	100
+GCA_050141325.1	Pyricularia oryzae	ASM5014132v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111378	2025-05-05	Fujian Agriculture and Forestry University	46780765	54	4273260	4273260	90
+GCA_050157325.1	Pyricularia oryzae	ASM5015732v1	Complete Genome	Canu v. 2.2	Oxford Nanopore PromethION	PRJNA1146767	SAMN43111381	2025-05-06	Fujian Agriculture and Forestry University	47777704	9	6738481	6738481	360
+GCA_050157855.1	Pyricularia oryzae	ASM5015785v1	Complete Genome	Canu v. 2.2	Oxford Nanopore PromethION	PRJNA1146767	SAMN43111376	2025-05-06	Fujian Agriculture and Forestry University	45859373	9	6551064	6551064	420
+GCA_050157985.1	Pyricularia oryzae	ASM5015798v1	Complete Genome	Canu v. 2.2	PacBio	PRJNA1146767	SAMN43111377	2025-05-06	Fujian Agriculture and Forestry University	42973823	7	6773983	6773983	160
+GCA_050656645.1	Pyricularia oryzae	95HPH-4-hifi	Contig	canu v. 2.2	PacBio	PRJNA1146767	SAMN43143354	2025-06-02	Fujian Agriculture and Forestry University	46065458	39	4850927	4850927	110
+GCA_050656755.1	Pyricularia oryzae	HCTi.v1.0.fasta	Contig	hifiasm v. v0.24.0-r703	PacBio	PRJNA1146767	SAMN48319862	2025-06-02	Fujian Agriculture and Forestry University	46771724	18	6015361	6015361	110
+GCA_057381395.1	Pyricularia oryzae	ASM5738139v1	Chromosome	Hifiasm+pilon v. 0.16.0	PacBio Sequel	PRJNA895008	SAMN31488230	2026-05-11	Hebei Agricultural University	39199217	43	5592785	5592785	52
+GCA_059329645.1	Pyricularia oryzae	Br58v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458202	2026-07-13	Kansas State University	43683271	9	5985948	5985948	80
+GCA_059329725.1	Pyricularia oryzae	ATCC64557v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458205	2026-07-13	Kansas State University	43923837	8	5691609	5691609	100
+GCA_059330025.1	Pyricularia oryzae	B2v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56501178	2026-07-13	Kansas State University	42958876	8	6311493	6311493	58
+GCA_059330095.1	Pyricularia oryzae	P3v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56501177	2026-07-13	Kansas State University	44918736	14	5928839	5928839	100
+GCA_059330115.1	Pyricularia oryzae	16MoT01v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458201	2026-07-13	Kansas State University	44285086	8	6433460	6433460	100
+GCA_059330365.1	Pyricularia oryzae	NE20v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458204	2026-07-13	Kansas State University	44500455	8	5943893	5943893	80
+GCA_059330485.1	Pyricularia oryzae	T21v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458206	2026-07-13	Kansas State University	45125712	13	6045283	6045283	120
+GCA_059330725.1	Pyricularia oryzae	T47v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458203	2026-07-13	Kansas State University	43610337	9	6109771	6482445	120
+GCA_059330735.1	Pyricularia oryzae	OKI18v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458200	2026-07-13	Kansas State University	43347792	7	7502585	7502585	120
+GCA_059469275.1	Pyricularia oryzae	ASM5946927v1	Chromosome	METCAT v. 1.4; ARROW v. 2.1	Illumina NovaSeq; PacBio RSII	PRJNA1279063	SAMN49375469	2026-07-16	University of Georgia	44456732	33	5806171	6127106	235
+GCA_900474175.3	Pyricularia oryzae	US71_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708259	2020-01-16	THE SAINSBURY LABORATORY	45580691	55	2812411	2812411	97
+GCA_900474225.2	Pyricularia oryzae	BTJP4_1_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708257	2018-12-06	THE SAINSBURY LABORATORY	44506711	59	4344896	4344896	97
+GCA_900474375.2	Pyricularia oryzae	BTMP13_1_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708262	2018-12-06	THE SAINSBURY LABORATORY	43978086	16	6037509	6037509	97
+GCA_900474435.2	Pyricularia oryzae	BTGP6F_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708264	2018-12-06	THE SAINSBURY LABORATORY	44234332	57	3705381	3705381	97
+GCA_900474475.3	Pyricularia oryzae	CD156_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708261	2020-01-16	THE SAINSBURY LABORATORY	43939965	27	5531649	5531649	97
+GCA_900474545.3	Pyricularia oryzae	BR32_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708260	2020-01-16	THE SAINSBURY LABORATORY	41805140	17	5096353	5096353	97
+GCA_900474635.2	Pyricularia oryzae	BTGP1b_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708263	2018-12-06	THE SAINSBURY LABORATORY	44406101	74	2814025	2814025	97
+GCA_900474655.3	Pyricularia oryzae	FR13_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708258	2020-01-16	THE SAINSBURY LABORATORY	46410415	31	5398440	5398440	97
+GCA_905066965.2	Pyricularia oryzae	AG059_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473260	2020-12-16	THE SAINSBURY LABORATORY	47743121	37	5900770	5900770	138
+GCA_905067005.2	Pyricularia oryzae	AG038_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473265	2020-12-16	THE SAINSBURY LABORATORY	46291169	19	5673907	5673907	117
+GCA_905067015.2	Pyricularia oryzae	AG098_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473266	2020-12-16	THE SAINSBURY LABORATORY	47810826	33	6094221	6094221	97
+GCA_905067025.2	Pyricularia oryzae	AG006_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illuminate	PRJEB40915	SAMEA7473262	2020-12-16	THE SAINSBURY LABORATORY	47005811	24	6618557	6618557	110
+GCA_905067035.2	Pyricularia oryzae	AG039_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473258	2020-12-16	THE SAINSBURY LABORATORY	47495958	26	6249570	6249570	113
+GCA_905067045.2	Pyricularia oryzae	AG002_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473264	2020-12-16	THE SAINSBURY LABORATORY	46086469	36	4555161	4555161	163
+GCA_905067055.2	Pyricularia oryzae	AG032_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473263	2020-12-16	THE SAINSBURY LABORATORY	45916910	24	5961411	5961411	122
+GCA_905067075.2	Pyricularia oryzae	PR003_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473261	2020-12-16	THE SAINSBURY LABORATORY	44615198	16	6063740	6063740	96
+GCA_905067085.2	Pyricularia oryzae	SAndrea_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473259	2020-12-16	THE SAINSBURY LABORATORY	48509714	35	4122582	4122582	115
+GCA_911175055.1	Pyricularia oryzae	N06047_contigs	Contig	Canu	Oxford Nanopore	PRJEB27137	SAMEA9124609	2021-07-19	THE SAINSBURY LABORATORY	41159917	115	880253	880253	150
+GCA_944606235.1	Pyricularia oryzae	O23_contigs_polished	Contig	NECAT,medaka,Hypo	Oxford Nanopore,Illumina	PRJEB53625	SAMEA110144965	2022-07-15	iwate biotechnology research center	43162440	11	6457810	6457810	122
+GCA_944606705.1	Pyricularia oryzae	d44a_contigs_polished	Contig	NECAT,medaka,Hypo	Oxford Nanopore,Illumina	PRJEB53625	SAMEA110145009	2022-07-15	iwate biotechnology research center	43626931	11	6588090	6588090	93
+GCA_944612285.1	Pyricularia oryzae	TH3o_contigs_polished	Contig	MECAT,Hypo	PacBio,Illumina	PRJEB53625	SAMEA110144966	2022-07-15	iwate biotechnology research center	41519998	129	865826	865826	44
+GCA_944989255.1	Pyricularia oryzae	GE12B_contigs_polished	Contig	Flye,Medaka,Pilon	Oxford Nanopore,Illumina	PRJEB53658	SAMEA110153376	2022-07-13	The John Innes Centre	44312841	20	5068283	5068283	109
+GCA_944989335.1	Pyricularia oryzae	GA10A2_contigs_polished	Contig	Flye,Medaka,Pilon	Oxford Nanopore,Illumina	PRJEB53658	SAMEA110153377	2022-07-13	The John Innes Centre	44788744	29	6975948	6975948	123
+GCA_946468025.1	Pyricularia oryzae	MoT PS-2	Contig	Canu	Oxford Nanopore	PRJEB55233	SAMEA110691667	2022-09-12	John Innes Centre	42866477	21	6394504	6394504	153
+GCA_963556445.1	Pyricularia oryzae	Br62_assembly	Contig	Flye (v2.9-b17680), Medaka (v1.7.2), Pilon (v1.23)	PromethION,Illumina HiSeq 2500	PRJEB66723	SAMEA114466569	2024-02-24	The John Innes Centre	43945100	10	6027403	6027403	19
+GCA_000292605.2	Pyricularia oryzae P131	PoP131	Complete Genome	Canu v. 2; Juicer v. 1.6	Illumina HiSeq; PacBio; Hi-C	PRJNA82693	SAMN02981399	2023-07-25	China Agricultural University	43237743	7	7048921	7048921	300

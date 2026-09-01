@@ -1,0 +1,606 @@
+Assembly Accession	Organism Name	Assembly Name	Assembly Level	Assembly Assembly Method	Assembly Sequencing Tech	Assembly BioProject Accession	Assembly BioSample Accession	Assembly Release Date	Assembly Submitter	Assembly Stats Total Sequence Length	Assembly Stats Number of Contigs	Assembly Stats Contig N50	Assembly Stats Scaffold N50	Assembly Stats Genome Coverage
+GCA_000734075.1	Pyricularia oryzae	Mo2303.1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739932	2014-07-28	Seoul National University	38048501	6787	14246	14246	65
+GCA_000734085.1	Pyricularia oryzae	Mo1801.4	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739928	2014-07-28	Seoul National University	35759866	8396	8645	8645	69
+GCA_000734095.1	Pyricularia oryzae	Mo1106.2	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739886	2014-07-28	Seoul National University	37556816	5680	16021	16021	76
+GCA_000734105.1	Pyricularia oryzae	Mo1836.3	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739929	2014-07-28	Seoul National University	35818083	7899	9241	9241	78
+GCA_000734155.1	Pyricularia oryzae	Mo4403.2	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739933	2014-07-28	Seoul National University	36260258	8416	9076	9076	73
+GCA_000734165.1	Pyricularia oryzae	Mo401.4	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739935	2014-07-28	Seoul National University	36036965	8275	8875	8875	80
+GCA_000734185.1	Pyricularia oryzae	Mo903.4	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739936	2014-07-28	Seoul National University	36211322	8248	9108	9108	74
+GCA_000734215.1	Pyricularia oryzae	Mo4603.4	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02739934	2014-07-28	Seoul National University	37593290	5947	15697	15697	64
+GCA_000734235.1	Pyricularia oryzae	MoHB12	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740630	2014-07-28	Seoul National University	36716275	7622	10757	10757	74
+GCA_000734245.1	Pyricularia oryzae	MoJS25	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740633	2014-07-28	Seoul National University	36863900	6159	14129	14129	71
+GCA_000734265.1	Pyricularia oryzae	MoNX37	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740634	2014-07-28	Seoul National University	35871377	8518	8745	8745	78
+GCA_000734275.1	Pyricularia oryzae	MoSC05	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740636	2014-07-28	Seoul National University	36679878	8190	9793	9793	77
+GCA_000734315.1	Pyricularia oryzae	MoZJ15	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740637	2014-07-28	Seoul National University	37493836	6575	14356	14356	73
+GCA_000734325.1	Pyricularia oryzae	MoCQ11	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740626	2014-07-28	Seoul National University	36263528	8541	8761	8761	72
+GCA_000734335.1	Pyricularia oryzae	MoAH06	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740625	2014-07-28	Seoul National University	37013264	6061	14799	14799	70
+GCA_000734345.1	Pyricularia oryzae	MoGD22	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740627	2014-07-28	Seoul National University	36982960	7027	11665	11665	71
+GCA_000734395.1	Pyricularia oryzae	MoGX01	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740629	2014-07-28	Seoul National University	36788781	8371	9897	9897	70
+GCA_000734405.1	Pyricularia oryzae	MoHN06	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740631	2014-07-28	Seoul National University	36113398	7798	9967	9967	69
+GCA_000734425.1	Pyricularia oryzae	MoJL10	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02740632	2014-07-28	Seoul National University	36315912	8649	8923	8923	79
+GCA_000734455.1	Pyricularia oryzae	MoK84-01	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742163	2014-07-28	Seoul National University	36391227	8119	9390	9390	68
+GCA_000734495.1	Pyricularia oryzae	ASM73449v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742165	2014-07-28	Seoul National University	36288354	7725	10514	10514	74
+GCA_000734515.1	Pyricularia oryzae	ASM73451v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742167	2014-07-28	Seoul National University	36446887	7603	10608	10608	74
+GCA_000734525.1	Pyricularia oryzae	ASM73452v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742168	2014-07-28	Seoul National University	35669262	9213	7980	7980	71
+GCA_000734555.1	Pyricularia oryzae	ASM73455v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742170	2014-07-28	Seoul National University	35613849	9452	7567	7567	75
+GCA_000734575.1	Pyricularia oryzae	ASM73457v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742164	2014-07-28	Seoul National University	35571426	7624	9888	9888	68
+GCA_000734595.1	Pyricularia oryzae	ASM73459v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742166	2014-07-28	Seoul National University	36384190	7786	10077	10077	75
+GCA_000734605.1	Pyricularia oryzae	ASM73460v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742169	2014-07-28	Seoul National University	35967056	8881	8241	8241	76
+GCA_000734635.1	Pyricularia oryzae	ASM73463v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742171	2014-07-28	Seoul National University	35774258	9202	7918	7918	67
+GCA_000734655.1	Pyricularia oryzae	ASM73465v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742173	2014-07-28	Seoul National University	37097895	8594	10036	10036	67
+GCA_000734675.1	Pyricularia oryzae	ASM73467v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742174	2014-07-28	Seoul National University	35946122	8535	8645	8645	77
+GCA_000734685.1	Pyricularia oryzae	ASM73468v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742175	2014-07-28	Seoul National University	36255505	8855	8613	8613	70
+GCA_000734705.1	Pyricularia oryzae	ASM73470v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742257	2014-07-28	Seoul National University	36235577	9429	8132	8132	67
+GCA_000734735.1	Pyricularia oryzae	ASM73473v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742258	2014-07-28	Seoul National University	36003007	9152	7951	7951	75
+GCA_000734755.1	Pyricularia oryzae	ASM73475v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742172	2014-07-28	Seoul National University	36003397	9277	7993	7993	73
+GCA_000734785.1	Pyricularia oryzae	ASM73478v1	Contig	Velvet v. 1.2.08	Illumina GAIIx	PRJNA245782	SAMN02742176	2014-07-28	Seoul National University	35801870	8427	8633	8633	74
+GCA_000805855.1	Pyricularia oryzae	ASM80585v1	Scaffold	SOAPdenovo v. 1.05	Illumina HiSeq	PRJNA259589	SAMN03010511	2014-12-19	nanjing agriculture university	42306689	1161	88900	1530397	135
+GCA_001548775.1	Pyricularia oryzae	EI9411	Scaffold	CLC NGS Cell v. JUNE-2014	Illumina HiSeq	PRJNA304354	SAMN04318447	2016-02-04	Fujian Agriculture and Forestry University	40306145	3088	50072	81416	60
+GCA_001548785.1	Pyricularia oryzae	EI9604	Scaffold	CLC NGS Cell v. JUNE-2014	Illumina HiSeq	PRJNA304354	SAMN04318448	2016-02-04	Fujian Agriculture and Forestry University	41601338	2856	57102	100075	60
+GCA_001548845.1	Pyricularia oryzae	SV9610	Scaffold	CLC NGS Cell v. JUNE-2014	Illumina HiSeq	PRJNA304354	SAMN04318449	2016-02-04	Fujian Agriculture and Forestry University	39325514	3151	73202	154236	60
+GCA_001548855.1	Pyricularia oryzae	SV9623	Scaffold	CLC NGS Cell v. JUNE-2014	Illumina HiSeq	PRJNA304354	SAMN04318450	2016-02-04	Fujian Agriculture and Forestry University	39376824	2869	72025	145603	60
+GCA_001675595.1	Pyricularia oryzae	ASM167559v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN04942531	2016-06-23	International Wheat Blast Consortium	41344138	9202	11882	18877	12
+GCA_001675605.1	Pyricularia oryzae	ASM167560v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN04942534	2016-06-23	International Wheat Blast Consortium	42962175	5915	26742	64503	38
+GCA_001675615.1	Pyricularia oryzae	ASM167561v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN04940126	2016-06-23	International Wheat Blast Consortium	42084471	11699	9547	12951	21
+GCA_001675625.1	Pyricularia oryzae	ASM167562v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN04942725	2016-06-23	International Wheat Blast Consortium	43625833	3475	36282	181209	157
+GCA_001853415.3	Pyricularia oryzae	ASM185341v3	Contig	wtdbg2 v. 2 Feb-2020; Long Read Gap closer v. 3 Feb-2020	Illumina HiSeq; PacBio RSII	PRJNA330763	SAMN05425585	2021-10-21	CRP on Genomics of ICAR, New Delhi	42437481	375	524210	524210	430
+GCA_001936075.1	Pyricularia oryzae	ASM193607v1	Contig	SOAPdenovo v. 2.04	Illumina HiSeq	PRJNA302700	SAMN04216992	2017-01-05	Centre for Cellular and Molecular Platforms	39336497	8554	13179	13179	75
+GCA_001936435.1	Pyricularia oryzae	ASM193643v1	Contig	SOAPdenovo v. 2.04	Illumina HiSeq	PRJNA302736	SAMN04217083	2017-01-05	Centre for Cellular and Molecular Platforms	38751292	7631	16651	16651	48
+GCA_001936935.1	Pyricularia oryzae	ASM193693v1	Contig	SOAPdenovo v. 2.04	Illumina HiSeq	PRJNA302732	SAMN04216996	2017-01-05	Centre for Cellular and Molecular Platforms	39881187	41689	1430	1430	300
+GCA_002105295.1	Pyricularia oryzae	ASM210529v1	Scaffold	SOAPdenovo v. 2015-10	Illumina HiSeq	PRJNA376429	SAMN06392751	2017-04-21	Fujian Agriculture and Forestry University	38934700	2897	67610	93412	113
+GCA_002218345.1	Pyricularia oryzae	H08-1a_0.9	Contig	SOAPdenovo v. 2.4	Illumina HiSeq	PRJNA391416	SAMN07267886	2017-07-14	huazhong agricultural university	39383118	2695	153342	153342	100
+GCA_002218355.1	Pyricularia oryzae	H08-1c_0.9	Scaffold	SOAPdenovo v. 2.4	Illumina HiSeq	PRJNA391416	SAMN07267887	2017-07-14	huazhong agricultural university	39272241	5290	20801	147502	50
+GCA_002218425.1	Pyricularia oryzae	Py22.1	Scaffold	CLC Genomics Workbench v. 7.5.1	Illumina MiSeq	PRJNA320483	SAMN05725179	2017-07-14	International Wheat Blast Consortium	42437008	988	110009	114284	141
+GCA_002218435.1	Pyricularia oryzae	ASM221843v1	Scaffold	CLC Genomics Workbench v. 7.5.1	Illumina MiSeq	PRJNA320483	SAMN05762829	2017-07-14	International Wheat Blast Consortium	42670599	1559	67755	69664	282
+GCA_002218465.1	Pyricularia oryzae	ASM221846v1	Scaffold	CLS Genomics Workbench v. 7.5.1	Illumina MiSeq	PRJNA320483	SAMN05580113	2017-07-14	International Wheat Blast Consortium	41771944	1409	81481	81851	97
+GCA_002218475.1	Pyricularia oryzae	P-0028	Scaffold	CLC Genomics Workbench v. 7.5.1	Illumina MiSeq	PRJNA320483	SAMN05864041	2017-07-14	International Wheat Blast Consortium	42988316	1688	110556	207207	111
+GCA_002218485.1	Pyricularia oryzae	ASM221848v1	Scaffold	CLC Genomics Workbench v. 7.5.1	Illumina MiSeq	PRJNA320483	SAMN05898532	2017-07-14	International Wheat Blast Consortium	42445515	1314	112150	196071	115
+GCA_002368475.1	Pyricularia oryzae	ASM236847v1	Contig	Celera Assembler v. June-2016	PacBio	PRJNA354811	SAMN06050152	2017-09-26	Fujian Agriculture and Forestry University	43846566	54	4134126	4134126	247
+GCA_002368485.1	Pyricularia oryzae	ASM236848v1	Contig	Celera Assembler v. June-2016	PacBio	PRJNA354811	SAMN06050153	2017-09-26	Fujian Agriculture and Forestry University	42869699	56	3275692	3275692	108
+GCA_002368515.1	Pyricularia oryzae	ASM236851v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354811	SAMN06050150	2017-09-26	Fujian Agriculture and Forestry University	38028932	2454	77792	156610	184
+GCA_002368525.1	Pyricularia oryzae	ASM236852v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354811	SAMN06050151	2017-09-26	Fujian Agriculture and Forestry University	37490204	2000	80464	180736	261
+GCA_002924665.1	Pyricularia oryzae	ASM292466v1	Scaffold	Velvet v. 1	Illumina HiSeq	PRJNA320483	SAMN08009580	2018-02-08	International Wheat Blast Consortium	42478152	11752	9731	37322	80
+GCA_002924685.1	Pyricularia oryzae	ASM292468v1	Scaffold	Newbler v. 2.9	Roche 454	PRJNA320483	SAMN08009578	2018-02-08	International Wheat Blast Consortium	43356274	923	96532	3962041	25
+GCA_002924695.1	Pyricularia oryzae	ASM292469v1	Scaffold	Velvet v. 1	Illumina GAII	PRJNA320483	SAMN08009579	2018-02-08	International Wheat Blast Consortium	39236975	22928	2964	2965	42
+GCA_002924745.1	Pyricularia oryzae	ASM292474v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009575	2018-02-08	International Wheat Blast Consortium	42288804	2784	29365	62883	124
+GCA_002924755.1	Pyricularia oryzae	ASM292475v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009576	2018-02-08	International Wheat Blast Consortium	43535068	3487	34075	104709	23
+GCA_002924785.1	Pyricularia oryzae	ASM292478v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009574	2018-02-08	International Wheat Blast Consortium	42713036	4643	27543	72801	22
+GCA_002924795.1	Pyricularia oryzae	ASM292479v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009573	2018-02-08	International Wheat Blast Consortium	40503645	3629	31386	69844	24
+GCA_002924825.1	Pyricularia oryzae	ASM292482v1	Contig	Newbler v. 2.9	Roche 454	PRJNA320483	SAMN08009572	2018-02-08	International Wheat Blast Consortium	42483483	1722	72795	72795	19
+GCA_002924835.1	Pyricularia oryzae	ASM292483v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009571	2018-02-08	International Wheat Blast Consortium	42551776	2348	43723	141200	51
+GCA_002924865.1	Pyricularia oryzae	ASM292486v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009570	2018-02-08	International Wheat Blast Consortium	43288804	4507	24050	45834	12
+GCA_002924875.1	Pyricularia oryzae	ASM292487v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009569	2018-02-08	International Wheat Blast Consortium	42076864	3423	37140	96476	31
+GCA_002924885.1	Pyricularia oryzae	ASM292488v1	Scaffold	Newbler v. 2.6	Illumina MiSeq	PRJNA320483	SAMN08009568	2018-02-08	International Wheat Blast Consortium	42620654	4290	32411	135136	144
+GCA_002924915.1	Pyricularia oryzae	ASM292491v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009567	2018-02-08	International Wheat Blast Consortium	43265743	3019	40682	232896	57
+GCA_002924945.1	Pyricularia oryzae	ASM292494v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009566	2018-02-08	International Wheat Blast Consortium	43574967	3409	39103	218204	53
+GCA_002924965.1	Pyricularia oryzae	ASM292496v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009565	2018-02-08	International Wheat Blast Consortium	39491748	4633	40205	84247	28
+GCA_002924975.1	Pyricularia oryzae	ASM292497v1	Scaffold	Newbler v. 2.9	Roche 454	PRJNA320483	SAMN08009564	2018-02-08	International Wheat Blast Consortium	42913937	3790	36713	940778	15
+GCA_002924985.1	Pyricularia oryzae	ASM292498v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009563	2018-02-08	International Wheat Blast Consortium	39600734	2862	43248	127734	73
+GCA_002925025.1	Pyricularia oryzae	ASM292502v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009562	2018-02-08	International Wheat Blast Consortium	39534872	3207	35806	87169	26
+GCA_002925045.1	Pyricularia oryzae	ASM292504v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009561	2018-02-08	International Wheat Blast Consortium	39439879	2782	40577	93401	39
+GCA_002925065.1	Pyricularia oryzae	ASM292506v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009560	2018-02-08	International Wheat Blast Consortium	40238383	3978	35082	85442	26
+GCA_002925085.1	Pyricularia oryzae	ASM292508v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009559	2018-02-08	International Wheat Blast Consortium	39422808	3400	38728	83221	29
+GCA_002925095.1	Pyricularia oryzae	ASM292509v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009557	2018-02-08	International Wheat Blast Consortium	37356090	4279	22229	36095	17
+GCA_002925105.1	Pyricularia oryzae	ASM292510v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009558	2018-02-08	International Wheat Blast Consortium	42976410	3250	44301	123633	48
+GCA_002925145.1	Pyricularia oryzae	ASM292514v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009556	2018-02-08	International Wheat Blast Consortium	39904360	5848	24946	105252	23
+GCA_002925155.1	Pyricularia oryzae	ASM292515v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009555	2018-02-08	International Wheat Blast Consortium	42564503	3366	35228	114865	25
+GCA_002925165.1	Pyricularia oryzae	ASM292516v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009554	2018-02-08	International Wheat Blast Consortium	41421252	3666	32502	72869	35
+GCA_002925205.1	Pyricularia oryzae	ASM292520v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009553	2018-02-08	International Wheat Blast Consortium	42055317	4255	30618	77760	20
+GCA_002925215.1	Pyricularia oryzae	ASM292521v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009552	2018-02-08	International Wheat Blast Consortium	39844086	4866	34732	77569	25
+GCA_002925225.1	Pyricularia oryzae	ASM292522v1	Contig	Newbler v. 2.9	Roche 454	PRJNA320483	SAMN08009551	2018-02-08	International Wheat Blast Consortium	42932243	2071	61997	61997	20
+GCA_002925285.1	Pyricularia oryzae	ASM292528v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009549	2018-02-08	International Wheat Blast Consortium	40381126	2830	34251	104795	32
+GCA_002925295.1	Pyricularia oryzae	ASM292529v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009548	2018-02-08	International Wheat Blast Consortium	42141387	3220	29869	88761	43
+GCA_002925325.1	Pyricularia oryzae	ASM292532v1	Scaffold	Velvet v. 1	Illumina HiSeq	PRJNA320483	SAMN08009547	2018-02-08	International Wheat Blast Consortium	40219488	15297	6345	46950	80
+GCA_002925335.1	Pyricularia oryzae	ASM292533v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009545	2018-02-08	International Wheat Blast Consortium	41732479	3710	27671	73544	39
+GCA_002925345.1	Pyricularia oryzae	ASM292534v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009546	2018-02-08	International Wheat Blast Consortium	42474840	2344	41793	134171	61
+GCA_002925385.1	Pyricularia oryzae	ASM292538v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009544	2018-02-08	International Wheat Blast Consortium	41379149	3202	44635	267242	33
+GCA_002925405.1	Pyricularia oryzae	ASM292540v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009543	2018-02-08	International Wheat Blast Consortium	41268497	4334	44687	204898	25
+GCA_002925415.1	Pyricularia oryzae	ASM292541v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009542	2018-02-08	International Wheat Blast Consortium	43052761	3924	26468	41323	61
+GCA_002925425.1	Pyricularia oryzae	ASM292542v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009541	2018-02-08	International Wheat Blast Consortium	42475479	3438	29827	46715	72
+GCA_002925445.1	Pyricularia oryzae	ASM292544v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN08009540	2018-02-08	International Wheat Blast Consortium	40843293	3500	29443	62030	26
+GCA_003013125.1	Pyricularia oryzae	ASM301312v1	Scaffold	Velvet v. 2.6	Illumina HiSeq	PRJNA320483	SAMN08377452	2018-03-21	International Wheat Blast Consortium	39165496	7549	12970	162206	11
+GCA_003015385.1	Pyricularia oryzae	ASM301538v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050060	2018-03-26	Fujian Agriculture and Forestry University	38390054	1902	113853	122137	60
+GCA_003015395.1	Pyricularia oryzae	ASM301539v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050061	2018-03-26	Fujian Agriculture and Forestry University	38568685	2034	119331	126393	60
+GCA_003015405.1	Pyricularia oryzae	ASM301540v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050062	2018-03-26	Fujian Agriculture and Forestry University	38865278	2193	108988	122072	60
+GCA_003015425.1	Pyricularia oryzae	ASM301542v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050063	2018-03-26	Fujian Agriculture and Forestry University	38475208	2101	112638	128693	60
+GCA_003015465.1	Pyricularia oryzae	ASM301546v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050064	2018-03-26	Fujian Agriculture and Forestry University	38807663	2134	106359	112636	60
+GCA_003015475.2	Pyricularia oryzae	ASM301547v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050065	2021-09-24	Fujian Agriculture and Forestry University	44970614	13	5503597	5503597	202
+GCA_003015495.1	Pyricularia oryzae	ASM301549v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050066	2018-03-26	Fujian Agriculture and Forestry University	38421385	3096	66178	116633	60
+GCA_003015515.1	Pyricularia oryzae	ASM301551v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050067	2018-03-26	Fujian Agriculture and Forestry University	38584030	2242	95867	108309	60
+GCA_003015545.1	Pyricularia oryzae	ASM301554v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050068	2018-03-26	Fujian Agriculture and Forestry University	38331944	2241	78574	78953	60
+GCA_003015555.1	Pyricularia oryzae	ASM301555v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050069	2018-03-26	Fujian Agriculture and Forestry University	38025015	2764	67502	100981	60
+GCA_003015565.1	Pyricularia oryzae	ASM301556v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050070	2018-03-26	Fujian Agriculture and Forestry University	38242558	2789	63259	111639	60
+GCA_003015595.1	Pyricularia oryzae	ASM301559v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050071	2018-03-26	Fujian Agriculture and Forestry University	38340962	2788	65920	107578	60
+GCA_003015625.1	Pyricularia oryzae	ASM301562v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050072	2018-03-26	Fujian Agriculture and Forestry University	37283658	2433	61728	103798	60
+GCA_003015635.1	Pyricularia oryzae	ASM301563v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050073	2018-03-26	Fujian Agriculture and Forestry University	37752038	2912	61118	98022	60
+GCA_003015645.1	Pyricularia oryzae	ASM301564v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050074	2018-03-26	Fujian Agriculture and Forestry University	38590940	2940	64979	116974	60
+GCA_003015655.1	Pyricularia oryzae	ASM301565v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050075	2018-03-26	Fujian Agriculture and Forestry University	38022850	2723	63758	125873	60
+GCA_003015705.1	Pyricularia oryzae	ASM301570v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050076	2018-03-26	Fujian Agriculture and Forestry University	38689525	2702	67059	117832	60
+GCA_003015735.1	Pyricularia oryzae	ASM301573v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050077	2018-03-26	Fujian Agriculture and Forestry University	38081667	2916	61366	110023	60
+GCA_003015745.1	Pyricularia oryzae	ASM301574v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050078	2018-03-26	Fujian Agriculture and Forestry University	38539643	2861	61579	116992	60
+GCA_003015755.1	Pyricularia oryzae	ASM301575v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050079	2018-03-26	Fujian Agriculture and Forestry University	37702447	2863	61922	103395	60
+GCA_003015805.1	Pyricularia oryzae	ASM301580v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050080	2018-03-26	Fujian Agriculture and Forestry University	37972307	2685	63964	113843	60
+GCA_003015815.2	Pyricularia oryzae	ASM301581v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050081	2021-09-24	Fujian Agriculture and Forestry University	43369826	13	5454130	5454130	159
+GCA_003015825.1	Pyricularia oryzae	ASM301582v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050083	2018-03-26	Fujian Agriculture and Forestry University	38728344	2471	71138	85714	60
+GCA_003015835.1	Pyricularia oryzae	ASM301583v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050082	2018-03-26	Fujian Agriculture and Forestry University	38453552	2365	61437	72356	60
+GCA_003015885.1	Pyricularia oryzae	ASM301588v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050084	2018-03-26	Fujian Agriculture and Forestry University	38644746	2621	61523	81077	60
+GCA_003015895.1	Pyricularia oryzae	ASM301589v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050086	2018-03-26	Fujian Agriculture and Forestry University	37960040	2563	49212	84041	60
+GCA_003015925.1	Pyricularia oryzae	ASM301592v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050088	2018-03-26	Fujian Agriculture and Forestry University	38383550	2938	53108	85748	60
+GCA_003015935.1	Pyricularia oryzae	ASM301593v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050089	2018-03-26	Fujian Agriculture and Forestry University	39062630	2691	76666	124066	60
+GCA_003015955.1	Pyricularia oryzae	ASM301595v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050090	2018-03-26	Fujian Agriculture and Forestry University	38253203	2684	65727	127319	60
+GCA_003015975.2	Pyricularia oryzae	ASM301597v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050092	2021-09-24	Fujian Agriculture and Forestry University	44637475	10	5637639	5637639	205
+GCA_003016005.1	Pyricularia oryzae	ASM301600v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050094	2018-03-26	Fujian Agriculture and Forestry University	38311891	2928	64639	103825	60
+GCA_003016015.1	Pyricularia oryzae	ASM301601v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050098	2018-03-26	Fujian Agriculture and Forestry University	38201480	2194	84089	86656	60
+GCA_003016025.1	Pyricularia oryzae	ASM301602v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050099	2018-03-26	Fujian Agriculture and Forestry University	38180528	2878	62415	113961	60
+GCA_003016035.1	Pyricularia oryzae	ASM301603v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050100	2018-03-26	Fujian Agriculture and Forestry University	37988177	2929	66373	120406	60
+GCA_003016085.1	Pyricularia oryzae	ASM301608v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050103	2018-03-26	Fujian Agriculture and Forestry University	38556164	2969	68833	144157	60
+GCA_003016095.1	Pyricularia oryzae	ASM301609v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050085	2018-03-26	Fujian Agriculture and Forestry University	38536878	2889	49242	81916	60
+GCA_003016105.1	Pyricularia oryzae	ASM301610v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050087	2018-03-26	Fujian Agriculture and Forestry University	38559090	2831	76553	122171	60
+GCA_003016115.1	Pyricularia oryzae	ASM301611v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050091	2018-03-26	Fujian Agriculture and Forestry University	38150992	2835	66607	120751	60
+GCA_003016165.1	Pyricularia oryzae	ASM301616v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050093	2018-03-26	Fujian Agriculture and Forestry University	37502973	3351	38840	91606	60
+GCA_003016175.1	Pyricularia oryzae	ASM301617v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050095	2018-03-26	Fujian Agriculture and Forestry University	37936538	2844	69063	115008	60
+GCA_003016185.1	Pyricularia oryzae	ASM301618v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050096	2018-03-26	Fujian Agriculture and Forestry University	37400436	2081	61919	62944	60
+GCA_003016195.1	Pyricularia oryzae	ASM301619v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050097	2018-03-26	Fujian Agriculture and Forestry University	37973670	2174	81400	87325	60
+GCA_003016245.1	Pyricularia oryzae	ASM301624v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050102	2018-03-26	Fujian Agriculture and Forestry University	37946895	2188	103609	108101	60
+GCA_003016255.1	Pyricularia oryzae	ASM301625v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050101	2018-03-26	Fujian Agriculture and Forestry University	38108148	2214	93761	95709	60
+GCA_003016265.1	Pyricularia oryzae	ASM301626v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050105	2018-03-26	Fujian Agriculture and Forestry University	38465793	2356	93782	112616	60
+GCA_003016275.1	Pyricularia oryzae	ASM301627v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050104	2018-03-26	Fujian Agriculture and Forestry University	38199718	2197	82576	90787	60
+GCA_003016325.1	Pyricularia oryzae	ASM301632v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050106	2018-03-26	Fujian Agriculture and Forestry University	37601888	2697	63126	116871	60
+GCA_003016385.1	Pyricularia oryzae	ASM301638v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050111	2018-03-26	Fujian Agriculture and Forestry University	39115722	3418	42494	67305	60
+GCA_003016395.1	Pyricularia oryzae	ASM301639v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050115	2018-03-26	Fujian Agriculture and Forestry University	38329806	2572	80182	121898	60
+GCA_003016415.1	Pyricularia oryzae	ASM301641v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050117	2018-03-26	Fujian Agriculture and Forestry University	39264239	2863	70726	113039	60
+GCA_003016425.1	Pyricularia oryzae	ASM301642v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050124	2018-03-26	Fujian Agriculture and Forestry University	38879255	2892	68492	119600	60
+GCA_003016465.1	Pyricularia oryzae	ASM301646v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050126	2018-03-26	Fujian Agriculture and Forestry University	39227576	2782	78875	114183	60
+GCA_003016475.1	Pyricularia oryzae	ASM301647v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050128	2018-03-26	Fujian Agriculture and Forestry University	39025302	2991	64118	121346	60
+GCA_003016495.1	Pyricularia oryzae	ASM301649v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050129	2018-03-26	Fujian Agriculture and Forestry University	39075819	2742	73433	123739	60
+GCA_003016505.1	Pyricularia oryzae	ASM301650v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050131	2018-03-26	Fujian Agriculture and Forestry University	38977876	2878	71639	110758	60
+GCA_003016545.1	Pyricularia oryzae	ASM301654v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050135	2018-03-26	Fujian Agriculture and Forestry University	38754264	2598	108643	145748	60
+GCA_003016555.1	Pyricularia oryzae	ASM301655v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050136	2018-03-26	Fujian Agriculture and Forestry University	39303591	2873	84306	152964	60
+GCA_003016575.1	Pyricularia oryzae	ASM301657v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050144	2018-03-26	Fujian Agriculture and Forestry University	37375355	2021	83101	114324	60
+GCA_003016585.1	Pyricularia oryzae	ASM301658v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050142	2018-03-26	Fujian Agriculture and Forestry University	38723087	2518	75178	106915	60
+GCA_003016625.1	Pyricularia oryzae	ASM301662v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050146	2018-03-26	Fujian Agriculture and Forestry University	37823351	2044	80343	81987	60
+GCA_003016635.1	Pyricularia oryzae	ASM301663v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050147	2018-03-26	Fujian Agriculture and Forestry University	38622443	2137	93690	119229	60
+GCA_003016655.1	Pyricularia oryzae	ASM301665v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050108	2018-03-26	Fujian Agriculture and Forestry University	38309819	2298	86067	88249	60
+GCA_003016665.1	Pyricularia oryzae	ASM301666v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050107	2018-03-26	Fujian Agriculture and Forestry University	37636355	2110	85519	90344	60
+GCA_003016705.1	Pyricularia oryzae	ASM301670v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050109	2018-03-26	Fujian Agriculture and Forestry University	39345505	3124	66815	96967	60
+GCA_003016715.1	Pyricularia oryzae	ASM301671v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050110	2018-03-26	Fujian Agriculture and Forestry University	39293993	2758	68433	110651	60
+GCA_003016725.1	Pyricularia oryzae	ASM301672v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050112	2018-03-26	Fujian Agriculture and Forestry University	39160722	3322	40868	69790	60
+GCA_003016745.2	Pyricularia oryzae	ASM301674v2	Contig	HGAP v. 5.0.1.10424	PacBio Sequel	PRJNA354675	SAMN06050113	2021-09-24	Fujian Agriculture and Forestry University	46284791	16	6161260	6161260	144
+GCA_003016785.1	Pyricularia oryzae	ASM301678v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050114	2018-03-26	Fujian Agriculture and Forestry University	38990986	3380	57130	114978	60
+GCA_003016795.1	Pyricularia oryzae	ASM301679v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050116	2018-03-26	Fujian Agriculture and Forestry University	38719370	2669	74710	117377	60
+GCA_003016805.1	Pyricularia oryzae	ASM301680v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050118	2018-03-26	Fujian Agriculture and Forestry University	38969147	2757	76034	123226	60
+GCA_003016825.1	Pyricularia oryzae	ASM301682v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050119	2018-03-26	Fujian Agriculture and Forestry University	38700975	2738	70178	120862	60
+GCA_003016855.1	Pyricularia oryzae	ASM301685v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050120	2018-03-26	Fujian Agriculture and Forestry University	38994734	2818	71960	106586	60
+GCA_003016875.1	Pyricularia oryzae	ASM301687v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050121	2018-03-26	Fujian Agriculture and Forestry University	39029107	2668	68031	119949	60
+GCA_003016895.1	Pyricularia oryzae	ASM301689v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050122	2018-03-26	Fujian Agriculture and Forestry University	39032477	2735	70711	121539	60
+GCA_003016905.1	Pyricularia oryzae	ASM301690v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050123	2018-03-26	Fujian Agriculture and Forestry University	38673055	2901	64066	115595	60
+GCA_003016935.1	Pyricularia oryzae	ASM301693v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050125	2018-03-26	Fujian Agriculture and Forestry University	38461384	3874	59424	106764	60
+GCA_003016955.1	Pyricularia oryzae	ASM301695v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050127	2018-03-26	Fujian Agriculture and Forestry University	38749593	2617	72939	128591	60
+GCA_003016965.1	Pyricularia oryzae	ASM301696v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050130	2018-03-26	Fujian Agriculture and Forestry University	38925638	2760	72132	116757	60
+GCA_003016985.1	Pyricularia oryzae	ASM301698v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050132	2018-03-26	Fujian Agriculture and Forestry University	39072033	2802	68533	113814	60
+GCA_003017025.1	Pyricularia oryzae	ASM301702v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050133	2018-03-26	Fujian Agriculture and Forestry University	39199722	2766	79322	119451	60
+GCA_003017035.1	Pyricularia oryzae	ASM301703v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050134	2018-03-26	Fujian Agriculture and Forestry University	38654543	2743	72664	123365	60
+GCA_003017045.1	Pyricularia oryzae	ASM301704v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050137	2018-03-26	Fujian Agriculture and Forestry University	39245967	2671	106499	134629	60
+GCA_003017065.1	Pyricularia oryzae	ASM301706v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050138	2018-03-26	Fujian Agriculture and Forestry University	38796913	2428	102248	152858	60
+GCA_003017115.1	Pyricularia oryzae	ASM301711v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050139	2018-03-26	Fujian Agriculture and Forestry University	38821611	2296	98154	149869	60
+GCA_003017125.1	Pyricularia oryzae	ASM301712v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050140	2018-03-26	Fujian Agriculture and Forestry University	39311923	3047	99137	133377	60
+GCA_003017165.1	Pyricularia oryzae	ASM301716v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050143	2018-03-26	Fujian Agriculture and Forestry University	37251599	1932	90074	117106	60
+GCA_003017175.1	Pyricularia oryzae	ASM301717v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050141	2018-03-26	Fujian Agriculture and Forestry University	39313667	2790	91013	133287	60
+GCA_003017255.1	Pyricularia oryzae	ASM301725v1	Scaffold	CLC NGS Cell v. 7.0	Illumina HiSeq	PRJNA354675	SAMN06050145	2018-03-26	Fujian Agriculture and Forestry University	37851311	2054	81284	85055	60
+GCA_003991345.1	Pyricularia oryzae	ASM399134v1	Scaffold	Velvet v. 1.2.08	Illumina HiSeq	PRJNA438312	SAMN08712647	2019-01-03	Kasetsart University	39554992	5275	21833	108598	46
+GCA_004346965.1	Pyricularia oryzae	ASM434696v1	Complete Genome	HGAP v. 3	PacBio RSII; Illumina MiSeq	PRJNA507314	SAMN10491321	2019-03-12	Academia Sinica	42703282	7	6129159	6129159	250
+GCA_004785725.2	Pyricularia oryzae	ASM478572v2	Chromosome	Canu v. 1.9	Oxford Nanopore MiniION	PRJNA355407	SAMN06076154	2021-03-15	Kansas State University	44811409	10	6474281	6668242	280
+GCA_011799905.1	Pyricularia oryzae	ASM1179990v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340662	2020-03-31	Fujian Agriculture and Forestry University	43369826	13	5454130	5454130	159
+GCA_011799915.1	Pyricularia oryzae	ASM1179991v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340660	2020-03-31	Fujian Agriculture and Forestry University	46284791	16	6161260	6161260	144
+GCA_011799925.1	Pyricularia oryzae	ASM1179992v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340661	2020-03-31	Fujian Agriculture and Forestry University	44637475	10	5637639	5637639	205
+GCA_011799965.1	Pyricularia oryzae	ASM1179996v1	Contig	HGAP v. 4	PacBio Sequel	PRJNA556096	SAMN12340659	2020-03-31	Fujian Agriculture and Forestry University	44970614	13	5503597	5503597	202
+GCA_012272995.1	Pyricularia oryzae	ASM1227299v1	Complete Genome	Canu v. 2.0	Oxford Nanopore MiniION	PRJNA579424	SAMN14533965	2020-04-12	University of Kentucky	45612971	9	6155580	6155580	50
+GCA_012490805.1	Pyricularia oryzae	ASM1249080v1	Contig	SPAdes v. 3.13.0	Illumina Solexa	PRJNA610476	SAMN14557268	2020-04-17	CAAS,Chinese Academy of Agricultural Sciences	40186092	4727	11731	11731	150
+GCA_012490815.1	Pyricularia oryzae	ASM1249081v1	Contig	SPAdes v. 3.13.0	Illumina Solexa	PRJNA610476	SAMN14329444	2020-04-17	CAAS,Chinese Academy of Agricultural Sciences	38497009	4774	10922	10922	150
+GCA_012596185.1	Pyricularia oryzae	EtKY19-1	Scaffold	Velvet v. 1.2.10	Illumina MiSeq	PRJNA604303	SAMN13964779	2020-04-21	University of Kentucky	42436810	11465	21636	83832	43
+GCA_012654035.1	Pyricularia oryzae	ASM1265403v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14167125	2020-04-22	International Wheat Blast Consortium	45525518	172	778082	778082	33
+GCA_012654075.1	Pyricularia oryzae	ASM1265407v1	Scaffold	Newbler v. 2.6	Illumina MiSeq	PRJNA320483	SAMN14167126	2020-04-22	International Wheat Blast Consortium	42563887	4147	32504	135136	35
+GCA_012654105.1	Pyricularia oryzae	ASM1265410v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14167124	2020-04-22	International Wheat Blast Consortium	42018348	4249	30649	77760	27
+GCA_012654115.1	Pyricularia oryzae	ASM1265411v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14167122	2020-04-22	International Wheat Blast Consortium	45684507	30	5510653	5982914	32
+GCA_012654135.1	Pyricularia oryzae	ASM1265413v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14167123	2020-04-22	International Wheat Blast Consortium	36783302	3178	58039	82256	31
+GCA_012922935.1	Pyricularia oryzae	ASM1292293v1	Scaffold	CLC genomic workbench v. 7.0	Illumina HiSeq	PRJNA544882	SAMN11866126	2020-04-28	Fujian Agriculture and Forestry University	38083458	2701	60992	107099	34
+GCA_012978415.1	Pyricularia oryzae	ASM1297841v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144147	2020-05-06	International Wheat Blast Consortium	41760938	6103	30563	49043	38
+GCA_012978435.1	Pyricularia oryzae	ASM1297843v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144141	2020-05-06	International Wheat Blast Consortium	39247142	2510	35129	140086	38
+GCA_012978465.1	Pyricularia oryzae	ASM1297846v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144146	2020-05-06	International Wheat Blast Consortium	40283419	15979	4254	5516	36
+GCA_012978495.1	Pyricularia oryzae	ASM1297849v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144140	2020-05-06	International Wheat Blast Consortium	40104735	4713	22659	60051	40
+GCA_012978505.1	Pyricularia oryzae	ASM1297850v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144139	2020-05-06	International Wheat Blast Consortium	40318458	4418	24448	61609	32
+GCA_012978515.1	Pyricularia oryzae	ASM1297851v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144138	2020-05-06	International Wheat Blast Consortium	43555119	4133	25498	48617	40
+GCA_012979075.1	Pyricularia oryzae	ASM1297907v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144137	2020-05-06	International Wheat Blast Consortium	43478302	6539	15957	24344	35
+GCA_012979135.1	Pyricularia oryzae	ASM1297913v1	Scaffold	Velvet v. 1.2.13	Illumina MiniSeq	PRJNA607937	SAMN14153276	2020-05-06	University of Kentucky	42823219	8132	26228	128958	42
+GCA_013423085.1	Pyricularia oryzae	ASM1342308v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14603776	2020-07-17	International Wheat Blast Consortium	40754864	4189	31745	113793	31
+GCA_013423095.1	Pyricularia oryzae	ASM1342309v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14603775	2020-07-17	International Wheat Blast Consortium	40185200	5541	23185	61060	30
+GCA_013423135.1	Pyricularia oryzae	ASM1342313v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14603777	2020-07-17	International Wheat Blast Consortium	42595444	6411	28094	63324	30
+GCA_013423145.1	Pyricularia oryzae	ASM1342314v1	Scaffold	Newbler v. 2.6	Illumina MiSeq	PRJNA320483	SAMN14603773	2020-07-17	International Wheat Blast Consortium	40283415	15979	4254	5516	28
+GCA_013423165.1	Pyricularia oryzae	ASM1342316v1	Scaffold	Newbler v. 2.9	Illumina MiSeq	PRJNA320483	SAMN14603774	2020-07-17	International Wheat Blast Consortium	39295922	3944	36957	105402	32
+GCA_017589535.1	Pyricularia oryzae	ASM1758953v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144144	2021-03-26	International Wheat Blast Consortium	41010760	7101	21312	28568	35
+GCA_017589555.1	Pyricularia oryzae	ASM1758955v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144143	2021-03-26	International Wheat Blast Consortium	43681297	5438	21180	55278	39
+GCA_017589565.1	Pyricularia oryzae	ASM1758956v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144142	2021-03-26	International Wheat Blast Consortium	41448936	3324	30838	285670	40
+GCA_017589575.1	Pyricularia oryzae	ASM1758957v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14144145	2021-03-26	International Wheat Blast Consortium	40752054	4377	38952	81573	37
+GCA_019775995.1	Pyricularia oryzae	ASM1977599v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14151737	2021-08-26	International Wheat Blast Consortium	40916473	5477	22419	49266	35
+GCA_019776005.1	Pyricularia oryzae	ASM1977600v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA320483	SAMN14151738	2021-08-26	International Wheat Blast Consortium	42854431	8586	14468	141061	40
+GCA_021442365.1	Pyricularia oryzae	FMB_K23123	Contig	SPAdes v. 3.11.1; Canu v. 1.6	PacBio; Illumina MiSeq	PRJNA418767	SAMN08033374	2022-01-12	University of Bedfordshire	42583001	21	5380831	5380831	244
+GCA_021764705.1	Pyricularia oryzae	ASM2176470v1	Chromosome	NextDenovo v. v2.4	Oxford Nanopore; Illumina NextSeq	PRJNA799857	SAMN25211060	2022-02-01	Huazhong Agricultural University	45746719	14	5527333	7493747	210
+GCA_021845515.1	Pyricularia oryzae	ASM2184551v1	Contig	Celera Assembler v. 1.6; SPAdes v. 3.5	PacBio; Illumina MiSeq	PRJNA418767	SAMN12142210	2022-02-01	University of Bedfordshire	44150490	31	4729682	4729682	275
+GCA_024703655.1	Pyricularia oryzae	ASM2470365v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040832	2022-08-16	University of Bedfordshire	41826558	779	111131	119768	115
+GCA_024703665.1	Pyricularia oryzae	ASM2470366v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040831	2022-08-16	University of Bedfordshire	41920817	823	101478	108517	110
+GCA_024703685.1	Pyricularia oryzae	ASM2470368v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15098633	2022-08-16	University of Bedfordshire	41595240	915	93003	98454	81
+GCA_024703975.1	Pyricularia oryzae	ASM2470397v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15098632	2022-08-16	University of Bedfordshire	41662384	1231	89522	92250	105
+GCA_024704035.1	Pyricularia oryzae	ASM2470403v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040829	2022-08-16	University of Bedfordshire	41829476	781	112307	121279	105
+GCA_024704055.1	Pyricularia oryzae	ASM2470405v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040828	2022-08-16	University of Bedfordshire	42217637	874	115225	117140	120
+GCA_024704115.1	Pyricularia oryzae	ASM2470411v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040827	2022-08-16	University of Bedfordshire	41823963	758	114140	120504	105
+GCA_024704145.1	Pyricularia oryzae	ASM2470414v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040825	2022-08-16	University of Bedfordshire	43610565	1883	65963	71939	99
+GCA_024704165.1	Pyricularia oryzae	ASM2470416v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040824	2022-08-16	University of Bedfordshire	41684766	736	119664	126716	117
+GCA_024704195.1	Pyricularia oryzae	ASM2470419v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040823	2022-08-16	University of Bedfordshire	42341518	928	109493	113874	107
+GCA_024704225.1	Pyricularia oryzae	ASM2470422v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040822	2022-08-16	University of Bedfordshire	41818156	877	97358	101041	83
+GCA_024704235.1	Pyricularia oryzae	ASM2470423v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040821	2022-08-16	University of Bedfordshire	41361883	827	100178	104337	87
+GCA_024704255.1	Pyricularia oryzae	ASM2470425v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040820	2022-08-16	University of Bedfordshire	41929093	804	97895	108005	98
+GCA_024704275.1	Pyricularia oryzae	ASM2470427v1	Scaffold	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN15040819	2022-08-16	University of Bedfordshire	41609711	791	114158	114863	90
+GCA_024704305.1	Pyricularia oryzae	ASM2470430v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143020	2022-08-16	University of Bedfordshire	41553633	1705	52099	52099	105.03
+GCA_024704315.1	Pyricularia oryzae	ASM2470431v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143019	2022-08-16	University of Bedfordshire	42254231	1367	59266	59266	110.35
+GCA_024704335.1	Pyricularia oryzae	ASM2470433v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143018	2022-08-16	University of Bedfordshire	41548171	1367	58114	58114	104.82
+GCA_024704405.1	Pyricularia oryzae	ASM2470440v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143017	2022-08-16	University of Bedfordshire	42182491	1008	122529	122529	99.8
+GCA_024704415.1	Pyricularia oryzae	ASM2470441v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143016	2022-08-16	University of Bedfordshire	42509517	726	135039	135039	114
+GCA_024704445.1	Pyricularia oryzae	ASM2470444v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143015	2022-08-16	University of Bedfordshire	42543665	1291	66396	66396	121.63
+GCA_024704475.1	Pyricularia oryzae	ASM2470447v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143014	2022-08-16	University of Bedfordshire	42163530	2250	34966	34966	96.66
+GCA_024704485.1	Pyricularia oryzae	ASM2470448v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143013	2022-08-16	University of Bedfordshire	42785286	1793	45195	45195	72.03
+GCA_024704505.1	Pyricularia oryzae	ASM2470450v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143012	2022-08-16	University of Bedfordshire	41132665	1471	58809	58809	128.04
+GCA_024704515.1	Pyricularia oryzae	ASM2470451v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143011	2022-08-16	University of Bedfordshire	41650482	1220	65604	65604	118.55
+GCA_024704575.1	Pyricularia oryzae	ASM2470457v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143010	2022-08-16	University of Bedfordshire	41704176	1493	53543	53543	111.36
+GCA_024704605.1	Pyricularia oryzae	ASM2470460v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143009	2022-08-16	University of Bedfordshire	41388510	1401	53440	53440	105.22
+GCA_024704625.1	Pyricularia oryzae	ASM2470462v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143008	2022-08-16	University of Bedfordshire	41533915	1269	63806	63806	103.73
+GCA_024704655.1	Pyricularia oryzae	ASM2470465v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143007	2022-08-16	University of Bedfordshire	41579359	1544	52067	52067	101.71
+GCA_024704685.1	Pyricularia oryzae	ASM2470468v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143006	2022-08-16	University of Bedfordshire	41747166	1478	52230	52230	101.1
+GCA_024704695.1	Pyricularia oryzae	ASM2470469v1	Contig	SPAdes v. 3.11.1	Illumina HiSeq	PRJNA418767	SAMN12143005	2022-08-16	University of Bedfordshire	41957450	1586	57318	57318	120.11
+GCA_025134795.1	Pyricularia oryzae	ZJE1M_oryza	Scaffold	SPAdes v. 1.4.0	Illumina NovaSeq	PRJNA817219	SAMN26750476	2022-09-12	Jilin Academy of Agricultural Sciences	37799225	1004	106112	114867	50
+GCA_025135345.1	Pyricularia oryzae	ZJG1M_oryza	Scaffold	SPAdes v. 1.4.0	Illumina NovaSeq	PRJNA817219	SAMN26750225	2022-09-12	Jilin Academy of Agricultural Sciences	37841042	1034	117886	123987	50
+GCA_025473255.1	Pyricularia oryzae	ASM2547325v1	Scaffold	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714328	2022-09-28	Kansas state University	45519630	124	3333742	3333742	58.6
+GCA_025473265.1	Pyricularia oryzae	ASM2547326v1	Contig	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714326	2022-09-28	Kansas state University	44674728	64	3420154	3420154	56.67
+GCA_025473275.1	Pyricularia oryzae	ASM2547327v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714324	2022-09-28	Kansas state University	44459350	73	4188193	4188193	50.15
+GCA_025473285.1	Pyricularia oryzae	ASM2547328v1	Contig	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714327	2022-09-28	Kansas state University	44722005	88	2984647	2984647	31.64
+GCA_025473295.1	Pyricularia oryzae	ASM2547329v1	Scaffold	CANU v. 2.1.1	Oxford Nanopore MinION	PRJNA753862	SAMN20714325	2022-09-28	Kansas state University	45007896	136	1562235	1562235	25.21
+GCA_025473435.1	Pyricularia oryzae	ASM2547343v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714323	2022-09-28	Kansas state University	44462687	24	5150716	5150716	61.66
+GCA_025473445.1	Pyricularia oryzae	ASM2547344v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714322	2022-09-28	Kansas state University	44393497	33	4365759	4365759	117.14
+GCA_025473575.1	Pyricularia oryzae	ASM2547357v1	Contig	CANU v. 1.9	Oxford Nanopore MinION	PRJNA753862	SAMN20714321	2022-09-28	Kansas state University	44816243	182	1337757	1337757	16.12
+GCA_025727595.1	Pyricularia oryzae	ASM2572759v1	Contig	MaSuRCA v. 3.3.3	Oxford Nanopore MinION; Illumina	PRJNA881958	SAMN30921126	2022-10-17	The Sainsbury Laboratory	47905671	39	3032991	3032991	235
+GCA_026170115.1	Pyricularia oryzae	Rep1-bas4#3	Contig	CANU v. 2.0	Oxford Nanopore MinION	PRJNA753862	SAMN29985040	2022-11-14	Kansas state University	45835137	204	1845737	1845737	22.52
+GCA_026170125.1	Pyricularia oryzae	Rep1-bas4#11	Contig	CANU v. 2.0	Oxford Nanopore MinION	PRJNA753862	SAMN29985041	2022-11-14	Kansas state University	45796476	263	849061	849061	21.44
+GCA_026170135.1	Pyricularia oryzae	Rep1-bas4#2	Contig	CANU v. 2.0	Oxford Nanopore MinION	PRJNA753862	SAMN29985039	2022-11-14	Kansas state University	45520154	232	845321	845321	19.06
+GCA_026261775.1	Pyricularia oryzae	ZM1-2.v0.43	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA849498	SAMN29254577	2022-12-02	Kansas State University	44974979	12	6045076	6045076	60
+GCA_030512215.1	Pyricularia oryzae	TGR2_hybrid_assembly	Chromosome	SPAdes v. 3.14	PacBio RSII	PRJNA825294	SAMN27511241	2023-07-26	National Science and Technology Development Agency	38916680	3234	152159	5827256	80
+GCA_030718865.1	Pyricularia oryzae	ASM3071886v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1002604	SAMN36849576	2023-08-14	Kansas State University	41682104	9	6136143	6306421	150
+GCA_031001895.1	Pyricularia oryzae	ASM3100189v1	Scaffold	Velvet v. 2023-02-28	Illumina NovaSeq	PRJNA926786	SAMN33023181	2023-08-30	University of Kentucky	39978738	8950	10459	25643	60.929
+GCA_031002315.1	Pyricularia oryzae	ASM3100231v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN33024728	2023-08-30	University of Kentucky	41348831	8972	13034	18175	40.7965
+GCA_031208665.1	Pyricularia oryzae	T29_UKY_PO	Scaffold	Velvet v. FEB-2023	Illumina NovaSeq	PRJNA926786	SAMN33023215	2023-09-07	University of Kentucky	44054931	12454	12037	38724	27
+GCA_031208675.1	Pyricularia oryzae	ASM3120867v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN32979421	2023-09-07	University of Kentucky	40493166	9286	9967	38129	58
+GCA_031208725.1	Pyricularia oryzae	ASM3120872v1	Contig	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN33023214	2023-09-07	University of Kentucky	39770362	1978	118202	118202	40
+GCA_031211395.1	Pyricularia oryzae	ASM3121139v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN33023130	2023-09-07	University of Kentucky	37840603	10340	10099	24999	116.384
+GCA_031212055.1	Pyricularia oryzae	ASM3121205v1	Contig	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN33018055	2023-09-07	University of Kentucky	42058027	2590	55184	55184	166
+GCA_031306055.1	Pyricularia oryzae	ASM3130605v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN32979412	2023-09-08	University of Kentucky	43845043	9384	9752	13678	35
+GCA_031306085.1	Pyricularia oryzae	ASM3130608v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN33023180	2023-09-08	University of Kentucky	35951648	36416	1297	5661	18
+GCA_031466475.1	Pyricularia oryzae	ASM3146647v1	Contig	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN33037742	2023-09-14	University of Kentucky	39330571	6352	17944	17944	20
+GCA_031466495.1	Pyricularia oryzae	ASM3146649v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN33023234	2023-09-14	University of Kentucky	40075611	8015	11899	38125	21
+GCA_032881745.1	Pyricularia oryzae	JA119_contigs_nh.fasta	Scaffold	Velvet v. FEB-2023	Illumina	PRJNA926786	SAMN33013233	2023-09-05	University of Kentucky	40275392	6910	15510	44160	85
+GCA_033035085.1	Pyricularia oryzae	ASM3303508v1	Scaffold	Velvet v. 1.2.10	Illumina MiniSeq	PRJNA607937	SAMN14153273	2023-10-25	University of Kentucky	43244095	4529	40598	105804	37
+GCA_033035115.1	Pyricularia oryzae	ASM3303511v1	Scaffold	Velvet v. 1.2.11	Illumina MiniSeq	PRJNA607937	SAMN14153274	2023-10-25	University of Kentucky	42718462	9508	19036	62797	36
+GCA_033035145.1	Pyricularia oryzae	ASM3303514v1	Scaffold	Velvet v. 1.2.12	Illumina MiniSeq	PRJNA607937	SAMN14153275	2023-10-25	University of Kentucky	43853137	8128	25856	103210	40
+GCA_033875275.1	Pyricularia oryzae	ASM3387527v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN32979455	2023-11-20	University of Kentucky	43329010	6540	17484	88629	49
+GCA_033875295.1	Pyricularia oryzae	ASM3387529v1	Scaffold	Velvet v. 1.2.10	IlluminaSeq	PRJNA926786	SAMN33020648	2023-11-20	University of Kentucky	37458192	6006	13278	57082	52
+GCA_036172685.1	Pyricularia oryzae	TF05-1MC7Ref1	Chromosome	Canu v. 2.0	Oxford Nanopore MinION	PRJNA750760	SAMN36850036	2024-01-31	Kansas State University	45513680	11	6099538	6099538	100
+GCA_036493215.1	Pyricularia oryzae	Br48_v3	Complete Genome	HGAP, CLC Genomics workbench v. 11.0.1	PacBio2; Illumina MiSeq;Illumina HiSeq	PRJDB14561	SAMD00549507	2023-08-24	Cell function and structure, Graduate School of Agricultural Sciences, Kobe University	42501442	7	6276809	6276809	250
+GCA_043231905.1	Pyricularia oryzae	KSU_PyrO_219_1	Chromosome	Canu v. 2.2.1	Oxford Nanopore MinION	PRJNA1006359	SAMN37099171	2024-10-16	Kansas State University	46767474	13	6382644	6382644	149.3
+GCA_043231915.1	Pyricularia oryzae	KSU_PyrO_137_1	Chromosome	Canu v. 2.2.1	Oxford Nanopore MinION	PRJNA1006359	SAMN37099170	2024-10-16	Kansas State University	44200050	9	5522887	5740312	62.1
+GCA_043231925.1	Pyricularia oryzae	KSU_PyrO_135_1	Chromosome	Canu v. 1.9	Oxford Nanopore MinION	PRJNA1006359	SAMN37099169	2024-10-16	Kansas State University	44468491	10	5950546	5950546	131.9
+GCA_046629725.1	Pyricularia oryzae	UK_UFVPY113	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732780	2025-01-14	University of Kentucky	43297333	5570	17145	70336	57.66
+GCA_046629885.1	Pyricularia oryzae	UK_UFVPY166	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732776	2025-01-14	University of Kentucky	39659620	6990	16044	84342	82
+GCA_046718435.1	Pyricularia oryzae	UK_UFVPY232	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732783	2025-01-15	University of Kentucky	41801214	3639	31332	83582	63.1574
+GCA_046718735.1	Pyricularia oryzae	KSU_PyrO_Guy11_1	Chromosome	Canu v. 2.2.1	Oxford Nanopore MinION	PRJNA1006359	SAMN37608890	2025-01-17	Kansas State University	42607926	14	5802300	6590161	86.6
+GCA_046865825.1	Pyricularia oryzae	LmSM248	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN40727758	2025-01-21	University of Kentucky	43800694	8528	15869	67659	84
+GCA_046866195.1	Pyricularia oryzae	UK_UFVPY231	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732784	2025-01-21	University of Kentucky	44394824	6589	16712	101661	67
+GCA_047301875.1	Pyricularia oryzae	UK_U249	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732779	2025-01-29	University of Kentucky	40880654	6176	19144	104435	88
+GCA_047323615.1	Pyricularia oryzae	ASM4732361v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732774	2025-01-30	University of Kentucky	43059422	10308	12095	34587	48
+GCA_047323675.1	Pyricularia oryzae	ASM4732367v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732775	2025-01-30	University of Kentucky	43369703	6639	16894	75381	76
+GCA_047323685.1	Pyricularia oryzae	ASM4732368v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732785	2025-01-30	University of Kentucky	44675066	9951	14614	62392	89.9
+GCA_047323795.1	Pyricularia oryzae	ASM4732379v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732778	2025-01-30	University of Kentucky	41228753	4277	26995	77753	56.12
+GCA_047323855.1	Pyricularia oryzae	ASM4732385v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN41434657	2025-01-30	University of Kentucky	42994851	5243	24538	66750	80
+GCA_047323865.1	Pyricularia oryzae	ASM4732386v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732782	2025-01-30	University of Kentucky	42156087	3469	32549	76417	69.25
+GCA_048987255.1	Pyricularia oryzae	ASM4898725v1	Scaffold	Velvet v. 1.12.0	Illumina NovaSeq	PRJNA926786	SAMN39732789	2025-03-26	University of Kentucky	41826850	3844	30541	87678	83
+GCA_049190995.1	Pyricularia oryzae	ASM4919099v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39733236	2025-03-31	University of Kentucky	44594106	11234	13939	67678	87
+GCA_049309555.1	Pyricularia oryzae	UK_UFVPY198	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN39732781	2025-04-04	University of Kentucky	38928783	5656	17832	98072	82
+GCA_049355315.1	Pyricularia oryzae	ASM4935531v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804022	2025-04-08	Brazilian Agricultural Research Corporation	43016526	1175	134922	6144003	114
+GCA_049355325.1	Pyricularia oryzae	ASM4935532v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804020	2025-04-08	Brazilian Agricultural Research Corporation	42979565	944	148174	6163044	93
+GCA_049355335.1	Pyricularia oryzae	ASM4935533v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804015	2025-04-08	Brazilian Agricultural Research Corporation	42019977	987	135058	6044138	109
+GCA_049355375.1	Pyricularia oryzae	ASM4935537v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804009	2025-04-08	Brazilian Agricultural Research Corporation	42870903	1054	137613	6273795	140
+GCA_049355395.1	Pyricularia oryzae	ASM4935539v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804030	2025-04-08	Brazilian Agricultural Research Corporation	43021031	1246	134959	6149646	92
+GCA_049355405.1	Pyricularia oryzae	ASM4935540v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804025	2025-04-08	Brazilian Agricultural Research Corporation	43074183	986	152340	6232963	122
+GCA_049355415.1	Pyricularia oryzae	ASM4935541v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804029	2025-04-08	Brazilian Agricultural Research Corporation	43025429	954	150407	6250136	112
+GCA_049735435.1	Pyricularia oryzae	ASM4973543v1	Complete Genome	HiCanu v. 2.2	PacBio SequelI	PRJNA1210831	SAMN46257954	2025-04-17	Chinese Academy of Sciences	43463497	7	6853756	6853756	173
+GCA_049996535.1	Pyricularia oryzae	T29.1	Scaffold	Velvet v. 1.2.10	Illumina	PRJNA926786	SAMN39732777	2025-04-29	University of Kentucky	42284672	5844	14415	64165	37
+GCA_050140945.1	Pyricularia oryzae	ASM5014094v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111389	2025-05-05	Fujian Agriculture and Forestry University	42650632	119	5436533	5436533	150
+GCA_050140955.1	Pyricularia oryzae	ASM5014095v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43143353	2025-05-05	Fujian Agriculture and Forestry University	41891141	83	5443991	5443991	100
+GCA_050140975.1	Pyricularia oryzae	ASM5014097v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111390	2025-05-05	Fujian Agriculture and Forestry University	41386469	79	4806363	4806363	130
+GCA_050141065.1	Pyricularia oryzae	ASM5014106v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111387	2025-05-05	Fujian Agriculture and Forestry University	42559394	105	4793887	4793887	170
+GCA_050141075.1	Pyricularia oryzae	ASM5014107v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111386	2025-05-05	Fujian Agriculture and Forestry University	41779481	67	5444627	5444627	120
+GCA_050141105.1	Pyricularia oryzae	ASM5014110v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111388	2025-05-05	Fujian Agriculture and Forestry University	35218470	120	4785008	4785008	140
+GCA_050141145.1	Pyricularia oryzae	ASM5014114v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111385	2025-05-05	Fujian Agriculture and Forestry University	41617990	106	4953908	4953908	90
+GCA_050141165.1	Pyricularia oryzae	ASM5014116v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111384	2025-05-05	Fujian Agriculture and Forestry University	40376776	66	4779076	4779076	110
+GCA_050141175.1	Pyricularia oryzae	ASM5014117v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111383	2025-05-05	Fujian Agriculture and Forestry University	46018840	145	5867634	5867634	140
+GCA_050141245.1	Pyricularia oryzae	ASM5014124v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111382	2025-05-05	Fujian Agriculture and Forestry University	40816409	58	5904295	5904295	120
+GCA_050141255.1	Pyricularia oryzae	ASM5014125v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111380	2025-05-05	Fujian Agriculture and Forestry University	48373624	112	4608212	4608212	110
+GCA_050141285.1	Pyricularia oryzae	ASM5014128v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111379	2025-05-05	Fujian Agriculture and Forestry University	49011405	112	4300898	4300898	100
+GCA_050141325.1	Pyricularia oryzae	ASM5014132v1	Contig	Canu v. 2.2	PacBio Sequel	PRJNA1146767	SAMN43111378	2025-05-05	Fujian Agriculture and Forestry University	46780765	54	4273260	4273260	90
+GCA_050157325.1	Pyricularia oryzae	ASM5015732v1	Complete Genome	Canu v. 2.2	Oxford Nanopore PromethION	PRJNA1146767	SAMN43111381	2025-05-06	Fujian Agriculture and Forestry University	47777704	9	6738481	6738481	360
+GCA_050157855.1	Pyricularia oryzae	ASM5015785v1	Complete Genome	Canu v. 2.2	Oxford Nanopore PromethION	PRJNA1146767	SAMN43111376	2025-05-06	Fujian Agriculture and Forestry University	45859373	9	6551064	6551064	420
+GCA_050157985.1	Pyricularia oryzae	ASM5015798v1	Complete Genome	Canu v. 2.2	PacBio	PRJNA1146767	SAMN43111377	2025-05-06	Fujian Agriculture and Forestry University	42973823	7	6773983	6773983	160
+GCA_050656645.1	Pyricularia oryzae	95HPH-4-hifi	Contig	canu v. 2.2	PacBio	PRJNA1146767	SAMN43143354	2025-06-02	Fujian Agriculture and Forestry University	46065458	39	4850927	4850927	110
+GCA_050656755.1	Pyricularia oryzae	HCTi.v1.0.fasta	Contig	hifiasm v. v0.24.0-r703	PacBio	PRJNA1146767	SAMN48319862	2025-06-02	Fujian Agriculture and Forestry University	46771724	18	6015361	6015361	110
+GCA_052055085.1	Pyricularia oryzae	ASM5205508v1	Contig	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN47132510	2025-08-15	University of Kentucky	43958104	4161	45817	45817	40
+GCA_052855805.1	Pyricularia oryzae	ASM5285580v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000585	2025-09-26	Yunnan Agricultural University	35749546	1804	53121	392306	69.68
+GCA_052855865.1	Pyricularia oryzae	ASM5285586v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000583	2025-09-26	Yunnan Agricultural University	35985680	1616	66293	341091	47.22
+GCA_052855885.1	Pyricularia oryzae	ASM5285588v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000582	2025-09-26	Yunnan Agricultural University	36515767	2436	64389	385645	62.66
+GCA_052855925.1	Pyricularia oryzae	ASM5285592v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000580	2025-09-26	Yunnan Agricultural University	35919248	1481	112488	340729	151.64
+GCA_052855945.1	Pyricularia oryzae	ASM5285594v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000581	2025-09-26	Yunnan Agricultural University	36195685	1679	108666	421978	75.78
+GCA_052855965.1	Pyricularia oryzae	ASM5285596v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000579	2025-09-26	Yunnan Agricultural University	36504568	1941	126450	465211	162
+GCA_052856025.1	Pyricularia oryzae	ASM5285602v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000578	2025-09-26	Yunnan Agricultural University	36390158	1609	141178	396472	101.37
+GCA_052856045.1	Pyricularia oryzae	ASM5285604v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000577	2025-09-26	Yunnan Agricultural University	36050013	1509	108750	401822	195.53
+GCA_052856065.1	Pyricularia oryzae	ASM5285606v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000576	2025-09-26	Yunnan Agricultural University	36258741	1941	62617	464693	86.16
+GCA_052856105.1	Pyricularia oryzae	ASM5285610v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000575	2025-09-26	Yunnan Agricultural University	35140262	2518	37359	278737	79.76
+GCA_052856125.1	Pyricularia oryzae	ASM5285612v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000573	2025-09-26	Yunnan Agricultural University	35526430	1871	50930	337776	65.53
+GCA_052856145.1	Pyricularia oryzae	ASM5285614v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000574	2025-09-26	Yunnan Agricultural University	35735816	1733	61117	340066	80.04
+GCA_052856185.1	Pyricularia oryzae	ASM5285618v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000572	2025-09-26	Yunnan Agricultural University	35729271	3872	24577	222918	134.58
+GCA_052856215.1	Pyricularia oryzae	ASM5285621v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000570	2025-09-26	Yunnan Agricultural University	35957232	1472	64785	230251	60.39
+GCA_052856235.1	Pyricularia oryzae	ASM5285623v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000571	2025-09-26	Yunnan Agricultural University	36427873	1670	78604	459667	153.54
+GCA_052856275.1	Pyricularia oryzae	ASM5285627v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000569	2025-09-26	Yunnan Agricultural University	35721706	1568	66469	351457	66.76
+GCA_052856295.1	Pyricularia oryzae	ASM5285629v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000568	2025-09-26	Yunnan Agricultural University	36487037	1860	97947	409053	65.78
+GCA_052856315.1	Pyricularia oryzae	ASM5285631v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000567	2025-09-26	Yunnan Agricultural University	36495757	1823	98321	453351	68.53
+GCA_052856355.1	Pyricularia oryzae	ASM5285635v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000566	2025-09-26	Yunnan Agricultural University	35806712	1878	61338	355899	84.77
+GCA_052856375.1	Pyricularia oryzae	ASM5285637v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000565	2025-09-26	Yunnan Agricultural University	35857007	1403	72541	351573	100.18
+GCA_052856415.1	Pyricularia oryzae	ASM5285641v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000564	2025-09-26	Yunnan Agricultural University	35929656	1531	72285	355853	56.98
+GCA_052856435.1	Pyricularia oryzae	ASM5285643v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000563	2025-09-26	Yunnan Agricultural University	35399221	1455	73526	306560	78.62
+GCA_052856455.1	Pyricularia oryzae	ASM5285645v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000562	2025-09-26	Yunnan Agricultural University	35704414	1740	66320	391684	63.03
+GCA_052856475.1	Pyricularia oryzae	ASM5285647v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000560	2025-09-26	Yunnan Agricultural University	35494232	9787	6037	105224	250.15
+GCA_052856495.1	Pyricularia oryzae	ASM5285649v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000559	2025-09-26	Yunnan Agricultural University	35196550	1468	72967	307719	51.9
+GCA_052856515.1	Pyricularia oryzae	ASM5285651v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000554	2025-09-26	Yunnan Agricultural University	35055396	1648	97525	242217	97.42
+GCA_052856535.1	Pyricularia oryzae	ASM5285653v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000558	2025-09-26	Yunnan Agricultural University	36111846	1698	130035	337629	141.28
+GCA_052856575.1	Pyricularia oryzae	ASM5285657v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000553	2025-09-26	Yunnan Agricultural University	36359683	1775	81039	464963	103.43
+GCA_052856615.1	Pyricularia oryzae	ASM5285661v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000552	2025-09-26	Yunnan Agricultural University	36464694	2096	58211	340504	78.88
+GCA_052856635.1	Pyricularia oryzae	ASM5285663v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000551	2025-09-26	Yunnan Agricultural University	35107890	1736	80362	352893	77.43
+GCA_052856655.1	Pyricularia oryzae	ASM5285665v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000550	2025-09-26	Yunnan Agricultural University	35917835	1830	73960	391765	79.55
+GCA_052856695.1	Pyricularia oryzae	ASM5285669v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000549	2025-09-26	Yunnan Agricultural University	35794952	1438	59431	309832	70.58
+GCA_052856715.1	Pyricularia oryzae	ASM5285671v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000548	2025-09-26	Yunnan Agricultural University	36319609	1839	85269	450771	66.84
+GCA_052856725.1	Pyricularia oryzae	ASM5285672v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000547	2025-09-26	Yunnan Agricultural University	35869971	3851	23772	210116	70.12
+GCA_052856755.1	Pyricularia oryzae	ASM5285675v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000546	2025-09-26	Yunnan Agricultural University	35860172	1816	66571	391494	63.37
+GCA_052856775.1	Pyricularia oryzae	ASM5285677v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000545	2025-09-26	Yunnan Agricultural University	35885771	3529	29538	241339	65.02
+GCA_052856795.1	Pyricularia oryzae	ASM5285679v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000542	2025-09-26	Yunnan Agricultural University	35909211	2094	45222	328412	53.74
+GCA_052856835.1	Pyricularia oryzae	ASM5285683v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000541	2025-09-26	Yunnan Agricultural University	35877560	3292	28670	248101	95.99
+GCA_052856855.1	Pyricularia oryzae	ASM5285685v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000539	2025-09-26	Yunnan Agricultural University	35617526	1286	71523	306080	84.73
+GCA_052856875.1	Pyricularia oryzae	ASM5285687v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000540	2025-09-26	Yunnan Agricultural University	35947279	1442	71500	337745	77.28
+GCA_052856935.1	Pyricularia oryzae	ASM5285693v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000537	2025-09-26	Yunnan Agricultural University	36616531	1977	85331	470970	107.54
+GCA_052856955.1	Pyricularia oryzae	ASM5285695v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000538	2025-09-26	Yunnan Agricultural University	36370653	1672	98371	464992	88.06
+GCA_052856975.1	Pyricularia oryzae	ASM5285697v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000536	2025-09-26	Yunnan Agricultural University	35756961	1225	64460	259286	53.18
+GCA_052856995.1	Pyricularia oryzae	ASM5285699v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000535	2025-09-26	Yunnan Agricultural University	36657831	1656	143393	382272	79.94
+GCA_052857025.1	Pyricularia oryzae	ASM5285702v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000534	2025-09-26	Yunnan Agricultural University	35776020	5047	19051	259767	82.93
+GCA_052857045.1	Pyricularia oryzae	ASM5285704v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000533	2025-09-26	Yunnan Agricultural University	36098634	1646	68192	355975	52.65
+GCA_052857065.1	Pyricularia oryzae	ASM5285706v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000532	2025-09-26	Yunnan Agricultural University	35562095	1796	57713	337928	66.34
+GCA_052857105.1	Pyricularia oryzae	ASM5285710v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000530	2025-09-26	Yunnan Agricultural University	36587416	2037	91227	469949	83.21
+GCA_052857125.1	Pyricularia oryzae	ASM5285712v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000531	2025-09-26	Yunnan Agricultural University	35709829	4179	22935	269961	82.26
+GCA_052857165.1	Pyricularia oryzae	ASM5285716v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000525	2025-09-26	Yunnan Agricultural University	35803303	1497	88233	347664	70.31
+GCA_052857295.1	Pyricularia oryzae	ASM5285729v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000529	2025-09-26	Yunnan Agricultural University	36068171	1584	89039	465592	65.66
+GCA_052857335.1	Pyricularia oryzae	ASM5285733v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000528	2025-09-26	Yunnan Agricultural University	35645109	5114	17195	250596	66.76
+GCA_052857355.1	Pyricularia oryzae	ASM5285735v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000527	2025-09-26	Yunnan Agricultural University	36592387	1686	163518	465008	105.17
+GCA_052857415.1	Pyricularia oryzae	ASM5285741v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000526	2025-09-26	Yunnan Agricultural University	36513367	1650	141211	401798	114.99
+GCA_052857435.1	Pyricularia oryzae	ASM5285743v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000524	2025-09-26	Yunnan Agricultural University	35447196	2476	35927	250133	53.38
+GCA_052857455.1	Pyricularia oryzae	ASM5285745v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000523	2025-09-26	Yunnan Agricultural University	36346230	1638	128405	356503	147.95
+GCA_052857475.1	Pyricularia oryzae	ASM5285747v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000522	2025-09-26	Yunnan Agricultural University	36834101	1775	159555	450787	166.32
+GCA_052857495.1	Pyricularia oryzae	ASM5285749v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000521	2025-09-26	Yunnan Agricultural University	35593355	3388	27060	246795	59.84
+GCA_052857515.1	Pyricularia oryzae	ASM5285751v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000520	2025-09-26	Yunnan Agricultural University	35443038	1813	69575	252685	110.35
+GCA_052857555.1	Pyricularia oryzae	ASM5285755v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000519	2025-09-26	Yunnan Agricultural University	36796852	1925	153834	466977	174.29
+GCA_052857575.1	Pyricularia oryzae	ASM5285757v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000518	2025-09-26	Yunnan Agricultural University	35662980	1805	74087	278484	182.56
+GCA_052857595.1	Pyricularia oryzae	ASM5285759v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000517	2025-09-26	Yunnan Agricultural University	36295397	1632	127630	450646	77.18
+GCA_052857635.1	Pyricularia oryzae	ASM5285763v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000516	2025-09-26	Yunnan Agricultural University	36016435	2012	56442	356098	52.02
+GCA_052857675.1	Pyricularia oryzae	ASM5285767v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000515	2025-09-26	Yunnan Agricultural University	35837716	4611	20937	249832	42.98
+GCA_052857695.1	Pyricularia oryzae	ASM5285769v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000513	2025-09-26	Yunnan Agricultural University	35319870	3807	23141	246788	62.73
+GCA_052857715.1	Pyricularia oryzae	ASM5285771v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000512	2025-09-26	Yunnan Agricultural University	36055315	1628	130034	337730	127.8
+GCA_052857735.1	Pyricularia oryzae	ASM5285773v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000511	2025-09-26	Yunnan Agricultural University	35884270	1925	70641	329033	149.29
+GCA_052857755.1	Pyricularia oryzae	ASM5285775v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000510	2025-09-26	Yunnan Agricultural University	35799627	1531	100419	278981	103.82
+GCA_052857775.1	Pyricularia oryzae	ASM5285777v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000509	2025-09-26	Yunnan Agricultural University	35774391	1914	73696	317728	116.73
+GCA_052857795.1	Pyricularia oryzae	ASM5285779v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000508	2025-09-26	Yunnan Agricultural University	35551967	1847	66005	337623	49.73
+GCA_052857815.1	Pyricularia oryzae	ASM5285781v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000507	2025-09-26	Yunnan Agricultural University	35129331	2331	40372	224074	61.47
+GCA_052857855.1	Pyricularia oryzae	ASM5285785v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000505	2025-09-26	Yunnan Agricultural University	35903402	2847	33718	301190	62.19
+GCA_052857895.1	Pyricularia oryzae	ASM5285789v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000506	2025-09-26	Yunnan Agricultural University	35973539	1495	69627	438530	91.51
+GCA_052857915.1	Pyricularia oryzae	ASM5285791v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000504	2025-09-26	Yunnan Agricultural University	36537077	1590	146545	468649	128.62
+GCA_052857965.1	Pyricularia oryzae	ASM5285796v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000502	2025-09-26	Yunnan Agricultural University	35645740	1846	75377	240760	286.31
+GCA_052857985.1	Pyricularia oryzae	ASM5285798v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000498	2025-09-26	Yunnan Agricultural University	35377515	1400	56116	171302	89.49
+GCA_052858005.1	Pyricularia oryzae	ASM5285800v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000497	2025-09-26	Yunnan Agricultural University	36060443	1537	130443	333753	127.33
+GCA_052858025.1	Pyricularia oryzae	ASM5285802v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000495	2025-09-26	Yunnan Agricultural University	35375454	1567	110809	340594	80.75
+GCA_052858045.1	Pyricularia oryzae	ASM5285804v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000496	2025-09-26	Yunnan Agricultural University	36035587	1517	96117	417735	56.55
+GCA_052858065.1	Pyricularia oryzae	ASM5285806v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000494	2025-09-26	Yunnan Agricultural University	36002669	1482	66584	337866	55.47
+GCA_052858085.1	Pyricularia oryzae	ASM5285808v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000493	2025-09-26	Yunnan Agricultural University	36482564	1601	134486	471662	93.02
+GCA_052858105.1	Pyricularia oryzae	ASM5285810v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000492	2025-09-26	Yunnan Agricultural University	35550273	9296	10037	134970	143.69
+GCA_052858125.1	Pyricularia oryzae	ASM5285812v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000488	2025-09-26	Yunnan Agricultural University	35412676	1355	60105	186301	57.38
+GCA_052858155.1	Pyricularia oryzae	ASM5285815v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000487	2025-09-26	Yunnan Agricultural University	35936531	1956	75222	290305	140.56
+GCA_052858175.1	Pyricularia oryzae	ASM5285817v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000603	2025-09-26	Yunnan Agricultural University	35773770	1770	62318	338004	76.77
+GCA_052858235.1	Pyricularia oryzae	ASM5285823v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000605	2025-09-26	Yunnan Agricultural University	35856401	1707	63760	255674	74.01
+GCA_052858255.1	Pyricularia oryzae	ASM5285825v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000600	2025-09-26	Yunnan Agricultural University	36060762	1735	64478	289931	100.42
+GCA_052858265.1	Pyricularia oryzae	ASM5285826v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000599	2025-09-26	Yunnan Agricultural University	35476619	1482	50807	299646	82.17
+GCA_052858315.1	Pyricularia oryzae	ASM5285831v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000598	2025-09-26	Yunnan Agricultural University	35352933	1292	61250	155152	58.14
+GCA_052858335.1	Pyricularia oryzae	ASM5285833v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000597	2025-09-26	Yunnan Agricultural University	35423740	1283	58198	169133	71.43
+GCA_052858355.1	Pyricularia oryzae	ASM5285835v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000586	2025-09-26	Yunnan Agricultural University	35902517	1894	51414	355843	117.87
+GCA_052858375.1	Pyricularia oryzae	ASM5285837v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000596	2025-09-26	Yunnan Agricultural University	36008242	1946	65231	312617	82.21
+GCA_052858395.1	Pyricularia oryzae	ASM5285839v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000595	2025-09-26	Yunnan Agricultural University	35685764	1704	55823	337825	81.67
+GCA_052858415.1	Pyricularia oryzae	ASM5285841v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000594	2025-09-26	Yunnan Agricultural University	35964145	1536	71173	340788	83.52
+GCA_052858455.1	Pyricularia oryzae	ASM5285845v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000592	2025-09-26	Yunnan Agricultural University	35472471	4050	21054	276513	65.75
+GCA_052858475.1	Pyricularia oryzae	ASM5285847v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000591	2025-09-26	Yunnan Agricultural University	35911283	1710	61453	331101	72.01
+GCA_052858515.1	Pyricularia oryzae	ASM5285851v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000589	2025-09-26	Yunnan Agricultural University	35294599	4053	18898	238890	75.29
+GCA_055472255.1	Pyricularia oryzae	ASM5547225v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000561	2026-02-24	Yunnan Agricultural University	35938359	3439	27169	262046	62.76
+GCA_055472275.1	Pyricularia oryzae	ASM5547227v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000556	2026-02-24	Yunnan Agricultural University	35931754	1412	72013	421122	84.66
+GCA_055472295.1	Pyricularia oryzae	ASM5547229v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000555	2026-02-24	Yunnan Agricultural University	35138900	2775	28376	190776	68.78
+GCA_055472325.1	Pyricularia oryzae	ASM5547232v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000544	2026-02-24	Yunnan Agricultural University	35066157	1387	52773	117202	157.61
+GCA_055472335.1	Pyricularia oryzae	ASM5547233v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000514	2026-02-24	Yunnan Agricultural University	35318106	1318	56495	136281	130.01
+GCA_055472375.1	Pyricularia oryzae	ASM5547237v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000503	2026-02-24	Yunnan Agricultural University	35241991	1301	54866	145456	148.59
+GCA_055472395.1	Pyricularia oryzae	ASM5547239v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000501	2026-02-24	Yunnan Agricultural University	35392767	1304	61092	178827	114.79
+GCA_055472415.1	Pyricularia oryzae	ASM5547241v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000500	2026-02-24	Yunnan Agricultural University	35444847	1289	58671	155692	108.09
+GCA_055472435.1	Pyricularia oryzae	ASM5547243v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000499	2026-02-24	Yunnan Agricultural University	35385786	1330	61403	188292	86.34
+GCA_055472455.1	Pyricularia oryzae	ASM5547245v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000491	2026-02-24	Yunnan Agricultural University	35374064	1290	62128	188410	69.85
+GCA_055472475.1	Pyricularia oryzae	ASM5547247v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000490	2026-02-24	Yunnan Agricultural University	35670133	1836	52859	340657	80.45
+GCA_055472495.1	Pyricularia oryzae	ASM5547249v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000489	2026-02-24	Yunnan Agricultural University	35743321	1799	57856	355551	69.27
+GCA_055472515.1	Pyricularia oryzae	ASM5547251v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000604	2026-02-24	Yunnan Agricultural University	35904240	1853	55020	280364	61.46
+GCA_055472535.1	Pyricularia oryzae	ASM5547253v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000602	2026-02-24	Yunnan Agricultural University	35092245	1178	98207	421020	42.42
+GCA_055472555.1	Pyricularia oryzae	ASM5547255v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000601	2026-02-24	Yunnan Agricultural University	36003714	1637	68626	242699	76.3
+GCA_055472575.1	Pyricularia oryzae	ASM5547257v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000588	2026-02-24	Yunnan Agricultural University	35612785	3283	26749	306725	82.46
+GCA_055472595.1	Pyricularia oryzae	ASM5547259v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000593	2026-02-24	Yunnan Agricultural University	35331033	1302	57188	155823	64.91
+GCA_055472615.1	Pyricularia oryzae	ASM5547261v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000590	2026-02-24	Yunnan Agricultural University	35409798	1159	71620	168961	79.27
+GCA_055472635.1	Pyricularia oryzae	ASM5547263v1	Scaffold	SPAdes v. 3.13.0	Illumina HiSeq 2000	PRJNA748547	SAMN26000587	2026-02-24	Yunnan Agricultural University	35556313	1417	58388	198844	51.56
+GCA_055473985.1	Pyricularia oryzae	ASM5547398v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN47133007	2026-02-24	University of Kentucky	42902109	8620	16490	45090	1.93078e+09
+GCA_055689495.1	Pyricularia oryzae	ASM5568949v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804031	2026-03-05	Brazilian Agricultural Research Corporation	43612811	1903	129618	6194380	83
+GCA_055689515.1	Pyricularia oryzae	ASM5568951v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804021	2026-03-05	Brazilian Agricultural Research Corporation	42933601	1205	137510	6137152	98
+GCA_055689535.1	Pyricularia oryzae	ASM5568953v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804019	2026-03-05	Brazilian Agricultural Research Corporation	43256556	1195	139869	6259668	106
+GCA_055689555.1	Pyricularia oryzae	ASM5568955v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804018	2026-03-05	Brazilian Agricultural Research Corporation	42954001	1854	95846	6167284	88
+GCA_055689575.1	Pyricularia oryzae	ASM5568957v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804017	2026-03-05	Brazilian Agricultural Research Corporation	42912136	970	152254	6191916	87
+GCA_055689595.1	Pyricularia oryzae	ASM5568959v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804024	2026-03-05	Brazilian Agricultural Research Corporation	42981609	1126	142532	6157575	85
+GCA_055689605.1	Pyricularia oryzae	ASM5568960v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804023	2026-03-05	Brazilian Agricultural Research Corporation	42549565	893	134861	6218978	104
+GCA_055689635.1	Pyricularia oryzae	ASM5568963v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804012	2026-03-05	Brazilian Agricultural Research Corporation	43045474	1062	150956	6235207	83
+GCA_055697835.1	Pyricularia oryzae	ASM5569783v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804011	2026-03-05	Brazilian Agricultural Research Corporation	43017720	1257	113822	6291321	83
+GCA_055697855.1	Pyricularia oryzae	ASM5569785v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804010	2026-03-05	Brazilian Agricultural Research Corporation	42870344	1144	133726	6265318	85
+GCA_055697875.1	Pyricularia oryzae	ASM5569787v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804008	2026-03-05	Brazilian Agricultural Research Corporation	42668985	1004	126299	6124397	110
+GCA_055697895.1	Pyricularia oryzae	ASM5569789v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804016	2026-03-05	Brazilian Agricultural Research Corporation	42652025	1141	118375	6151526	99
+GCA_055697915.1	Pyricularia oryzae	ASM5569791v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804007	2026-03-05	Brazilian Agricultural Research Corporation	43207151	1463	135059	6221440	114
+GCA_055697935.1	Pyricularia oryzae	ASM5569793v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804014	2026-03-05	Brazilian Agricultural Research Corporation	42739401	983	152202	6274490	90
+GCA_055697955.1	Pyricularia oryzae	ASM5569795v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804013	2026-03-05	Brazilian Agricultural Research Corporation	42374045	975	178006	6085918	177
+GCA_055697975.1	Pyricularia oryzae	ASM5569797v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804027	2026-03-05	Brazilian Agricultural Research Corporation	43286861	1542	122061	6213044	132
+GCA_055697985.1	Pyricularia oryzae	ASM5569798v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804026	2026-03-05	Brazilian Agricultural Research Corporation	42923426	1668	109363	6007635	87
+GCA_055774735.1	Pyricularia oryzae	ASM5577473v1	Chromosome	SPAdes v. 4.0	Illumina NovaSeq	PRJNA1197378	SAMN45804028	2026-03-05	Brazilian Agricultural Research Corporation	43977652	1734	133636	6258378	86
+GCA_056506405.1	Pyricularia oryzae	ASM5650640v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN46817899	2026-04-01	University of Kentucky	41413938	9211	15696	35432	45
+GCA_057381395.1	Pyricularia oryzae	ASM5738139v1	Chromosome	Hifiasm+pilon v. 0.16.0	PacBio Sequel	PRJNA895008	SAMN31488230	2026-05-11	Hebei Agricultural University	39199217	43	5592785	5592785	52
+GCA_057787155.1	Pyricularia oryzae	UK_Pr88167	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN46818070	2026-05-28	University of Kentucky	41022052	7498	14007	24119	49.37
+GCA_057978255.1	Pyricularia oryzae	ASM5797825v1	Scaffold	SPAdes v. 3.15.5	Illumina NovaSeq	PRJNA926786	SAMN55039460	2026-06-05	University of Kentucky	39586887	3759	56885	64111	27
+GCA_059329645.1	Pyricularia oryzae	Br58v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458202	2026-07-13	Kansas State University	43683271	9	5985948	5985948	80
+GCA_059329725.1	Pyricularia oryzae	ATCC64557v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458205	2026-07-13	Kansas State University	43923837	8	5691609	5691609	100
+GCA_059330025.1	Pyricularia oryzae	B2v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56501178	2026-07-13	Kansas State University	42958876	8	6311493	6311493	58
+GCA_059330095.1	Pyricularia oryzae	P3v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56501177	2026-07-13	Kansas State University	44918736	14	5928839	5928839	100
+GCA_059330115.1	Pyricularia oryzae	16MoT01v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458201	2026-07-13	Kansas State University	44285086	8	6433460	6433460	100
+GCA_059330365.1	Pyricularia oryzae	NE20v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458204	2026-07-13	Kansas State University	44500455	8	5943893	5943893	80
+GCA_059330485.1	Pyricularia oryzae	T21v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458206	2026-07-13	Kansas State University	45125712	13	6045283	6045283	120
+GCA_059330725.1	Pyricularia oryzae	T47v1	Chromosome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458203	2026-07-13	Kansas State University	43610337	9	6109771	6482445	120
+GCA_059330735.1	Pyricularia oryzae	OKI18v1	Complete Genome	Canu v. 2.2	Oxford Nanopore MinION	PRJNA1435864	SAMN56458200	2026-07-13	Kansas State University	43347792	7	7502585	7502585	120
+GCA_059469275.1	Pyricularia oryzae	ASM5946927v1	Chromosome	METCAT v. 1.4; ARROW v. 2.1	Illumina NovaSeq; PacBio RSII	PRJNA1279063	SAMN49375469	2026-07-16	University of Georgia	44456732	33	5806171	6127106	235
+GCA_059792175.1	Pyricularia oryzae	ASM5979217v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN46818389	2026-08-04	University of Kentucky	40945767	5440	24739	82007	48.1182
+GCA_059792635.1	Pyricularia oryzae	UK_Bm88503	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN46817651	2026-08-04	University of Kentucky	40866535	4842	21068	108656	54.66
+GCA_059801055.1	Pyricularia oryzae	ASM5980105v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN46711227	2026-08-04	University of Kentucky	40941955	6603	21572	212275	0.185768
+GCA_060309365.1	Pyricularia oryzae	ASM6030936v1	Scaffold	Velvet v. 1.2.10	Illumina NovaSeq	PRJNA926786	SAMN46924042	2026-08-21	University of Kentucky	40817568	4573	24013	113184	46.5
+GCA_900474175.3	Pyricularia oryzae	US71_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708259	2020-01-16	THE SAINSBURY LABORATORY	45580691	55	2812411	2812411	97
+GCA_900474225.2	Pyricularia oryzae	BTJP4_1_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708257	2018-12-06	THE SAINSBURY LABORATORY	44506711	59	4344896	4344896	97
+GCA_900474375.2	Pyricularia oryzae	BTMP13_1_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708262	2018-12-06	THE SAINSBURY LABORATORY	43978086	16	6037509	6037509	97
+GCA_900474435.2	Pyricularia oryzae	BTGP6F_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708264	2018-12-06	THE SAINSBURY LABORATORY	44234332	57	3705381	3705381	97
+GCA_900474475.3	Pyricularia oryzae	CD156_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708261	2020-01-16	THE SAINSBURY LABORATORY	43939965	27	5531649	5531649	97
+GCA_900474545.3	Pyricularia oryzae	BR32_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708260	2020-01-16	THE SAINSBURY LABORATORY	41805140	17	5096353	5096353	97
+GCA_900474635.2	Pyricularia oryzae	BTGP1b_contigs	Contig	Canu 1.7	minION	PRJEB27137	SAMEA4708263	2018-12-06	THE SAINSBURY LABORATORY	44406101	74	2814025	2814025	97
+GCA_900474655.3	Pyricularia oryzae	FR13_genome_polished_no_mito	Contig	pilon 1.22	Oxford Nanopore	PRJEB27137	SAMEA4708258	2020-01-16	THE SAINSBURY LABORATORY	46410415	31	5398440	5398440	97
+GCA_905066965.2	Pyricularia oryzae	AG059_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473260	2020-12-16	THE SAINSBURY LABORATORY	47743121	37	5900770	5900770	138
+GCA_905067005.2	Pyricularia oryzae	AG038_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473265	2020-12-16	THE SAINSBURY LABORATORY	46291169	19	5673907	5673907	117
+GCA_905067015.2	Pyricularia oryzae	AG098_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473266	2020-12-16	THE SAINSBURY LABORATORY	47810826	33	6094221	6094221	97
+GCA_905067025.2	Pyricularia oryzae	AG006_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illuminate	PRJEB40915	SAMEA7473262	2020-12-16	THE SAINSBURY LABORATORY	47005811	24	6618557	6618557	110
+GCA_905067035.2	Pyricularia oryzae	AG039_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473258	2020-12-16	THE SAINSBURY LABORATORY	47495958	26	6249570	6249570	113
+GCA_905067045.2	Pyricularia oryzae	AG002_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473264	2020-12-16	THE SAINSBURY LABORATORY	46086469	36	4555161	4555161	163
+GCA_905067055.2	Pyricularia oryzae	AG032_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473263	2020-12-16	THE SAINSBURY LABORATORY	45916910	24	5961411	5961411	122
+GCA_905067075.2	Pyricularia oryzae	PR003_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473261	2020-12-16	THE SAINSBURY LABORATORY	44615198	16	6063740	6063740	96
+GCA_905067085.2	Pyricularia oryzae	SAndrea_contigs_polished	Contig	Canu,Pilon	Oxford Nanopore,Illumina	PRJEB40915	SAMEA7473259	2020-12-16	THE SAINSBURY LABORATORY	48509714	35	4122582	4122582	115
+GCA_905081835.1	Pyricularia oryzae	Assembly of M.oryzae isolate 76_3 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751761	2020-11-22	UNIVERSITY OF EXETER	38352842	7453	16014	159298	54
+GCA_905104965.1	Pyricularia oryzae	Assembly of M.oryzae isolate BN0293 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753516	2020-11-22	UNIVERSITY OF EXETER	40010648	12548	11063	124287	47
+GCA_905105065.1	Pyricularia oryzae	Assembly of M.oryzae isolate 82_0835 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751762	2020-11-22	UNIVERSITY OF EXETER	40074354	9082	17211	136309	76
+GCA_905105085.1	Pyricularia oryzae	Assembly of M.oryzae isolate BF32 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753514	2020-11-22	UNIVERSITY OF EXETER	40189893	9960	15625	120312	59
+GCA_905105095.1	Pyricularia oryzae	Assembly of M.oryzae isolate BF48 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753515	2020-11-22	UNIVERSITY OF EXETER	40015456	9653	13905	144015	53
+GCA_905105105.1	Pyricularia oryzae	Assembly of M.oryzae isolate BF17 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753513	2020-11-22	UNIVERSITY OF EXETER	39725824	10602	11978	138447	46
+GCA_905105115.1	Pyricularia oryzae	Assembly of M.oryzae isolate 90_4_1 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751764	2020-11-22	UNIVERSITY OF EXETER	39527138	8840	17550	151648	68
+GCA_905105125.1	Pyricularia oryzae	Assembly of M.oryzae isolate BF5 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753512	2020-11-22	UNIVERSITY OF EXETER	40969151	10703	16717	122962	58
+GCA_905109085.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTGP1_b genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190809	2020-11-22	UNIVERSITY OF EXETER	43645146	2855	44845	107077	143
+GCA_905109095.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP4_12 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190818	2020-11-22	UNIVERSITY OF EXETER	43632231	2710	49946	110022	203
+GCA_905109105.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP4_11 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190817	2020-11-22	UNIVERSITY OF EXETER	43630244	2934	44738	91549	126
+GCA_905109115.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTBaB1 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190806	2020-11-22	UNIVERSITY OF EXETER	43399635	2347	40471	101720	93
+GCA_905109125.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTBa_2 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190807	2020-11-22	UNIVERSITY OF EXETER	43755255	3241	39417	91759	120
+GCA_905109135.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTAR_A1 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104365380	2020-11-22	UNIVERSITY OF EXETER	38140674	3499	62694	93389	140
+GCA_905109245.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP4_16 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190819	2020-11-22	UNIVERSITY OF EXETER	43632753	2709	51283	95064	173
+GCA_905109485.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP4_18 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190820	2020-11-22	UNIVERSITY OF EXETER	43394295	2282	43126	98888	114
+GCA_905109745.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP4_6 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190816	2020-11-22	UNIVERSITY OF EXETER	43645672	2895	44650	90777	131
+GCA_905109755.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP_4_2 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104365382	2020-11-22	UNIVERSITY OF EXETER	43194179	1582	63472	134160	103
+GCA_905109765.1	Pyricularia oryzae	Assembly of M.oryzae isolate Glhn3 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751767	2020-11-22	UNIVERSITY OF EXETER	39392990	8619	14935	134271	52
+GCA_905109775.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTTrp_6 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190824	2020-11-22	UNIVERSITY OF EXETER	41501021	3350	63644	109057	247
+GCA_905109785.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP4_3 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190814	2020-11-22	UNIVERSITY OF EXETER	43673126	2910	47026	92411	168
+GCA_905109805.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE019 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753509	2020-11-22	UNIVERSITY OF EXETER	39371043	6043	19383	176600	55
+GCA_905109815.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTMP_S13_1 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190821	2020-11-22	UNIVERSITY OF EXETER	43268406	2281	40447	99038	100
+GCA_905109825.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTGP_6_g genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190811	2020-11-22	UNIVERSITY OF EXETER	43643196	2823	42184	98580	167
+GCA_905109835.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE017 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753508	2020-12-16	UNIVERSITY OF EXETER	41104100	12670	16706	141652	79
+GCA_905109845.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP_4_15 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104365381	2020-11-22	UNIVERSITY OF EXETER	43574924	2370	70979	153255	150
+GCA_905109865.1	Pyricularia oryzae	Assembly of M.oryzae isolate JUM1 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753517	2020-11-22	UNIVERSITY OF EXETER	40503273	10988	11762	127476	47
+GCA_905109875.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE016 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753507	2020-11-22	UNIVERSITY OF EXETER	40270040	7884	18301	156802	90
+GCA_905109885.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE021 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753510	2020-11-22	UNIVERSITY OF EXETER	40076482	7396	18662	152792	93
+GCA_905109895.1	Pyricularia oryzae	Assembly of M.oryzae isolate Glhn4 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751768	2020-11-22	UNIVERSITY OF EXETER	39521489	7928	16708	134201	59
+GCA_905109905.1	Pyricularia oryzae	Assembly of M.oryzae isolate EG308 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753505	2020-11-22	UNIVERSITY OF EXETER	41564590	8824	16728	149180	82
+GCA_905109915.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP_4_9 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104365383	2020-11-22	UNIVERSITY OF EXETER	43511044	2174	74327	140435	216
+GCA_905109925.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTTrp_5 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190823	2020-11-22	UNIVERSITY OF EXETER	46707658	2347	56895	114140	27
+GCA_905114085.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE029 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753511	2020-12-16	UNIVERSITY OF EXETER	41039609	10863	18122	154544	94
+GCA_905114095.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE041 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753518	2020-11-22	UNIVERSITY OF EXETER	39008374	8174	16033	146883	61
+GCA_905114105.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE210 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753519	2020-12-15	UNIVERSITY OF EXETER	38854174	57392	921	15865	29
+GCA_905114645.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE255 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753520	2020-12-15	UNIVERSITY OF EXETER	39832145	16341	6043	119152	40
+GCA_905114655.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE332 genome	Contig	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753528	2020-12-15	UNIVERSITY OF EXETER	41002536	6268	35062	35062	171
+GCA_905114665.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE415 genome	Contig	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753529	2020-12-15	UNIVERSITY OF EXETER	39451500	3668	33912	33912	78
+GCA_905114675.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE443 genome	Contig	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753530	2020-12-15	UNIVERSITY OF EXETER	40885158	6077	36419	36419	204
+GCA_905114685.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE491 genome	Contig	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753532	2020-12-15	UNIVERSITY OF EXETER	40043457	3198	34509	34509	122
+GCA_905114695.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE473 genome	Contig	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753531	2020-12-15	UNIVERSITY OF EXETER	40616342	5858	37274	37274	200
+GCA_905114705.1	Pyricularia oryzae	Assembly of M.oryzae isolate NG0104 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753521	2020-12-15	UNIVERSITY OF EXETER	38946046	9088	14210	128841	53
+GCA_905114715.1	Pyricularia oryzae	Assembly of M.oryzae isolate NG0110 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753522	2020-12-15	UNIVERSITY OF EXETER	39600383	10939	11401	115527	50
+GCA_905114725.1	Pyricularia oryzae	Assembly of M.oryzae isolate NG0135 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753523	2020-12-15	UNIVERSITY OF EXETER	39852204	12923	8558	109842	41
+GCA_905114735.1	Pyricularia oryzae	Assembly of M.oryzae isolate NG0153 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753524	2020-11-22	UNIVERSITY OF EXETER	39800748	11216	11137	130820	48
+GCA_905114745.1	Pyricularia oryzae	Assembly of M.oryzae isolate TH3 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751774	2020-12-15	UNIVERSITY OF EXETER	37299722	30734	4935	22628	36
+GCA_905114755.1	Pyricularia oryzae	Assembly of M.oryzae isolate TG004 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753525	2020-12-15	UNIVERSITY OF EXETER	39965636	16173	6146	125683	48
+GCA_905114765.1	Pyricularia oryzae	Assembly of M.oryzae isolate TZ090 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753526	2020-12-15	UNIVERSITY OF EXETER	38952040	8008	15994	127695	65
+GCA_905114775.1	Pyricularia oryzae	Assembly of M.oryzae isolate UG08 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753527	2020-12-15	UNIVERSITY OF EXETER	39183782	9064	16892	122477	82
+GCA_905114785.1	Pyricularia oryzae	Assembly of M.oryzae isolate VO104 genome	Scaffold	spades	Illumina HiSeq 2500	PRJEB27387	SAMEA4751775	2020-12-15	UNIVERSITY OF EXETER	39866628	9570	14126	126352	53
+GCA_905114795.1	Pyricularia oryzae	Assembly of M.oryzae isolate VO113 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751777	2020-12-15	UNIVERSITY OF EXETER	39758505	7928	17214	151818	62
+GCA_905114805.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTGP_6_e genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190808	2020-12-16	UNIVERSITY OF EXETER	43622001	2740	41517	115705	132
+GCA_905114815.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTGP_6_f genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190810	2020-11-22	UNIVERSITY OF EXETER	43418197	2299	40470	104430	107
+GCA_905114825.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTGP_6_h genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190812	2020-11-22	UNIVERSITY OF EXETER	43657328	2756	46178	105122	181
+GCA_905125175.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP_4_1 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190813	2020-12-16	UNIVERSITY OF EXETER	43392441	2269	41442	109624	116
+GCA_905125185.1	Pyricularia oryzae	Assembly of M.oryzae isolate KE002 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB27419	SAMEA4753506	2020-12-15	UNIVERSITY OF EXETER	40252061	8196	17434	147435	98
+GCA_905186785.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTJP4_5 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190815	2021-02-02	UNIVERSITY OF EXETER	43437982	2395	41348	90380	96
+GCA_905186795.1	Pyricularia oryzae	Assembly of M.oryzae isolate BTMP_S_13_2 genome	Scaffold	Spades	Illumina HiSeq 2500	PRJEB22035	SAMEA104190822	2021-02-02	UNIVERSITY OF EXETER	43677391	2788	51968	108438	268
+GCA_905232145.1	Pyricularia oryzae	Assembly of M.oryzae isolate VO108 genome	Scaffold	Velvet	Illumina HiSeq 2500	PRJEB27387	SAMEA4751776	2021-02-20	UNIVERSITY OF EXETER	39904137	8157	16810	153228	58
+GCA_911175055.1	Pyricularia oryzae	N06047_contigs	Contig	Canu	Oxford Nanopore	PRJEB27137	SAMEA9124609	2021-07-19	THE SAINSBURY LABORATORY	41159917	115	880253	880253	150
+GCA_944606235.1	Pyricularia oryzae	O23_contigs_polished	Contig	NECAT,medaka,Hypo	Oxford Nanopore,Illumina	PRJEB53625	SAMEA110144965	2022-07-15	iwate biotechnology research center	43162440	11	6457810	6457810	122
+GCA_944606705.1	Pyricularia oryzae	d44a_contigs_polished	Contig	NECAT,medaka,Hypo	Oxford Nanopore,Illumina	PRJEB53625	SAMEA110145009	2022-07-15	iwate biotechnology research center	43626931	11	6588090	6588090	93
+GCA_944612285.1	Pyricularia oryzae	TH3o_contigs_polished	Contig	MECAT,Hypo	PacBio,Illumina	PRJEB53625	SAMEA110144966	2022-07-15	iwate biotechnology research center	41519998	129	865826	865826	44
+GCA_944989255.1	Pyricularia oryzae	GE12B_contigs_polished	Contig	Flye,Medaka,Pilon	Oxford Nanopore,Illumina	PRJEB53658	SAMEA110153376	2022-07-13	The John Innes Centre	44312841	20	5068283	5068283	109
+GCA_944989335.1	Pyricularia oryzae	GA10A2_contigs_polished	Contig	Flye,Medaka,Pilon	Oxford Nanopore,Illumina	PRJEB53658	SAMEA110153377	2022-07-13	The John Innes Centre	44788744	29	6975948	6975948	123
+GCA_946468025.1	Pyricularia oryzae	MoT PS-2	Contig	Canu	Oxford Nanopore	PRJEB55233	SAMEA110691667	2022-09-12	John Innes Centre	42866477	21	6394504	6394504	153
+GCA_963556445.1	Pyricularia oryzae	Br62_assembly	Contig	Flye (v2.9-b17680), Medaka (v1.7.2), Pilon (v1.23)	PromethION,Illumina HiSeq 2500	PRJEB66723	SAMEA114466569	2024-02-24	The John Innes Centre	43945100	10	6027403	6027403	19
+GCA_000376765.1	Pyricularia oryzae 4091-5-8	Mo4091-5-8_1.0	Contig	Velvet v. 1.2.03	Illumina GAIIx	PRJNA184380	SAMN02981493	2013-04-22	Seoul National University	37519115	8886	8761	8761	68
+GCF_000002495.2	Pyricularia oryzae 70-15	MG8	Chromosome		Sanger ABI	PRJNA13840	SAMN02953596	2011-10-14	International Rice Blast Genome Consortium	40979121	216	823590	6606598	
+GCA_000002495.2	Pyricularia oryzae 70-15	MG8	Chromosome		Sanger ABI	PRJNA13840	SAMN02953596	2011-10-14	International Rice Blast Genome Consortium	40979121	216	823590	6606598	
+GCA_977071145.1	Pyricularia oryzae 70-15	KE493_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103423	2025-11-29	The John Innes Centre	40496828	5506	167649	167649	70
+GCA_977071155.1	Pyricularia oryzae 70-15	TN0050_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103415	2025-11-29	The John Innes Centre	39988342	5235	155803	155803	70
+GCA_977071165.1	Pyricularia oryzae 70-15	TG0016_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103414	2025-11-29	The John Innes Centre	40572079	5405	176617	176617	70
+GCA_977071185.1	Pyricularia oryzae 70-15	TN0019_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103413	2025-11-29	The John Innes Centre	40576945	5803	167662	167662	70
+GCA_977071195.1	Pyricularia oryzae 70-15	TN0096_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103420	2025-11-29	The John Innes Centre	40611171	5584	176621	176621	70
+GCA_977071205.1	Pyricularia oryzae 70-15	NG0191_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103421	2025-11-29	The John Innes Centre	40432347	5998	157875	157875	70
+GCA_977071215.1	Pyricularia oryzae 70-15	TN0068_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103416	2025-11-29	The John Innes Centre	40585601	5708	167657	167657	70
+GCA_977071225.1	Pyricularia oryzae 70-15	TN0078_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103419	2025-11-29	The John Innes Centre	40010630	5385	160468	160468	70
+GCA_977071235.1	Pyricularia oryzae 70-15	BN0040_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103424	2025-11-29	The John Innes Centre	40511566	5823	174103	174103	70
+GCA_977071255.1	Pyricularia oryzae 70-15	ML0066_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103427	2025-11-29	The John Innes Centre	40862423	7207	158515	158515	70
+GCA_977071265.1	Pyricularia oryzae 70-15	TN0070_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103417	2025-11-29	The John Innes Centre	40026905	5456	159271	159271	70
+GCA_977071275.1	Pyricularia oryzae 70-15	BN0192_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103425	2025-11-29	The John Innes Centre	41716912	6928	153494	153494	70
+GCA_977071285.1	Pyricularia oryzae 70-15	TN0073_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103418	2025-11-29	The John Innes Centre	40699416	5688	164199	164199	70
+GCA_977071295.1	Pyricularia oryzae 70-15	ML0063_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103426	2025-11-29	The John Innes Centre	40946671	7345	152144	152144	70
+GCA_977071305.1	Pyricularia oryzae 70-15	KE489_assembly	Contig	SPAdes v3.8.1	ILLUMINA	PRJEB96956	SAMEA120103422	2025-11-29	The John Innes Centre	40343318	5284	164125	164125	70
+GCA_000832285.1	Pyricularia oryzae B157	M_oryzae_b157_v1	Contig	Velvet v. 1.2.07	Illumina HiSeq	PRJNA209290	SAMN03329169	2015-02-04	Centre for Cellular and Molecular Plateforms	37757427	5735	15455	15455	60
+GCA_000498135.1	Pyricularia oryzae FJ81278	FJ81278_genome_assembly	Scaffold	Velvet v. 2012	Illumina GAII	PRJNA209870	SAMN02215332	2013-10-21	The Ohio State University, Department of Plant Pathology	37873929	3783	115753	151964	34
+GCA_000475075.1	Pyricularia oryzae HN19311	HN19311_genome_assembly	Scaffold	Velvet v. 2012	Illumina GAII	PRJNA209870	SAMN02216973	2013-10-21	The Ohio State University, Department of Plant Pathology	36657487	3014	147471	147471	5.7
+GCA_000376685.2	Pyricularia oryzae KJ201	MoKJ201_3	Scaffold	SOAPdenovo v. 1.05	Illumina	PRJNA179498	SAMN02730190	2014-04-21	Seoul National University	45096509	3188	25520	2318557	199
+GCA_000969745.1	Pyricularia oryzae MG01	M_ oryzae_MG01_v1	Contig	Velvet v. 1.2.07	Illumina	PRJNA227170	SAMN02397294	2015-04-06	Centre for Cellular and Molecular Plateforms	38999079	7722	13722	13722	60
+GCA_003990535.1	Pyricularia oryzae Mo-nwi-31	Moryzae-RP-2421.1.0	Contig	CLC Genomics Workbench v. 6.5.1	Illumina HiSeq	PRJNA232299	SAMN07817530	2019-01-02	National Research Centre on Plant Biotechnology	37300819	3416	39892	39892	107
+GCA_002021675.1	Pyricularia oryzae Mo-nwi-55	Moryzae-RML-29.1.0	Contig	CLC Genomic Workbench v. 6.5.1	454	PRJNA232298	SAMN02688647	2017-03-06	National Research Centre on Plant Biotechnology	37764501	7002	10409	10409	13
+GCA_000292605.2	Pyricularia oryzae P131	PoP131	Complete Genome	Canu v. 2; Juicer v. 1.6	Illumina HiSeq; PacBio; Hi-C	PRJNA82693	SAMN02981399	2023-07-25	China Agricultural University	43237743	7	7048921	7048921	300
+GCA_000292585.1	Pyricularia oryzae Y34	MoY34_2.0	Scaffold	Newbler v. 1.1.02.15	Sanger; 454 GS FLX Titanium	PRJNA82691	SAMN02981398	2013-01-04	China Agricultural University	38872417	2114	52974	106863	21

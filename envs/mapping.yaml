@@ -1,0 +1,10 @@
+name: barragan-mapping
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - fastp
+  - bwa-mem2
+  - minimap2
+  - samtools
+  - mosdepth

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from cluster_and_score import cluster_and_score, per_region_ari
+from cluster_and_score import classify_region_discordance, cluster_and_score, per_region_ari
 
 
 def test_cluster_and_score_recovers_perfect_lineage_structure():
@@ -77,3 +77,41 @@ def test_per_region_ari_returns_one_score_per_column():
 
     assert list(scores.index) == ["clean", "mixed"]
     assert scores["clean"] > scores["mixed"]
+
+
+def test_classify_region_discordance_flags_the_one_low_outlier():
+    # A tightly clustered "clean" batch (small natural spread) plus one
+    # clearly separated low outlier.
+    scores = pd.Series(
+        {"r1": 0.90, "r2": 0.91, "r3": 0.90, "r4": 0.10, "r5": 0.91, "r6": 0.90}
+    )
+
+    classification = classify_region_discordance(scores)
+
+    assert classification["r4"] == "discordant"
+    for region in ["r1", "r2", "r3", "r5", "r6"]:
+        assert classification[region] == "concordant"
+
+
+def test_classify_region_discordance_nan_scores_are_uncertain():
+    scores = pd.Series({"r1": 0.9, "r2": 0.85, "r3": float("nan"), "r4": 0.1})
+
+    classification = classify_region_discordance(scores)
+
+    assert classification["r3"] == "uncertain"
+
+
+def test_classify_region_discordance_no_spread_is_all_concordant():
+    scores = pd.Series({"r1": 0.9, "r2": 0.9, "r3": 0.9, "r4": 0.9})
+
+    classification = classify_region_discordance(scores)
+
+    assert (classification == "concordant").all()
+
+
+def test_classify_region_discordance_too_few_regions_is_concordant():
+    scores = pd.Series({"r1": 0.9, "r2": 0.1})
+
+    classification = classify_region_discordance(scores)
+
+    assert (classification == "concordant").all()

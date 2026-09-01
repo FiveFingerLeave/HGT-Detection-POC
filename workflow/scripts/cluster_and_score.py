@@ -44,6 +44,44 @@ def per_region_ari(pav_matrix: pd.DataFrame, host_labels: pd.Series) -> pd.Serie
     return pd.Series(scores, name="ari")
 
 
+def classify_region_discordance(
+    region_scores: pd.Series, z_threshold: float = 1.0
+) -> pd.Series:
+    """Classify each candidate region as "discordant" (lineage-crossing,
+    an HGT candidate signature), "concordant" (core-like inheritance), or
+    "uncertain" (ARI undefined - too few valid calls or no variance).
+
+    Uses a robust modified z-score (median + MAD, not mean + std) against
+    the OTHER regions in the same batch: a region is "discordant" if its
+    ARI is more than `z_threshold` robust standard deviations BELOW the
+    median of the batch. Median/MAD are used instead of mean/std because
+    they are not pulled around by the very outliers (true HGT regions)
+    we are trying to detect - a handful of genuinely discordant regions
+    should not raise the "normal" baseline and mask themselves.
+    """
+    valid = region_scores.dropna()
+    classification = pd.Series("uncertain", index=region_scores.index)
+
+    if len(valid) < 3:
+        # Too few scored regions for a meaningful relative comparison.
+        classification.loc[valid.index] = "concordant"
+        return classification
+
+    median = valid.median()
+    mad = (valid - median).abs().median()
+
+    if mad == 0:
+        # No spread among the valid scores - nothing stands out as an outlier.
+        classification.loc[valid.index] = "concordant"
+        return classification
+
+    modified_z = 0.6745 * (valid - median) / mad
+    classification.loc[valid.index] = modified_z.apply(
+        lambda z: "discordant" if z <= -z_threshold else "concordant"
+    )
+    return classification
+
+
 def cluster_and_score(
     pav_matrix: pd.DataFrame, host_labels: pd.Series, k: int, n_components: int = 10
 ) -> tuple["pd.Series | None", "pd.Series | None", float]:
@@ -90,6 +128,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         "a more sensitive, targeted complement to the whole-matrix ARI above "
         "(see docs/decisions.md).",
     )
+    parser.add_argument(
+        "--discordance-z-threshold",
+        type=float,
+        default=1.0,
+        help="Modified z-score cutoff (median/MAD-based) below which a region is "
+        "classified 'discordant' (default: 1.0)",
+    )
     return parser.parse_args(argv)
 
 
@@ -128,9 +173,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.per_region_output is not None:
         args.per_region_output.parent.mkdir(parents=True, exist_ok=True)
         per_region = per_region_ari(candidate_matrix, candidate_host_labels)
-        per_region.rename_axis("region_id").reset_index(name="ari").to_csv(
-            args.per_region_output, sep="\t", index=False
-        )
+        classification = classify_region_discordance(per_region, args.discordance_z_threshold)
+        per_region_table = pd.DataFrame(
+            {"ari": per_region, "classification": classification}
+        ).rename_axis("region_id").reset_index()
+        per_region_table.to_csv(args.per_region_output, sep="\t", index=False)
 
     return 0
 

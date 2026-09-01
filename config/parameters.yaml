@@ -19,3 +19,12 @@ starfish:
 clustering:
   k: 4 # number of known host lineages (rice, wheat, finger millet, wild grass)
   n_components: 10
+  # Modified z-score (median/MAD-based) cutoff for classify_region_discordance():
+  # a candidate region scores "discordant" if its per-region ARI is more than
+  # this many robust standard deviations below the batch median. Calibrated
+  # against synthetic data (docs/decisions.md): best sensitivity/false-positive
+  # tradeoff found at z=0.5 for small (~5-region) candidate batches, but even
+  # so this absolute-threshold classification is markedly less sensitive than
+  # simply ranking regions by per-region ARI (see candidate_per_region_ari.tsv,
+  # sort ascending) - prefer the ranking for small POC-scale candidate counts.
+  discordance_z_threshold: 0.5

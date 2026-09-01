@@ -182,6 +182,47 @@ POC-Lauf empfiehlt sich, `candidate_per_region_ari.tsv` als primäres
 Diagnosewerkzeug zu verwenden und `ari_summary.tsv` (aggregiert) nur
 ergänzend, nicht umgekehrt.
 
+## 2026-09-01 — Pro-Region-ARI operationalisiert: Klassifikation vs. reine Rangfolge
+
+**Entscheidung:** `classify_region_discordance()` in `cluster_and_score.py`
+macht aus dem rohen Pro-Region-ARI-Score eine tatsächliche Entscheidung
+pro Region (`discordant` / `concordant` / `uncertain`), über einen
+robusten modifizierten Z-Score (Median + MAD, nicht Mittelwert + Std —
+damit einzelne echte Ausreißer die "Normal"-Baseline nicht selbst
+verzerren). Ausgabe: `results/clustering/candidate_per_region_ari.tsv`
+bekommt eine `classification`-Spalte; Schwelle konfigurierbar über
+`config/parameters.yaml: clustering.discordance_z_threshold`.
+
+**Kalibrierung (Monte-Carlo, Standard-Szenario: 5 Kandidatenregionen, 30 %
+Empfänger, 20–30 Wiederholungen):**
+
+| z-Schwelle | Sensitivität | Falsch-Positiv-Rate |
+|---|---|---|
+| 0,3 | 56,7 % | 2,5 % |
+| 0,5 | 56,7–70,0 % | 2,5 % |
+| 0,7 | 40,0 % | 0,0 % |
+| 1,0 (ursprünglicher Default) | 36,7–45,0 % | 0,0 % |
+
+Default auf **z = 0,5** gesetzt (bestes gefundenes
+Sensitivität/Falsch-Positiv-Verhältnis).
+
+**Wichtiger Befund:** Selbst mit kalibriertem Schwellenwert bleibt die
+Klassifikation (auf ~57–70 % Sensitivität) deutlich hinter der reinen
+Rangfolge-Methode zurück ("ist diese Region die niedrigst-bewertete von
+allen?", 95 % Erkennungsrate im selben Szenario). Grund: Bei nur ~5
+Kandidatenregionen pro Batch ist die Median-/MAD-Schätzung selbst
+statistisch instabil (kleine Stichprobe) — ein Absolut-Schwellenwert kann
+bei so wenigen Regionen nicht so zuverlässig kalibriert werden wie ein
+einfacher Rang-Vergleich.
+
+**Konsequenz für den echten POC-Lauf:** Bei den für einen POC realistisch
+kleinen Kandidatenzahlen (niedriger zweistelliger Bereich, laut
+Dokument-Erwartung) ist **Sortierung nach Pro-Region-ARI (aufsteigend)**
+das zuverlässigere Diagnosewerkzeug, nicht der feste
+Klassifikations-Schwellenwert. Die `classification`-Spalte bleibt als
+schnelle Grobfilterung mit sehr niedriger Falsch-Positiv-Rate nützlich,
+sollte aber nicht als alleinige Entscheidungsgrundlage dienen.
+
 ## 2026-09-01 — R-Umgebung für Power-Analyse noch nicht eingerichtet
 
 **Entscheidung:** `power_analysis/glmm_power_sim.R` wurde 1:1 aus dem

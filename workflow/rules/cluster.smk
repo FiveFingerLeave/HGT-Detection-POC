@@ -35,6 +35,7 @@ rule cluster_and_score:
     params:
         k=config["clustering"]["k"],
         n_components=config["clustering"]["n_components"],
+        z_threshold=config["clustering"]["discordance_z_threshold"],
     log:
         "logs/clustering/cluster_and_score.log",
     conda:
@@ -44,6 +45,7 @@ rule cluster_and_score:
         "--core {input.core} --candidate {input.candidate} "
         "--host-labels {input.host_labels} "
         "--k {params.k} --n-components {params.n_components} "
+        "--discordance-z-threshold {params.z_threshold} "
         "--output {output.ari_summary} "
         "--per-region-output {output.per_region_ari} "
         "> {log} 2>&1"

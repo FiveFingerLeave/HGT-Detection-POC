@@ -445,3 +445,60 @@ oben) — dafür fehlt den meisten SRA-Einträgen die nötige
 Feld/Jahr-Struktur. Ob die oben genannten Multi-Standort-Studien genug
 Geo-/Zeit-Metadaten in ihren Supplements für eine Annäherung an das
 Feld/Jahr-Design liefern, ist ein offener Prüfschritt.
+
+## 2026-09-01 — Pivot: neues Workflow-Dokument (`POC_HGT_Starships_Workflow.md`), alte Kurzread-Coverage-Pipeline entfernt
+
+**Entscheidung:** Der Nutzer hat ein neues, deutlich umfassenderes
+Workflow-Dokument bereitgestellt
+(`Dokumentation/POC_HGT_Starships_Workflow.md`, ursprünglich
+`C:\Users\flori\Downloads\POC_HGT_Starships_Workflow.md`) und angewiesen,
+alles bisher Erstellte zu entfernen, was unter dem neuen Ansatz nicht mehr
+gebraucht wird. Das alte Kurzread-Coverage-Pipeline-Setup (`workflow/`,
+`config/`, `power_analysis/`, alte `tests/`, `data/references/panel_manifest.tsv`
+und `candidate_regions.bed`, die bwa-mem2-Indexdateien) wurde entfernt.
+
+**Was sich inhaltlich ändert:** Das neue Dokument ersetzt den bisherigen
+Ansatz (Kurzread-Mapping gegen ein kleines 6-Genom-Panel + Coverage-PAV +
+PCA/ARI-Clustering) durch einen 8-Phasen-Workflow, der auf einem größeren
+(20–30 Isolate), überwiegend Long-Read-assemblierten und einheitlich
+annotierten Referenzpanel aufbaut: Assembly/QC (BUSCO, BlobTools) →
+Annotation/Repeat-Masking (funannotate/BRAKER, RepeatModeler/Masker) →
+Starship-Katalog (weiterhin `starfish`) → Pangenom-PAV (Panaroo/PIRATE/
+Roary + Alignment-basierte akzessorische Regionen) → **Sättigungs-/
+Rarefaktionsanalyse als Kernstück des POC** (Subsampling-Kurve: ab welcher
+Panelgröße flacht die Kandidatenentdeckung ab?) → Validierung (Leave-one-out
++ echte Kurzread-Testisolate) → phylogenetische Inkongruenz (Core-Baum vs.
+Starship-Gen-Baum) → GLMM-Stichproben-/Modellkomplexitäts-Simulation (neu
+gerahmt: klonlinienbasierte simulierte Phylogenien statt Feld/Jahr-Design)
+→ Synthese/Go-No-Go-Bericht.
+
+**Was erhalten blieb (siehe README.md für Details):**
+- Git-Historie (Checkpoint-Commit vor der Bereinigung: alle entfernten
+  Dateien weiterhin über `git log`/`git show` abrufbar)
+- `Dokumentation/` (alle bisherigen Planungsnotizen + das neue Dokument)
+- `assemblies/` (6 bereits heruntergeladene Referenzgenome — Startpunkt für
+  das größere 20–30-Genom-Panel aus Phase 1)
+- `data/isolates_poc/` (5 Kurzread- + 1 Langread-Testisolat, bereits
+  heruntergeladen und QC-geprüft — direkt nutzbar für Phase 5)
+- Alle NCBI-Kataloge in `data/` und `input/metadata/`
+- `envs/starfish.yaml` (Starfish wird in Phase 2 unverändert weiter
+  gebraucht); `envs/mapping.yaml`/`python.yaml` als generische
+  Werkzeug-Bausteine (minimap2 wird in Phase 3 für Alignment-basierte
+  PAV-Detektion erneut gebraucht)
+
+**Neu angelegt:** `poc_hgt_starships/{00_data...09_report}/` mit
+Phasen-READMEs (Input/Output/Tools je Phase, aus dem neuen Dokument
+übernommen).
+
+**Bewusst zurückgestellt:** Phase 7 (Stichproben-/GLMM-Simulation) — auf
+expliziten Nutzerwunsch ("lass das GLMM erstmal außen vor") nicht jetzt
+implementiert, obwohl das neue Dokument sie vorsieht. Die frühere
+Analyse zum alten Feld/Jahr-GLMM (siehe Eintrag oben, 0 %-Power-Befund)
+bleibt als Hintergrundwissen dokumentiert, ist aber für das neu gerahmte
+Phase-7-Modell (klonlinienbasierte Simulation) nicht direkt übertragbar.
+
+**Nächster Schritt:** Phase 1 (`poc_hgt_starships/00_data/`) — Kuration
+des 20–30-Isolat-Panels aus den bereits vorhandenen NCBI-Long-Read-
+Assembly-Katalogen (`data/ncbi_m_oryzae_longread_candidates*.tsv`,
+`ncbi_m_oryzae_longread_highquality.tsv`, `ncbi_m_oryzae_sra_wgs_longread.tsv`),
+mit Fokus auf maximale Klonlinien-/Wirtsdiversität.

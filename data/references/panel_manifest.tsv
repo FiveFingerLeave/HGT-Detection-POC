@@ -1,7 +1,0 @@
-reference_id	host_lineage	fasta	gff	source
-70-15	Oryza_sativa	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_000002495.2/GCA_000002495.2_MG8_genomic.fna	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_000002495.2/genomic.gff	Cheng et al. 2025 (GCA_000002495.2)
-Guy11	Oryza_sativa	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_046718735.1/GCA_046718735.1_KSU_PyrO_Guy11_1_genomic.fna		Kansas State University (GCA_046718735.1)
-B71	Triticum_aestivum	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004785725.2/GCA_004785725.2_ASM478572v2_genomic.fna		Yoshida et al. 2016 lineage (GCA_004785725.2)
-CD156	Eleusine_coracana	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_900474475.3/GCA_900474475.3_CD156_genome_polished_no_mito_genomic.fna		Chiapello et al. 2015 lineage (GCA_900474475.3)
-US71	Setaria_italica	assemblies/ncbi_dataset/ncbi_dataset/data/GCA_900474175.3/GCA_900474175.3_US71_genome_polished_no_mito_genomic.fna		Sainsbury Laboratory (GCA_900474175.3)
-M_grisea	Digitaria_sanguinalis	assemblies/ncbi_dataset/ncbi_dataset/data/GCF_004355905.1/GCF_004355905.1_PgNI_genomic.fna	assemblies/ncbi_dataset/ncbi_dataset/data/GCF_004355905.1/GCF_004355905.1_PgNI_genomic.gff	Sister-taxon negative control (GCF_004355905.1)

@@ -837,6 +837,18 @@ Starships/Accessory-Chromosomen ÜBER Host-Grenzen hinweg per Long-Read-
 Mapping) ist das akzeptabel; für eine spätere Vollanalyse/Publikation
 sollte auf den vollen 14-Genom-Katalog zurückgegriffen werden.
 
+**Windows-Ruhezustand deaktiviert (diesmal aus echtem Grund, nicht als
+Fehldiagnose):** Anders als beim früheren BUSCO-Abbruch (wo Sleep/USB-
+Suspend fälschlich verdächtigt wurden) besteht hier ein reales Risiko —
+mehrstündige Hintergrundläufe würden durch tatsächlichen Ruhezustand
+(nicht nur Bildschirmschoner) pausiert/unterbrochen. Auf Nutzerwunsch
+`STANDBYIDLE` und `HIBERNATEIDLE` für AC und DC auf 0 (deaktiviert)
+gesetzt. **Ursprungswerte zum späteren Zurücksetzen:** AC-Standby
+0x00000a8c (2700s/45min), DC-Standby 0x00000708 (1800s/30min),
+DC-Ruhezustand 0x0003f480 (259200s/3 Tage), AC-Ruhezustand war bereits 0.
+Sollte zurückgesetzt werden, sobald die aktuellen Mehrtages-Hintergrund-
+läufe (Repeat-Masking) abgeschlossen sind.
+
 **Repeat-Masking parallelisiert:** Da RepeatModeler kaum RAM braucht
 (siehe Pilotlauf-Befund oben), laufen jetzt alle 5 Panel-Genome
 GLEICHZEITIG statt seriell: der bereits laufende Br48-Pilot (8 Threads,

@@ -1,0 +1,12 @@
+# Section 6.2 (Liftoff-Teil): leichtgewichtige Environment, getrennt von
+# der schweren envs/annotation.yaml (BRAKER3 braucht eine separate
+# GeneMark-Lizenz und bleibt vorerst blockiert, siehe annotation.smk).
+# Liftoff selbst ist ein reiner Conda-Install ohne Lizenzabhaengigkeit.
+name: multiref-liftoff
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - liftoff
+  - minimap2
+  - samtools

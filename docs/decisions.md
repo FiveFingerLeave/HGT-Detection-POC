@@ -897,3 +897,61 @@ Starship-Suche (Abschnitt 6.4/DUF3435-Scan) und Panel-Klassifikation
 (Abschnitt 8) prioritär geprüft werden - noch nicht geschehen, da
 Starship-Annotation (starships.smk) weiterhin ein unimplementierter Stub
 ist.
+
+## 2026-09-02 — Abschnitt 6.2 (teilweise): Liftoff-Genannotation für alle 5 Panel-Genome, Mini-Chromosom-Hypothese durch Gendichte bestätigt
+
+**Entscheidung:** Da BRAKER3 (De-novo-Annotation, Abschnitt 6.2) weiter
+an der fehlenden GeneMark-Lizenz blockiert ist, wurde stattdessen
+**Liftoff** eingesetzt (eigene, leichte `envs/liftoff.yaml`, getrennt von
+der schweren `envs/annotation.yaml`) - die einzige echte, aus NCBI
+vorhandene Annotation (`GCA004346965_1`, 13.521 Gene) wurde auf alle 5
+Panel-Genome übertragen (inkl. Selbst-Liftoff von `GCA004346965_1` auf
+sich selbst, als Umbenennungsschritt: die rohe GFF3 nutzt die
+ORIGINALEN Contig-IDs, Liftoff produziert Output mit den umbenannten
+`{genome_id}__{contig}`-IDs passend zu `data/references/*.fa`).
+
+**Bug (Race Condition):** Beim ersten parallelen Lauf (4 Genome
+gleichzeitig, gleiche Referenz-GFF3) schlug `LpKY97` mit
+`UnboundLocalError: cannot access local variable 'feature_db'` fehl -
+Liftoffs interner gffutils-Schritt baut standardmäßig eine
+SQLite-Datenbank-Datei neben der Eingabe-GFF3; alle 4 Jobs versuchten
+gleichzeitig, dieselbe Datei zu schreiben (Race Condition, gleiches
+Grundmuster wie beim früheren BUSCO-Lineage-Download). Fix: `LpKY97`
+allein (ohne Konkurrenz) neu gestartet — lief sofort erfolgreich durch.
+
+**Ergebnis (Gene übertragen / nicht gemappt, von 13.521 Ausgangsgenen):**
+
+| Genom | Host | Gene übertragen | Nicht gemappt | Anteil |
+|---|---|---|---|---|
+| GCA004346965_1 | Eleusine (Selbst-Liftoff) | 13.518 | 3 | 99,98 % |
+| GCA036493215_1 (Br48) | Triticum | 13.209 | 312 | 97,7 % |
+| GCA059329645_1 | Avena | 13.231 | 290 | 97,9 % |
+| LpKY97 | Wildgrass | 13.256 | 265 | 98,0 % |
+| 7015 | Oryza | 12.787 | 734 | 94,6 % |
+
+Der Verlust korreliert sinnvoll mit der phylogenetischen/Host-Distanz zum
+Eleusine-Ursprungsgenom (Oryza am weitesten entfernt → höchster Verlust)
+— ein gutes Plausibilitätssignal für die Methode selbst.
+
+**Wichtige Zusatzbestätigung der Mini-Chromosom-Kandidaten (siehe voriger
+Eintrag):** Gendichte pro Contig zeigt für alle vier zuvor per
+Repeat-Anteil geflaggten Contigs eine drastisch ERNIEDRIGTE Gendichte —
+genau das erwartete Doppelsignal (repeat-reich UND genarm):
+
+| Contig | Größe | Gene | Gendichte | Vergleich Genomdurchschnitt |
+|---|---|---|---|---|
+| LpKY97 CP050927.1 | 3,0 Mb | 119 | ~40/Mb | ~300-400/Mb sonst — **~8-10x niedriger** |
+| LpKY97 CP050928.1 | 0,9 Mb | 43 | ~48/Mb | ~8x niedriger |
+| GCA059329645_1 CM181343.1 | 1,3 Mb | 129 | ~99/Mb | ~327/Mb sonst — **~3x niedriger** |
+| GCA059329645_1 CM181341.1 | 1,2 Mb | 297 | ~247/Mb | leicht unterdurchschnittlich |
+
+**Konsequenz:** `LpKY97__CP050927.1`, `LpKY97__CP050928.1` und
+`GCA059329645_1__CM181343.1` sind jetzt durch ZWEI unabhängige
+Evidenzlinien (hoher Repeat-Anteil + stark erniedrigte Gendichte)
+gestützte Kandidaten für `accessory_chromosome`/`mini_chromosome` —
+deutlich robuster als jede einzelne Evidenz allein.
+`GCA059329645_1__CM181341.1` bleibt ein schwächerer Sekundärkandidat.
+Fehlende Teile für vollständigen Abschnitt 6.2: BRAKER3-De-novo-Annotation
+(gerade in diesen genarmen/repeat-reichen Bereichen wichtig, siehe
+Dokument-Warnung "Lift-over allein kann accessory Gene unterschätzen"),
+InterProScan/eggNOG-Funktionsannotation, OrthoFinder (Abschnitt 7.1).

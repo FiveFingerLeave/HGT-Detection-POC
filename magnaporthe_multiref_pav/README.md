@@ -61,10 +61,22 @@ Die vier zuvor per Repeat-Anteil geflaggten Contigs zeigen zusätzlich
 3–10× niedrigere Gendichte als der Genomdurchschnitt — repeat-reich UND
 genarm, zwei unabhängige Evidenzlinien. Details: `docs/decisions.md`.
 
-**Whole-genome-Alignment/SyRI, OrthoFinder (Abschnitt 7), Panel-Bau,
-Long-Read-Mapping, PAV, SV-Calling, Rarefaction: noch nicht
-implementiert** — siehe die einzelnen `workflow/rules/*.smk`-Dateien für
-den jeweiligen Statuskommentar und die Voraussetzungen.
+**Phase II (Abschnitt 7) — teilweise:**
+- **7.1 OrthoFinder:** fertig. 13.226 Orthogruppen, 92,7 % in allen 5
+  Genomen (strict_core). Panel-Prävalenzschwellen (7.3) für 5 statt 14
+  Referenzen neu kalibriert (`config/thresholds.yaml`).
+- **7.2 Whole-genome-Alignment/SyRI:** fertig für 3 von 10 Genompaaren
+  (SyRI verlangt gleiche Chromosomenzahl; LpKY97/GCA059329645_1 haben
+  durch ihre vermuteten Accessory-Chromosomen mehr Contigs als die
+  übrigen 3 Genome — nucmer/Coverage läuft trotzdem für alle 10 Paare).
+  Details: `docs/decisions.md`.
+- **7.3 Regionstypen, 7.4 Starship-Kandidaten:** noch nicht
+  implementiert.
+
+**Panel-Bau (Abschnitt 8), Long-Read-Mapping, PAV, SV-Calling,
+Rarefaction: noch nicht implementiert** — siehe die einzelnen
+`workflow/rules/*.smk`-Dateien für den jeweiligen Statuskommentar und
+die Voraussetzungen.
 
 ## Kritischer Befund zur Testisolat-Auswahl (Abschnitt 9)
 

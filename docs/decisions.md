@@ -1071,3 +1071,52 @@ faelschlich als "shell" statt "soft_core" eingestuft worden.
 (4/5), `shell_min=0,40` (2/5, alles darunter = `private_accessory`)
 umgestellt - qualitativ dieselbe Rangfolge wie im Dokument, nur an die
 kleinere, diskrete Panelgroesse angepasst.
+
+## 2026-09-02 — Abschnitt 7.2: Whole-genome Alignments (MUMmer4/SyRI) - SyRI erfordert gleiche Chromosomenzahl
+
+**Setup:** `envs/wga.yaml` (mummer4, syri), `workflow/rules/wga.smk`
+implementiert `nucmer_align` → `delta_filter` → `show_coords` → `run_syri`
+exakt nach Dokument-Befehl (Abschnitt 7.2). Statt eines einzelnen Ankers
+laufen alle 10 ungerichteten Paare des 5-Genom-Panels
+(`itertools.combinations`, `genome_pairs` im Snakefile) - das Dokument
+warnt explizit vor der Verzerrung durch einen einzelnen Oryza-Anker.
+
+**Bug 1:** SyRI (installierte Version) verlangt `-d <delta-Datei>`
+zusaetzlich zu `-c <coords>` fuer SNP/Indel-Identifikation - das
+Dokument-Beispiel laesst `-d` weg, was mit
+`ERROR - CIGAR string or .delta file is required` fehlschlaegt (die
+Table-Coords aus `show-coords -THrd` enthalten kein CIGAR). Fix: `-d
+{filtered.delta}` ergaenzt. Ausserdem erwartet `--prefix` nur den
+Dateinamen-Zusatz, nicht einen kompletten Pfad - `--dir` separat
+gesetzt (sonst Crash-Warnung).
+
+**Bug 2 (methodische Grenze, kein reiner Software-Fehler):** SyRI
+verlangt fuer seine Whole-genome-1:1-Chromosomenzuordnung, dass
+Referenz- und Query-Genom die GLEICHE Anzahl Contigs/Chromosomen haben
+(`ERROR - Unequal number of chromosomes in the genomes`). Unser
+5-Genom-Panel hat aber bewusst unterschiedliche Contigzahlen (7015=7,
+Br48=7, GCA004346965_1=7, **LpKY97=9**, **GCA059329645_1=10**) - und die
+"ueberzaehligen" Contigs sind exakt die bereits als Mini-/Accessory-
+Chromosom-Kandidaten geflaggten (siehe repeats.smk-Befund oben: LpKY97s
+2 kleine repeat-/genarme Contigs, GCA059329645_1s 2 kleine Contigs).
+**7 von 10 Paaren** (jedes mit LpKY97 oder GCA059329645_1) sind daher
+fuer SyRI nicht direkt nutzbar.
+
+**Fix (Scope-Anpassung, in `workflow/Snakefile` als `syri_pairs`
+umgesetzt):** `nucmer`/`show-coords` laufen fuer ALLE 10 Paare (liefert
+rohe Alignment-Coverage, funktioniert unabhaengig von der
+Chromosomenzahl). SyRIs vollstaendige Syntenie-/SV-Klassifikation laeuft
+nur fuer die 3 Paare mit gleicher Contigzahl (alle 7-Contig-Genome
+untereinander: `7015↔Br48`, `7015↔GCA004346965_1`,
+`Br48↔GCA004346965_1`). Kein Daten- oder Informationsverlust fuer die
+Mini-/Accessory-Chromosom-Frage selbst - die betroffenen Contigs sind
+durch Repeat-/Gendichte-Evidenz bereits gut belegt; SyRI haette dafuer
+ohnehin keine sinnvolle 1:1-Chromosomenzuordnung liefern koennen.
+
+**Ergebnis (3 SyRI-Klassifikationen, jeweils >600.000 Zeilen):**
+durchweg dominiert von SNP (237k-272k) und kleinen Indels (INS/DEL,
+20-32k), mit mehreren hundert syntenischen Bloecken (SYN/SYNAL,
+132-304 bzw. 699-877) und einer kleinen, aber vorhandenen Zahl an
+Strukturvarianten (Inversionen INV/INVAL/INVDP, Duplikationen DUP/DUPAL,
+Translokationen TRANS/TRANSAL) - biologisch plausibel fuer eng
+verwandte *M.-oryzae*-Isolate unterschiedlicher Wirtslinien.

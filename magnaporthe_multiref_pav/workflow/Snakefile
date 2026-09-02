@@ -1,3 +1,4 @@
+import itertools
 import pandas as pd
 import yaml
 
@@ -5,6 +6,34 @@ configfile: "config/config.yaml"
 
 references = pd.read_csv(config["references_tsv"], sep="\t", dtype=str, keep_default_na=False)
 genome_ids = references["genome_id"].tolist()
+
+# Section 7.2: alle ungerichteten Paare des 5-Genom-Panels (10 Paare) -
+# das Dokument warnt explizit vor einem einzelnen Oryza-Anker, der die
+# Diversitaet der anderen Linien systematisch als fehlend darstellen
+# wuerde; bei nur 5 Genomen ist der volle Paarsatz ohne Mehraufwand
+# machbar und liefert die vollstaendigste Syntenie-Evidenz fuer 7.3.
+genome_pairs = list(itertools.combinations(genome_ids, 2))
+
+
+def _n_contigs(genome_id):
+    fai = f"data/references/{genome_id}.fa.fai"
+    if os.path.exists(fai):
+        with open(fai) as f:
+            return sum(1 for _ in f)
+    return None
+
+
+# SyRI verlangt gleiche Chromosomen-/Contigzahl zwischen Referenz und
+# Query (whole-genome 1:1-Chromosomen-Zuordnung); Paare mit LpKY97
+# (9 Contigs) oder GCA059329645_1 (10) gegen die 7-Contig-Genome
+# schlagen sonst mit "Unequal number of chromosomes" fehl - siehe
+# docs/decisions.md. nucmer/show-coords laufen trotzdem fuer alle 10
+# Paare (liefern rohe Alignment-Coverage auch ohne SyRI-Klassifikation).
+syri_pairs = [
+    (r, q)
+    for r, q in genome_pairs
+    if _n_contigs(r) is not None and _n_contigs(r) == _n_contigs(q)
+]
 
 with open(config["thresholds"]) as f:
     thresholds = yaml.safe_load(f)

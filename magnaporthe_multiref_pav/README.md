@@ -41,10 +41,16 @@ Der volle 14-Genom-Katalog bleibt archiviert in
 alle 14 bleiben gültig, werden aber nicht weiter durch die Pipeline
 geführt).
 
-**Repeat-Masking (Abschnitt 6.3) — läuft** für alle 5 Panel-Genome
-parallel (`envs/repeats.yaml`: RepeatModeler2 + RepeatMasker,
-`workflow/rules/repeats.smk`). Laufzeit pro Genom laut Pilotlauf
-mehrere Stunden.
+**Repeat-Masking (Abschnitt 6.3) — abgeschlossen** für alle 5
+Panel-Genome (`envs/repeats.yaml`: RepeatModeler2 + RepeatMasker,
+`workflow/rules/repeats.smk`; parallelisiert, ~2:48 h für die letzten 4
+Genome). Genomweiter Repeat-Anteil 10,1–16,5 %. **Vier Contigs als
+starke Mini-/Accessory-Chromosom-Kandidaten identifiziert** (klein +
+weit überdurchschnittlicher Repeat-Anteil): `LpKY97__CP050927.1` (3,0 Mb,
+56,3 %), `LpKY97__CP050928.1` (0,9 Mb, 53,0 %),
+`GCA059329645_1__CM181343.1` (1,3 Mb, 45,4 %),
+`GCA059329645_1__CM181341.1` (1,2 Mb, 24,4 %) — Details:
+`docs/decisions.md`.
 
 **Annotation, Whole-genome-Alignment/SyRI, Panel-Bau, Long-Read-Mapping,
 PAV, SV-Calling, Rarefaction: noch nicht implementiert** — siehe die

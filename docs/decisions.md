@@ -502,3 +502,55 @@ des 20–30-Isolat-Panels aus den bereits vorhandenen NCBI-Long-Read-
 Assembly-Katalogen (`data/ncbi_m_oryzae_longread_candidates*.tsv`,
 `ncbi_m_oryzae_longread_highquality.tsv`, `ncbi_m_oryzae_sra_wgs_longread.tsv`),
 mit Fokus auf maximale Klonlinien-/Wirtsdiversität.
+
+## 2026-09-02 — Vollständiger NCBI-Assembly-Katalog (605 Genome) via Datasets REST API
+
+**Entscheidung:** Statt der bisherigen ~46-Einträge-Assembly-Liste
+(`data/ncbi_m_oryzae_assemblies.tsv`, älterer, unvollständiger Pull) wurde
+ein vollständiger Neuabruf über die NCBI Datasets REST API v2
+(`https://api.ncbi.nlm.nih.gov/datasets/v2/genome/taxon/318829/dataset_report`,
+txid 318829 deckt sowohl "Pyricularia oryzae" als auch das taxonomische
+Synonym "Magnaporthe oryzae" ab) durchgeführt: **605 Assemblies**, in
+einem einzigen Request (page_size=1000) vollständig abgerufen. Ergebnis in
+`poc_hgt_starships/00_data/ncbi_pyricularia_oryzae_assemblies_full.tsv`
+(27 Spalten: Accession, Organismus, Stamm, Assembly-Level, `sequencing_tech`
+— direkt aus der API, keine Heuristik nötig —, BioSample-Host/-Isolationsquelle/
+-Geo/-Sammeldatum, Contig-/Scaffold-N50/-L50, Chromosomenzahl, GC%).
+
+**Warum die Datasets-API statt E-Utilities:** Die Datasets-API liefert
+`assembly_stats` (N50 etc.) UND `assembly_info.sequencing_tech` UND
+eingebettete BioSample-Attribute in einem einzigen strukturierten
+JSON-Response pro Assembly — bei E-Utilities (esummary) hätte das
+mindestens 3 getrennte Abfragen pro Assembly gebraucht (Assembly-Summary,
+BioSample-Summary, ggf. Assembly-Stats-Report-Datei).
+
+**Kernbefunde (Details: `poc_hgt_starships/00_data/dataset_summary.md`):**
+- **Speicher:** 24,2 GB unkomprimierte FASTA-Summe (605 Genome à
+  35–49 Mb, Median 39,9 Mb); ≈ 6,1 GB gzip-komprimiert.
+- **Host-Diversität:** 29 normalisierte Kategorien nach
+  Tippfehler-/Synonym-Bereinigung (`host_diversity_summary.tsv`);
+  dominiert von *Oryza sativa* (275), *Triticum aestivum* (59),
+  *Eleusine* spp. (41), *Urochloa* spp. (19), *Lolium* spp. (16);
+  **27 % (164/605) ohne Host-Attribut im BioSample-Datensatz.**
+- **Assembly-Level/Contig-Größe:** nur 14 "Complete Genome" (2,3 %) + 42
+  "Chromosome"-Level (6,9 %) — 66 % (398) nur Scaffold-Level mit
+  Contig-N50-Median von nur 0,06 Mb.
+- **Kein explizit T2T-geflaggtes Assembly** (0 von 605). 14 Assemblies
+  sind "gapless chromosome-level" (Contig-Zahl = Chromosomenzahl) — ein
+  Näherungskriterium für T2T-Qualität, aber ohne verifizierte
+  Telomer-Repeats an beiden Enden, daher nicht mit echtem T2T
+  gleichzusetzen.
+- **Datentyp:** 84 % Short-Read-basiert (508), 11,6 % Long-Read (70),
+  4 % Hybrid (24), Rest Sanger/historisch. Erwarteter Zusammenhang
+  bestätigt: Complete-Genome-Level ausschließlich Long-Read/Hybrid,
+  Scaffold-Level fast ausschließlich Short-Read.
+
+**Konsequenz für Phase 1:** Von 605 Assemblies kommen nur die 56
+Complete-Genome-/Chromosome-Level-Einträge realistisch als
+Referenzpanel-Kandidaten in Frage (Rest zu fragmentiert für
+Starship-Boundary-Calling, siehe Dokument-Vorgabe "Repeat-Masking
+essenziell für saubere Boundary-Calls" — auf Scaffold-Level mit
+Contig-N50 ~60 kb sind Starship-Grenzen kaum sauber bestimmbar). Von
+diesen 56 sind wiederum nur die mit Host-Attribut UND ausreichender
+Klonlinien-Diversität für die 20–30-Isolat-Zielgröße relevant — noch zu
+filtern.

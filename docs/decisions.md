@@ -622,3 +622,71 @@ SV-Calling (Sniffles2), Rarefaction. Alle als dokumentierte Stubs in
 `workflow/rules/*.smk` mit Status-Kommentar und Voraussetzungen angelegt,
 damit die Snakemake-Struktur vollständig ist und der nächste
 Implementierungsschritt pro Datei klar ist.
+
+**Bug: BUSCO-OOM bei paralleler Ausführung.** Der erste BUSCO-Lauf
+(`--cores 2`, 2 Genome parallel) führte zu wiederholten, zunächst
+verwirrenden Abbrüchen (leere `/tmp`, `LockException`, EXT4-Un-/Remount
+und "journal corrupted or uncleanly shut down" im Kernel-Log — sah nach
+einem WSL-VM-Neustart aus). `dmesg` zeigte die eigentliche Ursache klar:
+`Out of memory: Killed process ... (python3) ... anon-rss:6897092kB` —
+ein einzelner BUSCO-Genome-Mode-Lauf (metaeuk-Genvorhersage gegen ein
+~44-Mb-Genom) braucht allein **~6,9 GB RSS**; zwei parallel sprengen die
+10 GB WSL-RAM-Grenze (+4 GB Swap) klar. Fix: `qc.smk`s
+`busco_reference`-Regel bekommt jetzt eine explizite `threads:`-Direktive
+(reserviert das volle Kernbudget pro Job), und der Lauf wird mit
+`--cores 1` (echte Serialisierung, ein Genom nach dem anderen) statt
+`--cores 2` gestartet. Erwartete Laufzeit dadurch länger (~14 × 10–20 Min
+statt parallelisiert), aber stabil.
+
+## 2026-09-02 — BUSCO-Abbrüche: tatsächliche Root Cause war WSL2 `autoMemoryReclaim`, nicht Energiesparmodus
+
+**Vorgeschichte:** Trotz der OOM-Fixes (siehe oben) brach der serialisierte
+BUSCO-Lauf (`--cores 1`) weiterhin unvermittelt ab — ohne internen
+BUSCO-Fehler (Abbruch mitten in `hmmsearch`, teils sogar mit einem
+WSL-Interop-Fehler "Failed to start the systemd user session"). `dmesg`
+zeigte durchgehend EXT4-Un-/Remount-Zyklen der Root-Disk (`sdd`) im
+~100–130-Sekunden-Takt, begleitet von
+`systemd-journald: File ... corrupted or uncleanly shut down`.
+
+**Erste (falsche) Hypothese:** Windows-Energiesparmodus (AC-Standby-Timeout
+45 Min) bzw. USB Selective Suspend (power-cycelt vermeintlich die Disk
+hinter `sdd`). Nutzer wurde befragt und wählte "Sleep-Timeout temporär
+deaktivieren"; beides (`STANDBYIDLE` und USB Selective Suspend, AC-Seite)
+wurde per `powercfg` deaktiviert. **Ergebnis: kein Effekt** — der
+identische Abbruch-Rhythmus trat unverändert erneut auf, diesmal mit dem
+zusätzlichen Fund, dass `/dev/sdd` gar kein externes/USB-Laufwerk ist,
+sondern die **Root-Disk der WSL2-VM selbst** (`/` und
+`/mnt/wslg/distro`, 1 TB dynamisches VHDX) — die powercfg-Hypothese war
+damit strukturell unplausibel (kein USB-Gerät betroffen) und wurde
+verworfen.
+
+**Tatsächliche Root Cause:** `C:\Users\flori\.wslconfig` hatte keine
+explizite `autoMemoryReclaim`-Einstellung, wodurch WSL2 (Version 2.7.12.0)
+den Default **`gradual`** verwendet — eine periodische
+Arbeitsspeicher-Kompaktierung der VM, die bei speicherintensiven
+Workloads (wie dem ~6,9 GB RSS BUSCO-Prozess) die VM kurz genug
+einfriert, um I/O-Timeouts auf der Root-Disk und dadurch die beobachteten
+Remounts/Journal-Korruption auszulösen. Fix: `.wslconfig` um
+```
+[experimental]
+autoMemoryReclaim=disabled
+```
+ergänzt, `wsl --shutdown` ausgeführt (sauberer Neustart, `uptime` bestätigt
+0 Min), BUSCO-Lauf erneut gestartet. **Ergebnis: alle 14 Genome liefen ohne
+Unterbrechung durch.** Die powercfg-Änderungen wurden auf die
+ursprünglichen Werte zurückgesetzt (AC-Standby 0x00000a8c/2700s,
+USB Selective Suspend AC 0x00000001/aktiviert), da sie nachweislich nicht
+die Ursache waren.
+
+**Lektion:** Bei WSL2-VM-internen Stabilitätsproblemen (Un-/Remounts der
+Root-Disk, nicht eines Peripheriegeräts) zuerst `.wslconfig`
+(`autoMemoryReclaim`, `vmIdleTimeout`, `sparseVhd`) prüfen, bevor
+Windows-Host-Energieeinstellungen als Ursache vermutet werden — das
+Gerät hinter der scheinbar "unmount/remount"-betroffenen Disk sollte
+immer zuerst per `mount`/`lsblk` identifiziert werden (hier: `sdd` = `/`,
+kein USB-Gerät).
+
+**BUSCO-Ergebnis (`sordariomycetes_odb10`, alle 14 Referenzgenome):**
+durchweg 97,9–98,2 % Complete (größtenteils Single-Copy, Duplication
+≤0,5 %), <2 % Missing — konsistent hohe Assembly-Vollständigkeit über das
+gesamte Panel, keine Ausreißer.

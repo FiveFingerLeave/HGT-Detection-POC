@@ -31,6 +31,12 @@ rule assembly_stats:
 
 
 rule busco_reference:
+    # A single BUSCO genome-mode run (metaeuk gene prediction against a
+    # ~44 Mb genome) uses ~7 GB RSS - confirmed via an actual OOM-kill
+    # when 2 ran in parallel on this 10 GB WSL2 VM (see docs/decisions.md).
+    # threads: reserves the full core budget per job so Snakemake
+    # serializes rather than oversubscribing, matching --cores 1.
+    threads: config["threads_default"]
     input:
         "data/references/{genome_id}.fa",
     output:

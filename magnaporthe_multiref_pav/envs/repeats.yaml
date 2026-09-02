@@ -1,0 +1,15 @@
+# Phase I (Section 6.3): Repeat-/TE-Annotation, separat von envs/annotation.yaml
+# gehalten (die BRAKER3/OrthoFinder/eggnog-mapper buendelt und dadurch ein
+# schwereres, fragileres Environment waere) - repeatmodeler bringt seine
+# eigenen Abhaengigkeiten (RECON, RepeatScout, LTR_retriever, cd-hit, mafft,
+# ninja, genometools) bereits ueber den Bioconda-Channel mit.
+name: multiref-repeats
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - repeatmodeler=2.0.5
+  - repeatmasker=4.1.7
+  - bedtools
+  - seqkit
+  - samtools

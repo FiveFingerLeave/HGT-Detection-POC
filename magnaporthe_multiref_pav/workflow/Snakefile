@@ -1,9 +1,13 @@
 import pandas as pd
+import yaml
 
 configfile: "config/config.yaml"
 
 references = pd.read_csv(config["references_tsv"], sep="\t", dtype=str, keep_default_na=False)
 genome_ids = references["genome_id"].tolist()
+
+with open(config["thresholds"]) as f:
+    thresholds = yaml.safe_load(f)
 
 # config/samples.tsv (pilot 10 test isolates) is created during Phase IV
 # (Section 9) once the pilot stratification is decided; guard against its

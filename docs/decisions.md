@@ -690,3 +690,85 @@ kein USB-Gerät).
 durchweg 97,9–98,2 % Complete (größtenteils Single-Copy, Duplication
 ≤0,5 %), <2 % Missing — konsistent hohe Assembly-Vollständigkeit über das
 gesamte Panel, keine Ausreißer.
+
+## 2026-09-02 — Eleusine-Long-Read-Lücke geschlossen: 2 echte Isolate im SRA-Rohdatenkatalog gefunden
+
+**Vorgehen:** Aus `data/ncbi_m_oryzae_sra_wgs_longread.tsv` (193 Läufe) die
+158 eindeutigen BioSample-Accessions extrahiert und per NCBI E-Utilities
+(`efetch db=biosample`, Batches à 50) die BioSample-Attribute (Host,
+Isolate, Isolation Source, Geo) abgerufen (`config/longread_sra_
+biosample_hosts.tsv` im neuen Projekt gesichert, 115/158 BioSamples
+lieferten Attribute — der Rest sind ältere BioSamples ohne strukturierte
+Metadaten).
+
+**Ergebnis:** Zwei Isolate mit Host `Eleucine coracana` (Fingerhirse) UND
+echten long-read-Rohdaten gefunden:
+
+| Isolat | BioSample | SRA-Run | Plattform | Bases | Herkunft |
+|---|---|---|---|---|---|
+| K23/123 | SAMN08033374 | SRR6307184 | PacBio RS II | 3,31 Gb (≈74× auf 44,5 Mb) | Kenia: Busia district, Halsbrand |
+| E34 | SAMN12142210 | SRR9972918 | PacBio Sequel | 8,41 Gb (≈189×) | Äthiopien: Diga, Halsbrand |
+
+Beide als neue Zeilen an `config/samples_candidate_pool.tsv` angehängt
+(Pool jetzt 44 statt 42 Einträge; `fastq`-Spalte trägt bereits den
+SRA-Run-Accession, da die Rohdaten anders als bei allen 42 ursprünglichen
+Chromosome-Level-Einträgen tatsächlich direkt herunterladbar sind).
+`read_n50_bp` ist hier die mittlere Subread-Länge aus der SRA-Runinfo
+(keine echte N50, da diese Kennzahl im runinfo-Format fehlt) — vor dem
+tatsächlichen Mapping-Lauf sollte die echte N50 aus den heruntergeladenen
+Reads berechnet werden.
+
+**Wichtiger Nebenbefund:** Cross-Referenz der 42 ursprünglichen
+Chromosome-Level-BioSamples gegen die 158 long-read-SRA-BioSamples ergab
+**null Überschneidungen** — keines der 42 Assemblies hat in diesem
+Katalog auffindbare Rohreads (die Long-Read-Assemblies wurden offenbar
+ohne Rohdaten-Deposit eingereicht, oder unter einem anderen BioSample als
+dem Assembly-BioSample). Das heißt: `config/samples_candidate_pool.tsv`
+enthielt bislang bei KEINEM der 42 Einträge tatsächlich ladbare FASTQ
+("assembly only" bei allen) — K23/123 und E34 sind damit nicht nur der
+Eleusine-Fix, sondern aktuell die EINZIGEN beiden Einträge im gesamten
+Pool mit real verfügbaren Rohdaten. Für die übrigen Host-Gruppen
+(Triticum, Oryza, Lolium, Setaria) muss vor der finalen 10-Pilotisolate-
+Auswahl (Abschnitt 9.1) ebenfalls im SRA-Katalog nach Rohdaten gesucht
+werden, nicht nur nach Assemblies — noch nicht geschehen.
+
+## 2026-09-02 — Repeat-Masking (Abschnitt 6.3): eigene, schlanke Environment statt der schweren `annotation.yaml`
+
+**Entscheidung:** `envs/repeats.yaml` (neu, `multiref-repeats`) mit nur
+`repeatmodeler=2.0.5`, `repeatmasker=4.1.7`, `bedtools`, `seqkit`,
+`samtools` angelegt, statt RepeatModeler/RepeatMasker aus der bereits
+geplanten `envs/annotation.yaml` zu installieren (die zusätzlich BRAKER3,
+liftoff, eggnog-mapper, orthofinder, diamond, iqtree bündelt — ein
+gemeinsamer Install-Versuch aller dieser Pakete wäre langsamer und
+fragiler gewesen, insbesondere wegen BRAKER3s GeneMark-Lizenzabhängigkeit,
+die ohnehin separat behandelt werden muss).
+
+**`workflow/rules/repeats.smk` implementiert** (vorher reiner Stub):
+`index_reference_fai` (samtools faidx) → `build_repeat_database`
+(BuildDatabase, NCBI-Engine) → `run_repeatmodeler` (mit `-LTRStruct` für
+LTR-Retrotransposon-Sensitivität) → `run_repeatmasker` (mit der
+genomspezifischen RepeatModeler-Bibliothek) → `repeat_windows`
+(`workflow/scripts/repeat_windows.sh`: RepeatMasker-`.out` → BED →
+`bedtools merge`/`coverage` gegen ein Fenstergitter). Fenstergröße wird
+aus `config/thresholds.yaml: pav.window_size_bp` (10 kb) übernommen,
+nicht neu definiert — damit lässt sich die Repeat-Dichte pro Fenster
+später direkt mit der windowbasierten PAV-Klassifikation (Abschnitt 8)
+joinen, exakt wie im Dokument gefordert ("Repeat-Anteil" als Spalte der
+finalen Panel-Tabelle, Abschnitt 8.4/8.5). Dafür musste
+`workflow/Snakefile` erweitert werden, um `config/thresholds.yaml`
+selbst einzulesen (`thresholds = yaml.safe_load(...)`) — vorher wurde die
+Datei nur referenziert, nie geparst.
+
+**Wie bei BUSCO:** `run_repeatmodeler`/`run_repeatmasker` bekommen ein
+explizites `threads:` (= `config["threads_default"]`), um bei `--cores`
+gleich dem Threadwert eine echte Serialisierung zu erzwingen — RepeatModeler
+ist ähnlich speicher-/zeitintensiv wie BUSCO, mehrere parallele Läufe auf
+der 10-GB-WSL2-VM sind ein bekanntes Risiko (siehe BUSCO-OOM oben).
+
+**Pilotlauf vor Vollausführung:** Da RepeatModeler2 mit `-LTRStruct` für
+Genome dieser Größe laut Literatur mehrere Stunden pro Genom brauchen
+kann und 14 Genome seriell potenziell 1–4+ Tage bedeuten, wurde zunächst
+NUR `GCA036493215_1` (kleinstes Genom im Panel, 42,5 Mb) als Zeitpilot
+gestartet, bevor alle 14 als langer Hintergrundlauf committed werden —
+Ergebnis wird bei Abschluss dokumentiert und entscheidet, ob `-LTRStruct`
+beibehalten oder für Zeitersparnis fallengelassen wird.

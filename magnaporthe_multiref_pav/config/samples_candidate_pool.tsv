@@ -41,3 +41,5 @@ GCA055697895_1	GCA_055697895.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2
 GCA055697835_1	GCA_055697835.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804011
 GCA055697985_1	GCA_055697985.1	Triticum aestivum	triticum	NA	Brazil: Londrina, PR	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804026
 GCA055689555_1	GCA_055689555.1	Triticum aestivum	triticum	NA	Brazil: Uberaba, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804018
+K23_123	NA (no genome assembly, raw long reads only)	Eleusine coracana	eleusine	NA	Kenya: Busia district	NA	long-read (PacBio RS II)	SRA:SRR6307184	9613 (mean subread length, not N50)	74x	candidate	SAMN08033374
+E34	NA (no genome assembly, raw long reads only)	Eleusine coracana	eleusine	NA	Ethiopia: Diga	NA	long-read (PacBio Sequel)	SRA:SRR9972918	8940 (mean subread length, not N50)	189x	candidate	SAMN12142210

@@ -1,0 +1,17 @@
+# Phase I/II annotation env. NOT yet installed (heavy, e.g. BRAKER3
+# needs a GeneMark-ES/ET license file set up separately - see
+# https://github.com/Gaius-Augustus/BRAKER). Installed on demand when
+# annotation.smk is actually run.
+name: multiref-annotation
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - braker3
+  - liftoff
+  - eggnog-mapper
+  - orthofinder
+  - diamond
+  - iqtree
+  - repeatmodeler
+  - repeatmasker

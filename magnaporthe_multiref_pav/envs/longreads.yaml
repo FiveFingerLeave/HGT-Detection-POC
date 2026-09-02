@@ -1,0 +1,10 @@
+name: multiref-longreads
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - nanoplot
+  - seqkit
+  - minimap2
+  - samtools
+  - sniffles=2

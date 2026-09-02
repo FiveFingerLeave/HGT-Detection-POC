@@ -1,0 +1,11 @@
+name: multiref-core
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - seqkit
+  - samtools
+  - bedtools
+  - busco=5
+  - minimap2
+  - mosdepth

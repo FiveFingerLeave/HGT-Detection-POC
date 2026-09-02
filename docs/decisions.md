@@ -554,3 +554,71 @@ Contig-N50 ~60 kb sind Starship-Grenzen kaum sauber bestimmbar). Von
 diesen 56 sind wiederum nur die mit Host-Attribut UND ausreichender
 Klonlinien-Diversität für die 20–30-Isolat-Zielgröße relevant — noch zu
 filtern.
+
+## 2026-09-02 — Zweiter Pivot: `multireferenzpanel_pav_workflow.md`, eigenes Projekt `magnaporthe_multiref_pav/`
+
+**Entscheidung:** Der Nutzer hat ein drittes, noch spezifischeres
+Workflow-Dokument bereitgestellt
+(`Dokumentation/multireferenzpanel_pav_workflow.md`, 19 Abschnitte) und
+angewiesen, dessen Arbeitsschritte strikt zu befolgen und dafür eine
+eigene Ordnerstruktur zu verwenden. Anders als beim ersten Pivot (siehe
+oben) wurde NICHTS aus `poc_hgt_starships/` entfernt — das neue Dokument
+ist eine sehr viel konkretere Ausarbeitung speziell des
+Multireferenzpanel-/PAV-Teils (deckungsgleich mit
+`poc_hgt_starships/{01_assembly_qc,03_starship_calls,04_pav_matrix}`),
+nicht ein Ersatz für den gesamten 8-Phasen-Plan. Neues, eigenständiges
+Projektverzeichnis `magnaporthe_multiref_pav/` exakt nach der in
+Abschnitt 4 des Dokuments vorgegebenen Struktur angelegt
+(`config/`, `data/{references,annotations,longreads,resources}/`,
+`envs/`, `workflow/{rules,scripts}/`, `results/`, `logs/`).
+
+**14-Genom-Referenzpanel identifiziert und heruntergeladen:** Die im
+Dokument geforderten "14 vollständigen Genomassemblies" entsprechen
+exakt den 14 "Complete Genome"-Einträgen aus dem tags zuvor erhobenen
+605-Genome-NCBI-Katalog (nicht neu gesucht, direkt weiterverwendet).
+Alle 14 FASTA erfolgreich über die NCBI Datasets API heruntergeladen
+(`data/references_raw/`) — **nur 1 von 14 (`GCA004346965_1`,
+Eleusine-Isolat) hat eine mitgelieferte GFF3-Annotation**, die übrigen
+13 brauchen die in Abschnitt 6.2 vorgesehene Reannotation (BRAKER3/
+Liftoff), bevor genbasierte Analysen (OrthoFinder, Abschnitt 7.1)
+möglich sind.
+
+**Kritischer Befund zur "42 Long-Read-Testisolate"-Annahme:** Das
+Dokument geht davon aus, dass 42 chromosomenbasierte Long-Read-Isolate
+für die Pilotauswahl (Abschnitt 9) zur Verfügung stehen. Der NCBI-Katalog
+liefert exakt 42 Assemblies auf Chromosome-Level (Zahlen-Übereinstimmung
+kein Zufall) — aber bei genauerer Prüfung der `sequencing_tech`-Metadaten:
+- **Nur 15 von 42 sind tatsächlich Long-Read/Hybrid-sequenziert**
+  (13 long-read + 2 hybrid); 25 sind Short-Read-basiert (überwiegend eine
+  große Charge von 22 brasilianischen Weizen-Isolaten, vermutlich
+  referenzgestützt gescaffoldet, nicht de-novo Long-Read-assembliert);
+  2 sind das historische Sanger-70-15-Duplikat (GCA/GCF_000002495.2).
+- **Host-Diversität in diesem 42er-Pool ist stark verzerrt:** 31/42
+  *Triticum*, 5 *Oryza*, je 1 *Lolium*/*Setaria*, **0 *Eleusine*.** Die
+  in Abschnitt 9.1 geforderte Stratifizierung (u. a. "2
+  Eleusine-assoziierte Isolate") ist aus diesem Pool nicht erfüllbar.
+
+**Konsequenz:** Für echte Eleusine-Long-Read-Testisolate muss der
+separate SRA-Rohdaten-Katalog (`data/ncbi_m_oryzae_sra_wgs_longread.tsv`,
+193 Läufe) nach BioSample-Host-Attributen durchsucht werden — noch nicht
+geschehen. `config/samples_candidate_pool.tsv` (42 Zeilen, mit
+`platform`-Spalte) dokumentiert den vollen Pool inkl. dieser
+Einschränkung; die finalen 10 Pilotisolate (`config/samples.tsv`) sind
+deshalb noch nicht befüllt.
+
+**Phase I (Abschnitt 6.1) ausgeführt:** `seqkit stats` für alle 14
+Referenzen (`results/qc/assembly_stats.tsv`) — konsistentes Bild (7–10
+Contigs, 42–48 Mb, N50 5,7–7,5 Mb, GC ~50 %, passend zum erwarteten
+*M. oryzae*-Profil). BUSCO (`sordariomycetes_odb10`) lief im Hintergrund
+für alle 14 Genome (env `qc_env`, bereits aus einer früheren Sitzung mit
+BUSCO vorhanden, nur `seqkit` ergänzt statt einer redundanten neuen
+Umgebung).
+
+**Bewusst zurückgestellt (Umfang/Werkzeugverfügbarkeit):** Annotation
+(BRAKER3 — braucht separate GeneMark-Lizenz, kein reiner Conda-Install),
+Repeat-Masking (RepeatModeler2/EDTA), Whole-genome-Alignment/SyRI,
+OrthoFinder, Panel-Bau, Long-Read-Mapping, fensterbasierte PAV,
+SV-Calling (Sniffles2), Rarefaction. Alle als dokumentierte Stubs in
+`workflow/rules/*.smk` mit Status-Kommentar und Voraussetzungen angelegt,
+damit die Snakemake-Struktur vollständig ist und der nächste
+Implementierungsschritt pro Datei klar ist.

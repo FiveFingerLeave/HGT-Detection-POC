@@ -1,0 +1,43 @@
+sample_id	accession	host	host_group	lineage	country	year	platform	fastq	read_n50_bp	estimated_coverage	pilot	biosample
+7015	GCA_000002495.2	NA	unknown	NA	NA	2011	sanger	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN02953596
+7015_2	GCF_000002495.2	NA	unknown	NA	NA	2011	sanger	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN02953596
+B71	GCA_004785725.2	Triticum aestivum	triticum	NA	Bolivia: Okinawa Uno	2012	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN06076154
+T3	GCA_030718865.1	Triticum aestivum	triticum	NA	Brazil	1986	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN36849576
+GCA059330725_1	GCA_059330725.1	Triticum aestivum	triticum	NA	Brazil: Sertaneja, Parana	1985	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN56458203
+GCA059330485_1	GCA_059330485.1	Triticum aestivum	triticum	NA	Brazil: Floresta, Parana	1988	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN56458206
+GCA021764705_1	GCA_021764705.1	NA	unknown	NA	China: Enshi Hubei	2021	hybrid (long-read+short-read)	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN25211060
+O219	GCA_043231905.1	Rice	oryza	NA	Cote d'Ivoire	1985	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN37099171
+TF051MC7	GCA_036172685.1	Lolium arundinaceum	wildgrass	NA	USA: Kentucky, Lexington	2005	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN36850036
+ZM12	GCA_026261775.1	Triticum aestivum	triticum	NA	Zambia: Mpika, Muchinga	2018	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN29254577
+O135	GCA_043231925.1	Rice	oryza	NA	China: Zhejiang, Hangzhou	1985	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN37099169
+GCA059330095_1	GCA_059330095.1	Triticum aestivum	triticum	NA	Paraguay: Canindeyu	2012	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN56501177
+GCA059469275_1	GCA_059469275.1	NA	unknown	NA	Ethiopia	2016	hybrid (long-read+short-read)	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN49375469
+Guy11	GCA_046718735.1	rice	oryza	NA	French Guiana	1979	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN37608890
+gw6	GCA_057381395.1	Setaria italica	setaria	NA	China: Shijiazhuang, Gaocheng	2016	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN31488230
+O137	GCA_043231915.1	Rice	oryza	NA	China: Zhejiang, Hangzhou	1985	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN37099170
+GCA055697955_1	GCA_055697955.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804013
+GCA049355405_1	GCA_049355405.1	Triticum aestivum	triticum	NA	Brazil: Argenita, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804025
+GCA055689575_1	GCA_055689575.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804017
+GCA055697935_1	GCA_055697935.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804014
+TRG2	GCA_030512215.1	Oryza sativa	oryza	NA	Thailand	2023	long-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN27511241
+GCA055689635_1	GCA_055689635.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804012
+GCA049355415_1	GCA_049355415.1	Triticum aestivum	triticum	NA	Brazil: Sacramento, MG	2017	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804029
+GCA049355325_1	GCA_049355325.1	Triticum aestivum	triticum	NA	Brazil: Pedrinopolis, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804020
+GCA055689595_1	GCA_055689595.1	Triticum aestivum	triticum	NA	Brazil: Perdizes, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804024
+GCA055689535_1	GCA_055689535.1	Triticum aestivum	triticum	NA	Brazil: Uberaba, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804019
+GCA049355375_1	GCA_049355375.1	Triticum aestivum	triticum	NA	Brazil: Cascavel, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804009
+GCA055689515_1	GCA_055689515.1	Triticum aestivum	triticum	NA	Brazil: Romaria, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804021
+GCA055697915_1	GCA_055697915.1	Triticum aestivum	triticum	NA	Brazil: Amambai, MS	2012	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804007
+GCA049355335_1	GCA_049355335.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804015
+GCA049355395_1	GCA_049355395.1	Triticum aestivum	triticum	NA	Brazil: Nova Ponte, MG	2017	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804030
+GCA049355315_1	GCA_049355315.1	Triticum aestivum	triticum	NA	Brazil: Serra do Salitre, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804022
+GCA055689605_1	GCA_055689605.1	Triticum aestivum	triticum	NA	Brazil: Casa Branca, SP	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804023
+GCA055697855_1	GCA_055697855.1	Triticum aestivum	triticum	NA	Brazil: Cascavel, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804010
+GCA055774735_1	GCA_055774735.1	Triticum aestivum	triticum	NA	Brazil: Uberaba, MG	2017	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804028
+GCA055689495_1	GCA_055689495.1	Triticum aestivum	triticum	NA	Brazil: Brasilia, DF	2017	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804031
+GCA055697875_1	GCA_055697875.1	Triticum aestivum	triticum	NA	Brazil: Sao Luis Gonzaga, RS	2012	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804008
+GCA055697975_1	GCA_055697975.1	Triticum aestivum	triticum	NA	Brazil: Passo Fundo, RS	2017	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804027
+GCA055697895_1	GCA_055697895.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804016
+GCA055697835_1	GCA_055697835.1	Triticum aestivum	triticum	NA	Brazil: Assis, PR	2013	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804011
+GCA055697985_1	GCA_055697985.1	Triticum aestivum	triticum	NA	Brazil: Londrina, PR	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804026
+GCA055689555_1	GCA_055689555.1	Triticum aestivum	triticum	NA	Brazil: Uberaba, MG	2015	short-read	NA (assembly only - raw long reads not yet located)	NA	NA	NA	SAMN45804018

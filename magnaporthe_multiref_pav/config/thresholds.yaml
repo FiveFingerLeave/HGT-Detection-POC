@@ -1,0 +1,33 @@
+panel:
+  strict_core_fraction: 1.00
+  soft_core_fraction: 0.93
+  shell_min_fraction: 0.21
+  candidate_min_length_bp: 10000
+  dedup_identity: 0.98
+  dedup_coverage: 0.90
+
+mapping:
+  preset_ont: map-ont
+  preset_hifi: map-hifi
+  min_mapq_unique: 20
+  min_primary_alignment_bp: 3000
+
+pav:
+  window_size_bp: 10000
+  high_resolution_window_size_bp: 2000
+  min_depth_present: 5
+  present_breadth_core: 0.80
+  present_breadth_accessory: 0.70
+  absent_breadth: 0.10
+  min_block_bp: 20000
+  min_global_depth: 20
+
+starship:
+  min_region_length_bp: 20000
+  duf3435_evalue: 1.0e-5
+  require_cargo_genes: true
+  require_boundary_evidence_for_high_confidence: true
+
+rarefaction:
+  n_permutations: 1000
+  saturation_delta_fraction: 0.05

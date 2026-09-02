@@ -1,0 +1,7 @@
+name: multiref-wga
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - mummer4
+  - syri

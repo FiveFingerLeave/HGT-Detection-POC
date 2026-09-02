@@ -1,0 +1,15 @@
+genome_id	accession	host	host_group	lineage	country	year	assembly_fasta	annotation_gff	sequencing	complete_status	biosample	total_length_bp	n_chromosomes
+GCA059330735_1	GCA_059330735.1	Triticum aestivum	triticum	NA	Bolivia	2018	data/references/GCA059330735_1.fa	data/annotations/GCA059330735_1.gff3	long-read	complete	SAMN56458200	43347792	7
+7015	GCA_049735435.1	Oryza sativa	oryza	NA	None	2021	data/references/7015.fa	data/annotations/7015.gff3	long-read	complete	SAMN46257954	43463497	7
+Guy11	GCA_050157985.1	Oryza sativa	oryza	NA	not collected	2025	data/references/Guy11.fa	data/annotations/Guy11.gff3	long-read	complete	SAMN43111377	42973823	7
+95HPH4	GCA_050157325.1	Oryza sativa	oryza	NA	China: Fujian	2023	data/references/95HPH4.fa	data/annotations/95HPH4.gff3	long-read	complete	SAMN43111381	47777704	9
+95085	GCA_050157855.1	Oryza sativa	oryza	NA	China: Fujian	1995	data/references/95085.fa	data/annotations/95085.gff3	long-read	complete	SAMN43111376	45859373	9
+GCA059330115_1	GCA_059330115.1	Triticum aestivum	triticum	NA	Brazil: Passo Fundo, Rio Grande do Sul	2016	data/references/GCA059330115_1.fa	data/annotations/GCA059330115_1.gff3	long-read	complete	SAMN56458201	44285086	8
+GCA059330025_1	GCA_059330025.1	Triticum aestivum	triticum	NA	Bolivia	2011	data/references/GCA059330025_1.fa	data/annotations/GCA059330025_1.gff3	long-read	complete	SAMN56501178	42958876	8
+GCA036493215_1	GCA_036493215.1	NA	unknown	NA	Brazil	2020	data/references/GCA036493215_1.fa	data/annotations/GCA036493215_1.gff3	hybrid (long-read+short-read)	complete	SAMD00549507	42501442	7
+LpKY97	GCA_012272995.1	perennial ryegrass	wildgrass	NA	not applicable	2020	data/references/LpKY97.fa	data/annotations/LpKY97.gff3	long-read	complete	SAMN14533965	45612971	9
+GCA004346965_1	GCA_004346965.1	Eleusine coracana	eleusine	NA	Japan: Miyazaki	1976	data/references/GCA004346965_1.fa	data/annotations/GCA004346965_1.gff3	hybrid (long-read+short-read)	complete	SAMN10491321	42703282	7
+GCA059329645_1	GCA_059329645.1	Avena sativa	avena	NA	Brazil: Parana	1990	data/references/GCA059329645_1.fa	data/annotations/GCA059329645_1.gff3	long-read	complete	SAMN56458202	43683271	9
+GCA059330365_1	GCA_059330365.1	Triticum aestivum	triticum	NA	Bolivia	2020	data/references/GCA059330365_1.fa	data/annotations/GCA059330365_1.gff3	long-read	complete	SAMN56458204	44500455	8
+GCA059329725_1	GCA_059329725.1	Lolium multiflorum	wildgrass	NA	USA: Mississippi	1980	data/references/GCA059329725_1.fa	data/annotations/GCA059329725_1.gff3	long-read	complete	SAMN56458205	43923837	8
+P131	GCA_000292605.2	Oryza sativa L. ssp. japonica	oryza	NA	Japan	1976	data/references/P131.fa	data/annotations/P131.gff3	hybrid (long-read+short-read)	complete	SAMN02981399	43237743	7

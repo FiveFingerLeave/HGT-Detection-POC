@@ -38,6 +38,10 @@ data/references/*.gff3
 *.fai
 *.paf
 
+# Rohe NCBI-Download-Archive (regenerierbar, redundant mit extrahierten
+# FASTA/GFF, die bereits oben ausgeschlossen sind)
+*.zip
+
 # Automatisch erzeugte Ergebnis- und temporäre Dateien
 results/
 logs/

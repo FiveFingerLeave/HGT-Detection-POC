@@ -1,0 +1,9 @@
+# Top-level Snakemake config for the Multireferenzpanel/PAV workflow
+# (Dokumentation/multireferenzpanel_pav_workflow.md).
+
+references_tsv: config/references.tsv
+samples_tsv: config/samples.tsv
+thresholds: config/thresholds.yaml
+
+busco_lineage: sordariomycetes_odb10
+threads_default: 8

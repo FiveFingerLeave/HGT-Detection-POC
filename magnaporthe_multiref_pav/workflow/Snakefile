@@ -1,0 +1,37 @@
+import pandas as pd
+
+configfile: "config/config.yaml"
+
+references = pd.read_csv(config["references_tsv"], sep="\t", dtype=str, keep_default_na=False)
+genome_ids = references["genome_id"].tolist()
+
+# config/samples.tsv (pilot 10 test isolates) is created during Phase IV
+# (Section 9) once the pilot stratification is decided; guard against its
+# absence so earlier phases remain runnable on their own.
+import os
+
+if os.path.exists(config["samples_tsv"]):
+    samples = pd.read_csv(config["samples_tsv"], sep="\t", dtype=str, keep_default_na=False)
+    sample_ids = samples["sample_id"].tolist()
+else:
+    samples = None
+    sample_ids = []
+
+
+include: "rules/qc.smk"
+include: "rules/annotation.smk"
+include: "rules/repeats.smk"
+include: "rules/starships.smk"
+include: "rules/wga.smk"
+include: "rules/panel.smk"
+include: "rules/mapping.smk"
+include: "rules/pav.smk"
+include: "rules/rarefaction.smk"
+include: "rules/report.smk"
+
+
+rule all:
+    input:
+        # Phase I (Section 6.1) - immediately runnable, see docs/decisions.md
+        "results/qc/assembly_stats.tsv",
+        expand("results/qc/{genome_id}_busco_summary.txt", genome_id=genome_ids),

@@ -52,10 +52,19 @@ weit überdurchschnittlicher Repeat-Anteil): `LpKY97__CP050927.1` (3,0 Mb,
 `GCA059329645_1__CM181341.1` (1,2 Mb, 24,4 %) — Details:
 `docs/decisions.md`.
 
-**Annotation, Whole-genome-Alignment/SyRI, Panel-Bau, Long-Read-Mapping,
-PAV, SV-Calling, Rarefaction: noch nicht implementiert** — siehe die
-einzelnen `workflow/rules/*.smk`-Dateien für den jeweiligen
-Statuskommentar und die Voraussetzungen.
+**Genannotation (Abschnitt 6.2) — teilweise:** Liftoff überträgt die
+einzige echte NCBI-Annotation (`GCA004346965_1`, 13.521 Gene) auf alle 5
+Panel-Genome (94,6–99,98 % erfolgreich übertragen, Verlust korreliert
+sinnvoll mit Host-Distanz). BRAKER3-De-novo-Annotation bleibt an der
+GeneMark-Lizenz blockiert. **Bestätigung der Mini-Chromosom-Kandidaten:**
+Die vier zuvor per Repeat-Anteil geflaggten Contigs zeigen zusätzlich
+3–10× niedrigere Gendichte als der Genomdurchschnitt — repeat-reich UND
+genarm, zwei unabhängige Evidenzlinien. Details: `docs/decisions.md`.
+
+**Whole-genome-Alignment/SyRI, OrthoFinder (Abschnitt 7), Panel-Bau,
+Long-Read-Mapping, PAV, SV-Calling, Rarefaction: noch nicht
+implementiert** — siehe die einzelnen `workflow/rules/*.smk`-Dateien für
+den jeweiligen Statuskommentar und die Voraussetzungen.
 
 ## Kritischer Befund zur Testisolat-Auswahl (Abschnitt 9)
 

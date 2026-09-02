@@ -8,3 +8,4 @@ dependencies:
   - minimap2
   - samtools
   - sniffles=2
+  - sra-tools

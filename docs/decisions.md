@@ -769,6 +769,82 @@ der 10-GB-WSL2-VM sind ein bekanntes Risiko (siehe BUSCO-OOM oben).
 Genome dieser Größe laut Literatur mehrere Stunden pro Genom brauchen
 kann und 14 Genome seriell potenziell 1–4+ Tage bedeuten, wurde zunächst
 NUR `GCA036493215_1` (kleinstes Genom im Panel, 42,5 Mb) als Zeitpilot
-gestartet, bevor alle 14 als langer Hintergrundlauf committed werden —
-Ergebnis wird bei Abschluss dokumentiert und entscheidet, ob `-LTRStruct`
-beibehalten oder für Zeitersparnis fallengelassen wird.
+gestartet, bevor alle 14 als langer Hintergrundlauf committed werden.
+
+**Pilotlauf-Ergebnis (Zeitmessung):** Runde 1 (RepeatScout, größte
+Stichprobe) brauchte 63 Minuten für `GCA036493215_1` — davon allein 56
+Minuten für EINE einzelne, ungewöhnlich kopienreiche Repeat-Familie
+("family-0"; die übrigen 88 entdeckten Familien liefen in Sekunden bis
+niedrigen Minuten durch). RepeatModeler ist dabei, anders als BUSCO,
+**kaum speicherhungrig** (~1 GB RSS statt ~7 GB) — die 10-GB-WSL2-Grenze
+ist hier kein Thema, der Engpass ist rein CPU-/Zeit-gebunden. Damit ist
+echte Parallelisierung über mehrere Genome hinweg (statt serieller
+Ausführung wie bei BUSCO) sowohl möglich als auch sinnvoll.
+
+## 2026-09-02 — Panel auf 5 Host-Repräsentanten reduziert (POC-Scope-Abweichung vom Dokument) + Repeat-Masking parallelisiert
+
+**Wichtig:** Das Dokument (`multireferenzpanel_pav_workflow.md`) selbst
+sieht KEINE Reduktion des 14-Genom-Katalogs vor — es geht durchgängig von
+allen 14 Genomen aus. Die folgende Reduktion ist eine bewusste,
+nutzergetriebene POC-Scope-Entscheidung (Rechenaufwand senken), keine
+Vorgabe aus dem Dokument, und wird hier als Abweichung transparent
+dokumentiert.
+
+**Entscheidung:** Statt aller 14 Complete-Genome-Referenzen wird für
+Repeat-Masking, Annotation und Panel-Bau nur noch **ein Repräsentant pro
+Host-Typ** verwendet (5 Genome). `config/references.tsv` (aktiv, von
+`workflow/Snakefile` gelesen) enthält jetzt nur diese 5 Zeilen; der volle
+14-Genom-Katalog ist unverändert in
+`config/references_full_catalog_14genomes.tsv` archiviert (die bereits
+abgeschlossenen BUSCO-Ergebnisse für alle 14 bleiben gültig und werden
+nicht verworfen, laufen aber nicht weiter durch nachfolgende
+Pipeline-Schritte).
+
+**Host-Typ-Tally und Korrektur einer Fehlklassifikation:** Ursprünglich
+wurde `GCA036493215_1` als `host_group=unknown` geführt (das `host`-Feld
+war im NCBI-BioSample-Datensatz leer). Eine gezielte Nachfrage bei der
+NCBI Datasets API (`accession/GCA_036493215.1/dataset_report`) ergab
+jedoch: Es handelt sich um **Br48**, ein Weizen-infizierendes Isolat aus
+Brasilien (BioSample-Attribut `strain: "wheat infecting strain"`,
+`geo_loc_name: Brazil`), UND die zugehörige BioProject-Beschreibung
+lautet explizit "**Telomere-to-telomere genome assembly of Pyricularia
+oryzae Br48**" (PRJDB14561) — ein selbstdeklariertes T2T-Assembly (7
+Contigs = 7 Chromosomen, `contig_l50=3`). `host`/`host_group` wurden
+entsprechend auf `Triticum aestivum`/`triticum` korrigiert. Damit sind es
+nur **5 echte Host-Typen** unter den 14 Genomen (Oryza, Triticum,
+Wildgrass/Lolium, Eleusine, Avena), nicht 6 wie zunächst angenommen.
+
+**Repräsentantenauswahl:**
+
+| Host-Typ | Kandidaten (14-Katalog) | Gewählt | Begründung |
+|---|---|---|---|
+| Oryza | 7015, Guy11, 95HPH4, 95085, P131 | **7015** | kanonischer Referenzstamm "70-15", Feldstandard in praktisch jeder vergleichenden *M.-oryzae*-Genomstudie |
+| Triticum | GCA059330735_1, GCA059330115_1, GCA059330025_1, GCA059330365_1, Br48 | **GCA036493215_1 (Br48)** | einziges explizit T2T-deklariertes Genom im gesamten Panel — direkt relevant für saubere Starship-/Mini-Chromosom-Boundary-Calls (Abschnitt 6.3/8), wichtiger als der marginal höhere Contig-N50 der Alternativen |
+| Wildgrass | LpKY97, GCA059329725_1 | **LpKY97** | etablierter, in der Literatur verwendeter Referenzstamm für die Lolium-Linie |
+| Eleusine | GCA004346965_1 | GCA004346965_1 | einzige Complete-Genome-Option |
+| Avena | GCA059329645_1 | GCA059329645_1 | einzige Complete-Genome-Option |
+
+`GCA036493215_1` (Br48) behält seine Genome-ID (Accession-basiert statt
+"Br48"), obwohl der Strain-Name jetzt bekannt ist — der bereits laufende
+RepeatModeler-Pilotlauf (siehe oben) nutzt exakt diesen Wildcard-Wert;
+eine Umbenennung hätte den bisherigen Fortschritt verwaist.
+
+**Bekannter Trade-off:** Die Reduktion verliert Within-Host-Diversität
+(z. B. 5 statt 1 Oryza-Genom, 5 statt 1 Triticum-Genom) — Starships, die
+nur in einer Teilmenge der Isolate EINES Host-Typs vorkommen, werden vom
+5-Genom-Panel nicht erfasst. Für die POC-Kernfrage (Nachweisbarkeit von
+Starships/Accessory-Chromosomen ÜBER Host-Grenzen hinweg per Long-Read-
+Mapping) ist das akzeptabel; für eine spätere Vollanalyse/Publikation
+sollte auf den vollen 14-Genom-Katalog zurückgegriffen werden.
+
+**Repeat-Masking parallelisiert:** Da RepeatModeler kaum RAM braucht
+(siehe Pilotlauf-Befund oben), laufen jetzt alle 5 Panel-Genome
+GLEICHZEITIG statt seriell: der bereits laufende Br48-Pilot (8 Threads,
+unverändert weitergelaufen) plus ein zweiter, per `--nolock` parallel
+gestarteter Snakemake-Lauf für die restlichen 4 Genome (`7015`,
+`LpKY97`, `GCA004346965_1`, `GCA059329645_1`, je 3 Threads,
+`config.yaml: threads_default` dafür von 8 auf 3 gesenkt). `--nolock`
+ist hier sicher, da beide Läufe disjunkte Zielgenome und damit disjunkte
+Ausgabedateien haben. Ressourcen-Check bei 5 parallelen Läufen: 4,5 GB
+RAM (von 10 GB), Load Average ~10 (von 14 Kernen) — stabil, kein
+OOM-Risiko.

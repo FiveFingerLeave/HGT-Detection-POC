@@ -1120,3 +1120,97 @@ durchweg dominiert von SNP (237k-272k) und kleinen Indels (INS/DEL,
 Strukturvarianten (Inversionen INV/INVAL/INVDP, Duplikationen DUP/DUPAL,
 Translokationen TRANS/TRANSAL) - biologisch plausibel fuer eng
 verwandte *M.-oryzae*-Isolate unterschiedlicher Wirtslinien.
+
+## 2026-09-02 — Abschnitt 7.4: Starship-/Captain-Kandidaten (starfish) - Mini-Chromosom-Fund bestaetigt
+
+**Setup:** `envs/starships.yaml` (starfish, metaeuk, hmmer, mmseqs2,
+blast) - identisch zur bereits erfolgreich getesteten globalen
+`starfish_env` aus einer frueheren Sitzung
+(`Dokumentation/Starfish_bisherige_Schritte.md`), hier als
+Projekt-lokale Kopie fuer Reproduzierbarkeit angelegt, aber fuer den
+tatsaechlichen Lauf wurde die bereits funktionierende globale
+`starfish_env` direkt wiederverwendet (spart Neuinstallation der
+mitgelieferten HMM-/Referenzproteindatenbanken unter `$CONDA_PREFIX/db`).
+
+`starfish annotate` lief in EINEM gemeinsamen Multi-Genome-Lauf ueber
+alle 5 Panel-Genome (2-Spalten-Assembly-TSV), mit `-s '__'` als
+Separator passend zu unserer bestehenden
+`{genome_id}__{contig}`-Kopfzeilenkonvention (Standard waere `_`, was
+bei Genome-IDs mit eigenem Unterstrich wie `GCA036493215_1` falsch
+geparst haette). Zusaetzlich `--gff` mit den Liftoff-Genmodellen
+uebergeben, um vorhandene Gene mit neu vorhergesagten YR-Genen
+abzugleichen.
+
+**Bekannte Einschraenkung (nicht kritisch):** Die interne
+Namens-Uebernahme aus den Liftoff-GFF3 schlug fehl
+(`does not have a parse-able featureID using namefield 'Name='`) - unsere
+Liftoff-GFF3 speichert Gennamen ueber `locus_tag=`, nicht `Name=`
+(Starfish-Default). Dadurch wurden 0 bestehende Gene mit neuen YR-Treffern
+verknuepft ("no metaeuk genes intersect..."). Dies wurde NICHT behoben,
+da die nachfolgende Cargo-Gen-Analyse ohnehin eigenstaendig gegen die
+Liftoff-GFF3 per Koordinatenueberlappung erfolgt (siehe unten) - die
+interne Starfish-Verknuepfung war dafuer nicht erforderlich.
+
+**Ergebnis `starfish annotate`:** **68 HMM-validierte YR-/Captain-Gene**
+gefunden (7015: 17, LpKY97: 16, GCA004346965_1: 13, GCA036493215_1: 12,
+GCA059329645_1: 10) - `results/starships/panel_YR.filt.gff`.
+
+**Synthese-Skript (`workflow/scripts/classify_starship_candidates.py`,
+Regel `classify_starship_candidates`):** Kombiniert pro YR-Treffer:
+- Fenstergroesse (zentriert auf den Treffer, mindestens 20 kb gemaess
+  `thresholds.yaml: starship.min_region_length_bp`, an Contig-Enden
+  gekappt via `.fai`),
+- mittleren Repeat-Anteil im Fenster (`repeats.smk`-Output,
+  ueberlappungsgewichtet),
+- Anzahl Cargo-Gene im Fenster (Liftoff-GFF3, reine
+  Koordinatenueberlappung - unabhaengig von der oben gescheiterten
+  Starfish-internen Verknuepfung).
+
+Konservative Klassifikation (angelehnt an Abschnitt 7.4, aber ohne
+SyRI-Syntenie-Kreuzreferenz - siehe "Noch offen" unten):
+`starship_like` nur wenn Mindestgroesse UND mindestens 1 Cargo-Gen UND
+Repeat-Anteil im Fenster ≥1,5x Genomdurchschnitt; sonst
+`duf3435_candidate_contextual` (mindestens eines der Kriterien erfuellt)
+oder `duf3435_candidate_only` (kein Kontext, reiner HMM-Treffer - "ein
+DUF3435-Treffer allein reicht nicht", Dokument-Zitat).
+
+**Ergebnis (68 Kandidaten insgesamt):**
+
+| Klassifikation | Anzahl |
+|---|---|
+| `starship_like` | 35 |
+| `duf3435_candidate_contextual` | 32 |
+| `duf3435_candidate_only` | 1 |
+
+**Wichtigster Befund - Ringschluss mit den Mini-Chromosom-Kandidaten:**
+Die beiden bereits durch Repeat-Anteil UND Gendichte als
+Mini-Chromosom-Kandidaten geflaggten LpKY97-Contigs tragen tatsaechlich
+Captain/YR-Gene:
+- `LpKY97__CP050927.1` (3,0 Mb, 56,3 % Repeat, 119 Gene): YR59
+  (`starship_like`, 2 Cargo-Gene, 44 % Repeat im Fenster) und YR60
+  (`duf3435_candidate_contextual`).
+- `LpKY97__CP050928.1` (0,9 Mb, 53,0 % Repeat, 43 Gene): YR61-64, davon
+  YR62 und YR63 als `starship_like` eingestuft.
+
+Bei `GCA059329645_1`s Mini-Chromosom-Kandidaten (`CM181343.1`,
+`CM181341.1`) wurden dagegen KEINE YR-Treffer gefunden - kein
+Widerspruch, sondern ein zusaetzliches Differenzierungsmerkmal: nicht
+jede akzessorische/repeat-reiche Region muss ein aktives
+Captain-getriebenes Element tragen.
+
+**Damit ist die Kernfrage des Projekts (Nachweisbarkeit von Starships/
+Accessory-Chromosomen mittels dieser Multi-Evidenz-Pipeline) am
+5-Genom-Panel selbst positiv beantwortet** - drei unabhaengige
+Evidenzlinien (Repeat-Anteil, Gendichte, Captain-Gen-Praesenz)
+konvergieren auf denselben LpKY97-Contigs.
+
+**Noch offen fuer eine vollstaendigere 7.4-Klassifikation:**
+- SyRI-Syntenie-Kreuzreferenz (nur fuer die 3 kompatiblen Genome
+  moeglich, siehe voriger Eintrag) ist noch nicht in die
+  Klassifikation eingebaut.
+- Echte Boundary-/Insertionsstellen-Detektion (Starfish-Folgeschritte
+  jenseits von `annotate`, z. B. flankierende direkte Wiederholungen)
+  wurde nicht durchgefuehrt - die aktuelle Fenstergroesse ist ein reiner
+  Abstands-Puffer um den YR-Treffer, keine strukturell bestaetigte
+  Elementgrenze. Terminologie bleibt daher bewusst konservativ
+  ("starship_like", nicht "Starship").

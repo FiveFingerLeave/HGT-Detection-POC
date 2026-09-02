@@ -70,8 +70,17 @@ genarm, zwei unabhängige Evidenzlinien. Details: `docs/decisions.md`.
   durch ihre vermuteten Accessory-Chromosomen mehr Contigs als die
   übrigen 3 Genome — nucmer/Coverage läuft trotzdem für alle 10 Paare).
   Details: `docs/decisions.md`.
-- **7.3 Regionstypen, 7.4 Starship-Kandidaten:** noch nicht
-  implementiert.
+- **7.4 Starship-/Captain-Kandidaten:** fertig (Kernergebnis). `starfish
+  annotate` fand 68 HMM-validierte YR-/Captain-Gene über alle 5 Genome.
+  Synthese mit Größe/Repeat-Kontext/Cargo-Genen klassifiziert 35 davon
+  als `starship_like`. **Ringschluss:** Die beiden zuvor per Repeat-
+  Anteil + Gendichte gefundenen LpKY97-Mini-Chromosom-Kandidaten
+  (`CP050927.1`, `CP050928.1`) tragen tatsächlich Captain-Gene, mehrere
+  als `starship_like` eingestuft — drei unabhängige Evidenzlinien
+  konvergieren auf denselben Contigs. Details: `docs/decisions.md`.
+- **7.3 Regionstypen (vollständige Klassifikation aller Panel-Regionen):**
+  noch nicht implementiert (Grundlagen — Orthogruppen, Synteny, Repeats,
+  Starship-Kandidaten — liegen alle bereits vor).
 
 **Panel-Bau (Abschnitt 8), Long-Read-Mapping, PAV, SV-Calling,
 Rarefaction: noch nicht implementiert** — siehe die einzelnen

@@ -860,3 +860,40 @@ ist hier sicher, da beide Läufe disjunkte Zielgenome und damit disjunkte
 Ausgabedateien haben. Ressourcen-Check bei 5 parallelen Läufen: 4,5 GB
 RAM (von 10 GB), Load Average ~10 (von 14 Kernen) — stabil, kein
 OOM-Risiko.
+
+**Ergebnis (alle 5 Genome fertig):** Die 4 parallelisierten Genome
+brauchten zusammen nur ~2:48 h Wandzeit (13:40-16:29 Uhr) statt der ~8 h,
+die eine serielle Ausführung (4 x ~2 h wie beim Br48-Piloten) gekostet
+hätte - die Parallelisierung war die richtige Entscheidung.
+
+| Genom | Host | Laufzeit (RepeatModeler) | Familien | Genomweiter Repeat-Anteil |
+|---|---|---|---|---|
+| 7015 | Oryza | 1:46 h | 76 | 16,47 % |
+| LpKY97 | Wildgrass | 2:06 h | 203 | 14,53 % |
+| GCA059329645_1 | Avena | 2:21 h | 133 | 11,66 % |
+| GCA004346965_1 | Eleusine | 2:46 h | 94 | 11,58 % |
+| GCA036493215_1 (Br48) | Triticum | 1:59 h | 138 | 10,12 % |
+
+**Wichtiger biologischer Befund - zwei klare Mini-/Accessory-Chromosom-
+Kandidaten** (aus results/repeats/{genome_id}_repeat_per_contig.tsv,
+Muster: deutlich kleinerer Contig + deutlich höherer Repeat-Anteil als
+der Rest des Genoms):
+
+- LpKY97 (Wildgrass): CP050927.1 (3,0 Mb, 56,3 % Repeat) und CP050928.1
+  (0,9 Mb, kleinster Contig, 53,0 % Repeat) - beide massiv über dem
+  restlichen Genom (6-17 % bei den übrigen 7 Contigs).
+- GCA059329645_1 (Avena): CM181343.1 (1,3 Mb, 45,4 %) und CM181341.1
+  (1,2 Mb, 24,4 %) - ebenfalls deutlich über dem Genomdurchschnitt (11,7 %).
+- Bei 7015, GCA004346965_1 und Br48 gibt es KEINEN vergleichbaren
+  Ausreißer (alle Contigs groß, 4,0-8,8 Mb, Repeat-Anteil im normalen
+  Bereich 4,8-22 %) - diese 3 Assemblies scheinen entweder keine separat
+  assemblierten Mini-/Accessory-Chromosomen zu enthalten, oder diese
+  wurden nicht als eigene Contigs aufgelöst.
+
+**Konsequenz:** Diese vier Contigs (LpKY97 x 2, GCA059329645_1 x 2) sind
+starke erste Kandidaten für accessory_chromosome/mini_chromosome
+(Abschnitt 8.2-Klassifikation) und sollten bei der späteren
+Starship-Suche (Abschnitt 6.4/DUF3435-Scan) und Panel-Klassifikation
+(Abschnitt 8) prioritär geprüft werden - noch nicht geschehen, da
+Starship-Annotation (starships.smk) weiterhin ein unimplementierter Stub
+ist.

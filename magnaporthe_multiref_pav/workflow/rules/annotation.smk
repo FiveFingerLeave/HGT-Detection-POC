@@ -93,13 +93,20 @@ rule orthofinder:
     conda:
         "../../envs/orthofinder.yaml"
     shell:
-        # Dokument schreibt "-T iqtree" vor; die installierte OrthoFinder-
-        # Version (bundlet iqtree3 statt iqtree2) erwartet stattdessen den
-        # Methodennamen "iqtree3" - inhaltlich dieselbe Wahl (IQ-TREE statt
-        # FastTree/RAxML fuer Gen-Baeume), nur der CLI-Bezeichner hat sich
-        # geaendert.
+        # Dokument schreibt "-M msa -T iqtree" vor. Getestet und wieder
+        # verworfen (siehe docs/decisions.md): mit nur 5 Spezies bleibt
+        # die Orthogruppen-Zuordnung selbst (diamond+MCL) schnell (Minuten),
+        # aber die anschliessende Gen-Baum-Inferenz laeuft iqtree3 MIT
+        # ModelFinder PRO Orthogruppe einzeln - bei >11.000 Orthogruppen
+        # und >15 Min je Baum waere das ein mehrtaegiger bis
+        # mehrwoechiger Lauf. Fuer den in Abschnitt 7.1 tatsaechlich
+        # benoetigten Output (die Orthogroups.tsv-Praesenz/Abwesenheits-
+        # Matrix fuer die genbasierte PAV-Klassifikation) ist das nicht
+        # noetig - "-M dendroblast" liefert dieselbe Orthogruppen-Matrix
+        # (unveraendert durch diamond+MCL bestimmt) ohne die teure
+        # MSA/Gen-Baum-Verfeinerungsschicht.
         "rm -rf {params.proteome_dir}/OrthoFinder {params.fixed_dir} && "
         "mkdir -p results/orthofinder && "
-        "orthofinder -f {params.proteome_dir} -S diamond -M msa -T iqtree3 "
+        "orthofinder -f {params.proteome_dir} -S diamond -M dendroblast "
         "-t {threads} -a {threads} > {log} 2>&1 && "
         "mv {params.proteome_dir}/OrthoFinder/Results_*/ {params.fixed_dir}"

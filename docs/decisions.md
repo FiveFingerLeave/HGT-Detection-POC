@@ -1026,3 +1026,48 @@ zeitliche Koinzidenz mit einem alten Symptommuster (hier: das seltene
 EXT4-Remount-Ereignis) kann taeuschen. Ein isolierter Minimaltest
 (kleinste Eingabedatei, single-threaded, alternative Toolversion) klaert
 das schneller als eine erneute Infrastruktur-Diagnose.
+
+**Zweites Laufzeitproblem nach dem Diamond-Fix:** Mit dem Dokument-Befehl
+`-M msa -T iqtree3` lief die Orthogruppen-Zuordnung selbst (diamond+MCL)
+zwar in Minuten durch, aber die anschliessende Gen-Baum-Inferenz rief
+`iqtree3` (mit ModelFinder) EINZELN pro Orthogruppe auf - bei >11.000
+Orthogruppen und >15 Minuten pro Baum (beobachtet an zwei laufenden
+Prozessen mit 100 % CPU-Last ueber >15 Min ohne Fertigstellung) haette
+das mehrere Tage bis Wochen gedauert. Fuer den in Abschnitt 7.1
+eigentlich benoetigten Output (Orthogroups.tsv als Grundlage der
+genbasierten PAV-Klassifikation) ist die Gen-Baum-Verfeinerungsschicht
+nicht erforderlich. Fix: `-M dendroblast` statt `-M msa -T iqtree3` -
+liefert dieselbe Orthogruppen-Zuordnung (unveraendert durch diamond+MCL
+bestimmt), ohne die teure MSA/Baum-Schicht. Lief danach in wenigen
+Minuten komplett durch.
+
+**Ergebnis (13.226 Orthogruppen, 66.000 Gene, 5 Genome):**
+
+| Kennzahl | Wert |
+|---|---|
+| Gene in Orthogruppen | 65.600 (99,4 %) |
+| Nicht zugeordnete Gene | 400 (0,6 %) |
+| Orthogruppen mit allen 5 Spezies | 12.259 (92,7 %) |
+| Single-copy-Orthogruppen | 12.042 |
+| Spezies-spezifische Orthogruppen | 7 |
+
+**Praevalenzverteilung** (Grundlage fuer die Neuskalierung der
+Abschnitt-7.3-Schwellenwerte, siehe `config/thresholds.yaml`):
+
+| Praesenz | Orthogruppen | Anteil |
+|---|---|---|
+| 5/5 (strict_core) | 12.259 | 92,7 % |
+| 4/5 (soft_core, NEU) | 589 | 4,5 % |
+| 2-3/5 (shell, NEU) | 371 | 2,8 % |
+| 1/5 (private_accessory) | 7 | 0,1 % |
+
+**Schwellenwert-Neuskalierung:** Die Dokument-Schwellen sind fuer 14
+Referenzen kalibriert (`soft_core: 13/14=0,93`, `shell: 3-12/14`). Bei
+nur 5 moeglichen Praesenzstufen (1/5 bis 5/5) waere der alte
+`soft_core`-Schwellenwert 0,93 NIE erreichbar gewesen (naechste Stufe
+unter 1,0 ist 4/5=0,80) - alle 589 Orthogruppen mit 4/5-Praesenz waeren
+faelschlich als "shell" statt "soft_core" eingestuft worden.
+`config/thresholds.yaml` jetzt auf `strict_core=1,00`, `soft_core=0,80`
+(4/5), `shell_min=0,40` (2/5, alles darunter = `private_accessory`)
+umgestellt - qualitativ dieselbe Rangfolge wie im Dokument, nur an die
+kleinere, diskrete Panelgroesse angepasst.

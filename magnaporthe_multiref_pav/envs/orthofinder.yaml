@@ -1,0 +1,15 @@
+# Section 7.1: Orthogruppen. Eigene Environment (getrennt von der
+# schweren envs/annotation.yaml) - orthofinder, diamond, mafft, iqtree
+# sind reine Conda-Installs ohne Lizenzabhaengigkeit, im Gegensatz zu
+# BRAKER3. gffread wird zur Proteom-Extraktion aus den Liftoff-GFF3
+# gebraucht (Voraussetzung fuer orthofinder -f).
+name: multiref-orthofinder
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - orthofinder
+  - diamond
+  - mafft
+  - iqtree
+  - gffread

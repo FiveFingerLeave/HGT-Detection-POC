@@ -955,3 +955,74 @@ Fehlende Teile für vollständigen Abschnitt 6.2: BRAKER3-De-novo-Annotation
 (gerade in diesen genarmen/repeat-reichen Bereichen wichtig, siehe
 Dokument-Warnung "Lift-over allein kann accessory Gene unterschätzen"),
 InterProScan/eggNOG-Funktionsannotation, OrthoFinder (Abschnitt 7.1).
+
+## 2026-09-02 — Abschnitt 7.1 (OrthoFinder): gffread-Stopcodon-Zeichen ließ diamond 2.2.6 haengen statt zu fehlern
+
+**Setup:** Eigene `envs/orthofinder.yaml` (orthofinder, diamond, mafft,
+iqtree, gffread), getrennt von `envs/annotation.yaml`. `gffread -y`
+extrahiert Proteinsequenzen aus den Liftoff-GFF3 (`extract_proteome`-
+Regel), dann `orthofinder -f ... -S diamond -M msa -T iqtree3` (Dokument
+schreibt `-T iqtree`, die installierte OrthoFinder-Version v3.1.5 nennt
+die Methode aber `iqtree3` - inhaltlich dieselbe Wahl). `-t`/`-a` an die
+14 verfügbaren Kerne angepasst (Dokument-Beispiel: 32/16). `-o` liess
+sich nicht wie geplant nutzen (verlangt ein noch nicht existierendes
+Zielverzeichnis, kollidiert mit Snakemakes automatischem Anlegen von
+Output-Elternverzeichnissen) - stattdessen laeuft OrthoFinder mit seinem
+Standardpfad (`OrthoFinder/Results_<Datum>/` im Proteom-Verzeichnis) und
+wird danach per `mv` an den festen Zielpfad verschoben.
+
+**Bug 1 (trivial):** Erster Lauf schlug mit
+`UnboundLocalError: cannot access local variable 'feature_db'` fehl -
+falsch, das war der LIFTOFF-Fehler aus dem vorigen Eintrag, hier nicht
+relevant, siehe oben.
+
+**Bug 2 (ernst, mehrstündiger Fehlschlag):** `orthofinder -T iqtree`
+schlug sofort fehl ("Invalid argument for option -T: iqtree... Valid
+options are: fasttree, raxml, raxml-ng, iqtree3") - behoben durch
+`iqtree3` statt `iqtree`.
+
+**Bug 3 (der eigentliche Zeitfresser, ~1 Stunde verloren):** Der
+`diamond makedb`-Schritt (erster echter Rechenschritt) HING sich aus
+scheinbar unerklärlichen Gründen auf - kein Fehler, keine
+Fortschrittsmeldung, 0 % CPU-Last nach Minuten. Erste Hypothese (durch
+zeitliche Koinzidenz mit einem erneuten, deutlich selteneren
+EXT4-Remount-Ereignis im `dmesg`-Log, ca. 4,7 h nach dem letzten
+WSL-Neustart) war ein Wiederauftreten des früheren WSL-Stabilitätsbugs -
+diese Hypothese wurde VERWORFEN, nachdem ein zweiter, sauber isolierter
+Versuch (System sonst völlig ruhig, `load average` ~0, kein neues
+`dmesg`-Ereignis) exakt denselben Haenger reproduzierte. Systematische
+Eingrenzung: `diamond makedb` haengt sowohl single- als auch
+multi-threaded, sowohl auf der vollen Proteindatei als auch auf einer
+1000-Zeilen-Teilmenge - das schliesst Bibliotheks-/CPU-Architektur- oder
+Datei-Groessenprobleme aus. Ein Test mit `diamond=2.1.9` (statt der
+per Dependency-Resolution installierten neueren Version) lieferte
+sofort einen echten Fehler statt eines Haengers: `Error reading input
+stream at line 11: Invalid character (.) in sequence`.
+
+**Ursache:** `gffread -y` markiert nicht sauber uebersetzbare Codons
+(u. a. Stopcodons, aber auch Codons an Exon-Grenzen mit Frame-Rest) im
+Proteinoutput mit einem Punkt (`.`) - dieses Zeichen ist aber NICHT Teil
+des von diamond akzeptierten Aminosaeurealphabets. diamond v2.2.6
+(zunaechst installierte Version) haengt sich bei diesem ungueltigen
+Zeichen komplett auf, statt einen Fehler zu werfen - ein echter Bug in
+dieser diamond-Version, kein WSL-/Ressourcenproblem.
+
+**Fix:** `extract_proteome`-Regel ersetzt jetzt `.` (und vorsorglich `-`)
+in Sequenzzeilen (nicht Headerzeilen) durch `X` (unbekannte
+Aminosaeure) via `sed '/^>/!{s/\./X/g; s/-/X/g}'`, bevor die
+Proteindatei geschrieben wird. Ein direkter Downgrade auf `diamond=2.1.9`
+wurde versucht, aber verworfen: `mamba install diamond=2.1.9` in der
+bestehenden Environment loeste einen Abhaengigkeitskonflikt und
+DEINSTALLIERTE `orthofinder` komplett (OrthoFinder erfordert eine
+neuere diamond-Version). Die Environment wurde daher mit `orthofinder`
+UND der von ihm bevorzugten diamond-Version neu aufgesetzt; die
+Input-Bereinigung allein genuegte, um den Haenger zu beheben - diamond
+2.2.6 funktioniert einwandfrei auf sauberem Input.
+
+**Lektion:** Wenn ein Rechenschritt bei 0 % CPU-Last unerklaerlich
+haengt, nicht vorschnell auf ein Infrastrukturproblem (WSL, Ressourcen)
+schliessen, nur weil frueher ein echtes Infrastrukturproblem vorlag -
+zeitliche Koinzidenz mit einem alten Symptommuster (hier: das seltene
+EXT4-Remount-Ereignis) kann taeuschen. Ein isolierter Minimaltest
+(kleinste Eingabedatei, single-threaded, alternative Toolversion) klaert
+das schneller als eine erneute Infrastruktur-Diagnose.

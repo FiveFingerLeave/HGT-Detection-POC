@@ -45,3 +45,61 @@ rule liftoff_annotation:
 rule annotation_all:
     input:
         expand("data/annotations/{genome_id}.gff3", genome_id=genome_ids),
+
+
+# Section 7.1: Orthogruppen. gffread extrahiert die Proteinsequenzen aus
+# den Liftoff-GFF3 (Voraussetzung fuer orthofinder -f), dann orthofinder
+# selbst genau nach Dokument-Befehl (Threadzahlen an die 14 verfuegbaren
+# Kerne angepasst statt der Dokument-Beispielwerte 32/16).
+
+
+rule extract_proteome:
+    # gffread -y markiert Stopcodons/nicht sauber uebersetzbare Codons
+    # (z.B. an Exon-Grenzen mit Frame-Rest) mit "." - diamond akzeptiert
+    # das nicht im Sequenzalphabet (siehe docs/decisions.md: diamond
+    # v2.2.6 haengt sich bei so einem Zeichen sogar komplett auf statt
+    # einen Fehler zu werfen). Ersetze "." (und vorsorglich "-") in
+    # Sequenzzeilen (nicht Header) durch "X" (unbekannte Aminosaeure).
+    input:
+        fasta="data/references/{genome_id}.fa",
+        gff="data/annotations/{genome_id}.gff3",
+    output:
+        "data/annotations/proteomes/{genome_id}.faa",
+    log:
+        "logs/annotation/{genome_id}_gffread.log",
+    conda:
+        "../../envs/orthofinder.yaml"
+    shell:
+        "mkdir -p data/annotations/proteomes && "
+        "gffread -g {input.fasta} -y /dev/stdout {input.gff} 2> {log} "
+        "| sed '/^>/!{{s/\\./X/g; s/-/X/g}}' > {output}"
+
+
+rule orthofinder:
+    # OrthoFinder's -o requires a not-yet-existing directory, which
+    # conflicts with Snakemake auto-creating output parent dirs - so we
+    # let it use its default OrthoFinder/Results_<timestamp>/ location
+    # inside the proteome dir and move it to a fixed path afterwards.
+    threads: config["threads_default"]
+    input:
+        expand("data/annotations/proteomes/{genome_id}.faa", genome_id=genome_ids),
+    output:
+        "results/orthofinder/Results/Orthogroups/Orthogroups.tsv",
+    params:
+        proteome_dir="data/annotations/proteomes",
+        fixed_dir="results/orthofinder/Results",
+    log:
+        "logs/annotation/orthofinder.log",
+    conda:
+        "../../envs/orthofinder.yaml"
+    shell:
+        # Dokument schreibt "-T iqtree" vor; die installierte OrthoFinder-
+        # Version (bundlet iqtree3 statt iqtree2) erwartet stattdessen den
+        # Methodennamen "iqtree3" - inhaltlich dieselbe Wahl (IQ-TREE statt
+        # FastTree/RAxML fuer Gen-Baeume), nur der CLI-Bezeichner hat sich
+        # geaendert.
+        "rm -rf {params.proteome_dir}/OrthoFinder {params.fixed_dir} && "
+        "mkdir -p results/orthofinder && "
+        "orthofinder -f {params.proteome_dir} -S diamond -M msa -T iqtree3 "
+        "-t {threads} -a {threads} > {log} 2>&1 && "
+        "mv {params.proteome_dir}/OrthoFinder/Results_*/ {params.fixed_dir}"

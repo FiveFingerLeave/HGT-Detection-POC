@@ -143,8 +143,17 @@ Mapping-Rate. **Konsequenz:** Ein größeres Referenzpanel (z. B. aus dem
 archivierten 14-Genom-Katalog) würde vermutlich deutlich mehr
 Kandidatenregionen aufdecken. Details: `docs/decisions.md`.
 
-**Abschnitt 13 (Kandidatenregionen-Manifest/Zuordnung): noch nicht
-implementiert** — siehe `workflow/rules/*.smk` für Statuskommentare.
+**Phase VIII (Abschnitt 13, Kandidatenregionen-Manifest) — fertig:**
+`results/panel/panel_candidate_regions.tsv` (39 Kandidatenregionen: 30
+starship_like, 5 accessory_chromosome, 4 private_accessory, alle mit
+stabilen IDs STAR_/ACC_) und `results/pav/candidate_region_calls.tsv`
+(finale Per-Isolat-Zuordnung, kombiniert PAV + SV-Evidenz). **Alle 30
+starship_like-Kandidaten haben ein zugeordnetes Captain-Gen (100%
+Konsistenz zwischen Starfish-Fund und Panel-Clustering).** Abschnitt
+13.3 (Gen-Funktionsannotation je PAV-Block) nicht umgesetzt — fehlende
+Panel-weite Gen-GFF3. Details: `docs/decisions.md`.
+
+Damit sind alle Kernphasen des Workflow-Dokuments (I–IX) bearbeitet.
 
 ## Kritischer Befund zur Testisolat-Auswahl (Abschnitt 9)
 

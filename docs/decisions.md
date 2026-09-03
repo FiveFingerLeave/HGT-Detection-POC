@@ -1581,7 +1581,60 @@ bestaetigt das: **ein groesseres Referenzpanel wuerde die
 Kandidatenregion-Abdeckung spuerbar verbessern.** Die eigentliche
 Contig-Assembly/Neuheits-Klassifikation dieser unmapped Reads ist NICHT
 durchgefuehrt - klar dokumentierter offener Punkt fuer eine
-Vollanalyse. 0,0 % |
+Vollanalyse.
+
+## 2026-09-03 — Abschnitt 13: Kandidatenregionen-Manifest und finale Per-Isolat-Zuordnung
+
+**Setup:** Zwei Skripte setzen Abschnitt 13.1/13.2 um:
+- `build_candidate_regions.py` filtert `panel_contig_manifest.tsv` auf
+  die drei tatsaechlich vergebenen Kandidatenklassen
+  (`accessory_chromosome`, `starship_like`, `private_accessory` -
+  `mini_chromosome`/`subtelomeric_dynamic` wurden nie vergeben, siehe
+  fruehere Eintraege, daher keine MCHR_/SUBTEL_-IDs) und verknuepft
+  jede `starship_like`-Region per Koordinatenueberlappung mit ihrem
+  Captain-Gen (`panel_YR.filt.gff`, Abschnitt 7.4) und dessen
+  Cargo-Gen-Zahl (`starship_like_candidates.tsv`).
+- `build_candidate_region_calls.py` kombiniert fuer jede
+  Kandidatenregion x Testisolat: PAV-Status (Abschnitt 11), Breadth/
+  Tiefe/Multi-Mapping-Anteil (aus den Fenster-Calls gemittelt) und
+  SV-Unterstuetzung (Anzahl nicht-Referenz-Genotypen aus der
+  Sniffles2-Kohorten-VCF, Abschnitt 12 - VCF-CHROM entspricht exakt dem
+  Panel-FASTA-Header, keine Koordinatentransformation noetig).
+
+**Nicht umgesetzt:** Abschnitt 13.3 (bedtools-Intersect mit einer
+Panel-weiten Gen-GFF3 fuer Funktionsannotation je PAV-Block) - unsere
+Genannotation liegt nur pro Ausgangsgenom vor (Liftoff), nicht auf
+Panel-Koordinaten projiziert; diese Projektion waere ein zusaetzlicher
+Schritt.
+
+**Ergebnis:** `results/panel/panel_candidate_regions.tsv` (39
+Kandidatenregionen: 30 `starship_like`, 5 `accessory_chromosome`, 4
+`private_accessory`) und `results/pav/candidate_region_calls.tsv` (196
+Zeilen = bis zu 39 Regionen x 5 Isolate, wo PAV-Daten vorlagen).
+
+**Captain-Gen-Verknuepfung: 30 von 30 (100 %)** `starship_like`-
+Kandidaten erhielten ein zugeordnetes Captain-Gen ueber die
+Koordinatenueberlappung - vollstaendige Konsistenz zwischen Abschnitt
+7.4 (Starfish-Fund) und Abschnitt 8 (Panel-Clustering), keine
+verlorenen Zuordnungen.
+
+**Die beiden bereits identifizierten wirtsuebergreifenden
+Starship-Kandidaten im Detail:**
+- **STAR_012** (`PANEL003659`, Captain `GCA036493215_1__YR35`, Br48/
+  Triticum) - bei allen 5 Isolaten "present", Konfidenz "medium" bei
+  B71/K23_123/TF051MC7/ZM12, "low" bei E34 (niedrigere Breadth, 0,42).
+- **STAR_023** (`PANEL003670`, Captain `GCA059329645_1__YR50`, Avena,
+  geteilt mit Triticum/Br48) - bei allen 5 Isolaten "present",
+  Konfidenz "medium" bei TF051MC7/ZM12, "low" bei B71/E34/K23_123.
+
+Kein SV-Support (`sv_support=0`) fuer diese beiden Regionen bei keinem
+Isolat - das Praesenz-Signal stuetzt sich ausschliesslich auf
+Coverage-Breadth, nicht auf Sniffles2-Breakpoints. Das schwaecht die
+Aussage nicht (Coverage-Breadth ist laut Abschnitt 11.3 fuer
+Starship-like-Innenbereiche die primaere Evidenz; SV-Breakpoints sind
+eine ZUSAETZLICHE, nicht notwendige Bestaetigungsebene fuer die
+Grenzen), sollte aber bei einer spaeteren Publikations-Aufbereitung
+explizit benannt werden. 0,0 % |
 
 **Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
 AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt

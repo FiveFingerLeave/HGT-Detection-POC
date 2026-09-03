@@ -115,3 +115,42 @@ rule pav_matrix:
         "../../envs/core.yaml"
     shell:
         "python3 workflow/scripts/build_pav_matrix.py --region-calls {input} --out {output}"
+
+
+# Phase VII (Section 12): breakpoint-basiertes SV-Calling mit Sniffles2,
+# als zusaetzliche, unabhaengige Evidenzlinie neben der Coverage-basierten
+# PAV-Analyse oben (Abschnitt 12: "PAV-Evidenz = Coverage-Breadth +
+# Mapping-Eindeutigkeit + SV-Breakpoints + spanning reads").
+
+
+rule sniffles_call:
+    threads: config["threads_default"]
+    input:
+        bam="results/mapping/{sample_id}.panel.bam",
+        bai="results/mapping/{sample_id}.panel.bam.bai",
+        panel="results/panel/Mo_multiref_panel_v1.fa",
+    output:
+        vcf="results/pav/{sample_id}.sv.vcf.gz",
+        snf="results/pav/{sample_id}.snf",
+    log:
+        "logs/pav/{sample_id}_sniffles.log",
+    conda:
+        "../../envs/longreads.yaml"
+    shell:
+        "mkdir -p results/pav logs/pav && "
+        "sniffles --input {input.bam} --vcf {output.vcf} --snf {output.snf} "
+        "--reference {input.panel} --threads {threads} > {log} 2>&1"
+
+
+rule sniffles_cohort:
+    threads: config["threads_default"]
+    input:
+        snf=expand("results/pav/{sample_id}.snf", sample_id=mappable_sample_ids),
+    output:
+        "results/pav/pilot_cohort.sv.vcf.gz",
+    log:
+        "logs/pav/sniffles_cohort.log",
+    conda:
+        "../../envs/longreads.yaml"
+    shell:
+        "sniffles --input {input.snf} --vcf {output} --threads {threads} > {log} 2>&1"

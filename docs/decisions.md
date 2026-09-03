@@ -1505,7 +1505,83 @@ Cargo-Gen-Identitaet zwischen Referenz und Testisolaten) vor einer
 Publikations-reifen Aussage - die Terminologie bleibt bewusst
 "starship_like", keine strukturell bestaetigten Starships (siehe
 Abschnitt-7.4-Einschraenkung: keine echte Boundary-/Insertionsstellen-
-Detektion durchgefuehrt). 0,0 % |
+Detektion durchgefuehrt).
+
+## 2026-09-03 — Abschnitt 12 (SV-Calling) und Abschnitt 14 (Rarefaction) - Panel ist NICHT gesaettigt
+
+**Abschnitt 12, SV-Calling (Sniffles2):** `sniffles_call` (pro Isolat,
+gegen die Panel-FASTA) + `sniffles_cohort` (Kohorten-Merge ueber die
+`.snf`-Dateien) exakt nach Dokument-Befehl. Lief in Sekunden pro Isolat
+(deutlich schneller als Mapping/PAV). **Ergebnis: 193 strukturelle
+Varianten** in der 5-Isolate-Kohorte - 110 Deletionen, 82 Insertionen,
+1 Inversion (`results/pav/pilot_cohort.sv.vcf.gz`). Noch nicht mit der
+Coverage-basierten PAV-Matrix (Abschnitt 11) zu einer kombinierten
+Evidenz verschmolzen (Abschnitt 12s "PAV-Evidenz = Coverage-Breadth +
+Mapping-Eindeutigkeit + SV-Breakpoints + spanning reads" - offener
+Folgeschritt, Abschnitt 13).
+
+**Abschnitt 14.1/14.2, Referenz-Panel-Rarefaction:** Das Dokument sieht
+1000 zufaellige Permutationen vor (fuer C(14,k), zu gross fuer
+erschoepfende Aufzaehlung). Unser bewusst reduziertes 5-Genom-Panel
+erlaubt **erschoepfende Aufzaehlung ALLER C(5,k)-Kombinationen**
+(hoechstens 10 pro Panelgroesse) - strenger als das Dokument-eigene
+Sampling, keine Abschwaechung (`workflow/scripts/
+rarefaction_reference_panel.py`).
+
+**Ergebnis bei voller Panelgroesse (k=5, 39 Kandidatenregionen
+insgesamt):** 5 accessory_chromosome + 30 starship_like + 4
+private_accessory.
+
+**Saettigungs-Check (Abschnitt 14.2, Schwelle 2-5 % laut Dokument):**
+
+| Regionsklasse | R(4) Mittel | R(5) | Δ-Anteil | Gesaettigt? |
+|---|---|---|---|---|
+| accessory_chromosome | 4,0 | 5 | 20,0 % | **Nein** |
+| starship_like | 24,4 | 30 | 18,7 % | **Nein** |
+| private_accessory | 3,2 | 4 | 20,0 % | **Nein** |
+| alle kombiniert | 31,6 | 39 | 19,0 % | **Nein** |
+
+**Wichtiger, ehrlicher Befund: Das 5-Genom-Panel ist NICHT gesaettigt**
+- der Zugewinn beim Hinzufuegen des 5. Genoms liegt bei ~19-20 % fuer
+alle Kandidatenklassen, weit ueber der 2-5-%-Saettigungsschwelle. Das
+ist eine direkte, erwartbare Konsequenz der Panel-Reduktion von 14 auf 5
+Genome (siehe fruehere Entscheidung) - mit nur 5 statt 14 Referenzen ist
+eine Saettigung der Kandidatenregionen-Entdeckung nicht zu erwarten.
+**Konsequenz fuer eine spaetere Vollanalyse:** Zusaetzliche
+Referenzgenome (z. B. aus dem archivierten 14-Genom-Katalog,
+`config/references_full_catalog_14genomes.tsv`) wuerden mit hoher
+Wahrscheinlichkeit weitere, bisher nicht erfasste Kandidatenregionen
+aufdecken - das 5-Genom-Panel ist fuer den POC ausreichend, aber nicht
+als vollstaendiger Kandidatenkatalog misszuverstehen.
+
+**Abschnitt 14.3, Testisolat-Rarefaction/Novelty-Check - bewusst
+reduzierter Umfang:** Volle Umsetzung (unmapped Reads → lokale Assembly
+→ Panel-Ruecksuche → Klassifikation neuer Kandidatenregionen) braucht
+einen Long-Read-Assembler (z. B. Flye), der nicht installiert ist.
+Umgesetzt: nur Schritt 1 (Extraktion + Basisstatistik der unmapped
+Reads) als kostenguenstige Naeherung fuer "wie viel Isolat-Sequenz
+erklaert das Panel gar nicht".
+
+| Isolat | Unmapped Reads | Unmapped Basen | Anteil an Gesamtreads |
+|---|---|---|---|
+| TF051MC7 | 1.489 | 4,4 Mb | 0,46 % (passt zu 99,92 % Gesamt-Mapping) |
+| K23_123 | 27.928 | 41,5 Mb | 8,1 % |
+| ZM12 | 27.994 | 109,3 Mb | 7,0 % |
+| E34 | 211.317 | 485,9 Mb | 22,5 % |
+| **B71** | **46.395** | **273,0 Mb** | **28,4 %** |
+
+**B71 und E34 haben die mit Abstand groesste unmapped-Sequenzmenge** -
+passt exakt zu B71s bereits dokumentierter, auffaellig niedrigerer
+Mapping-Rate (71,6 %, siehe Abschnitt-10.1-Eintrag). 273 Mb unmapped
+Sequenz bei B71 entspricht etwa dem 6-fachen der Genomgroesse - ein
+starkes Signal, dass B71 (bolivianische Weizenbrand-Linie) substanzielle,
+im aktuellen 5-Genom-Panel nicht repraesentierte Sequenzanteile traegt.
+Kombiniert mit dem oben dokumentierten fehlenden Saettigungssignal
+bestaetigt das: **ein groesseres Referenzpanel wuerde die
+Kandidatenregion-Abdeckung spuerbar verbessern.** Die eigentliche
+Contig-Assembly/Neuheits-Klassifikation dieser unmapped Reads ist NICHT
+durchgefuehrt - klar dokumentierter offener Punkt fuer eine
+Vollanalyse. 0,0 % |
 
 **Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
 AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt

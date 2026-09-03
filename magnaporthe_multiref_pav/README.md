@@ -127,9 +127,24 @@ kein reines Multi-Mapping-Artefakt. **Damit ist die POC-Kernfrage
 (wirtsübergreifende Starship-Nachweisbarkeit per Long-Read-Mapping) mit
 echten Daten positiv demonstriert.** Details: `docs/decisions.md`.
 
-**SV-Calling (Abschnitt 12), Rarefaction (Abschnitt 14): noch nicht
-implementiert** — siehe die einzelnen `workflow/rules/*.smk`-Dateien für
-den jeweiligen Statuskommentar.
+**Phase VII (Abschnitt 12, SV-Calling) — fertig:** Sniffles2 pro Isolat
++ Kohorten-Merge. **193 strukturelle Varianten** in der 5-Isolate-Kohorte
+(110 Deletionen, 82 Insertionen, 1 Inversion). Noch nicht mit der
+PAV-Matrix zu kombinierter Evidenz verschmolzen (Abschnitt 13).
+
+**Phase IX (Abschnitt 14, Rarefaction) — fertig, wichtiger Befund:**
+Erschöpfende C(5,k)-Kombinationsanalyse (statt 1000 Zufalls-
+Permutationen wie im Dokument — bei nur 5 Genomen strenger möglich).
+**Das 5-Genom-Panel ist NICHT gesättigt** — Zugewinn beim 5. Genom liegt
+bei ~19-20% für alle Kandidatenklassen (weit über der 2-5%-Schwelle).
+Bestätigt durch Unmapped-Read-Analyse: B71 hat 28% unmapped Reads
+(273 Mb, ~6× Genomgröße) — passt zur bereits beobachteten niedrigeren
+Mapping-Rate. **Konsequenz:** Ein größeres Referenzpanel (z. B. aus dem
+archivierten 14-Genom-Katalog) würde vermutlich deutlich mehr
+Kandidatenregionen aufdecken. Details: `docs/decisions.md`.
+
+**Abschnitt 13 (Kandidatenregionen-Manifest/Zuordnung): noch nicht
+implementiert** — siehe `workflow/rules/*.smk` für Statuskommentare.
 
 ## Kritischer Befund zur Testisolat-Auswahl (Abschnitt 9)
 

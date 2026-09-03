@@ -96,3 +96,44 @@ rule classify_starship_candidates:
         "--gff-template 'data/annotations/{{genome_id}}.gff3' "
         "--min-region-bp {params.min_region_bp} "
         "--out {output} > {log} 2>&1"
+
+
+rule classify_panel_regions:
+    # Section 7.3: klassifiziert jedes 10kb-Fenster jedes Panel-Genoms
+    # in einen Regionstyp, kombiniert aus Orthogruppen-Praevalenz (7.1),
+    # Repeat-Dichte (6.3), Contig-Groesse/Gendichte (Mini-/Accessory-
+    # Chromosom-Signal) und Starship-like-Kandidaten (7.4). SyRI-Syntenie
+    # (nur 3/5 Genome, siehe wga.smk) ist noch NICHT eingebaut - siehe
+    # docs/decisions.md fuer die Begruendung und als offener Folgeschritt.
+    input:
+        fais=expand("data/references/{genome_id}.fa.fai", genome_id=genome_ids),
+        repeat_windows=expand("results/repeats/{genome_id}_repeat_windows.bed", genome_id=genome_ids),
+        repeat_per_contig=expand("results/repeats/{genome_id}_repeat_per_contig.tsv", genome_id=genome_ids),
+        gffs=expand("data/annotations/{genome_id}.gff3", genome_id=genome_ids),
+        orthogroups="results/orthofinder/Results/Orthogroups/Orthogroups.tsv",
+        starship_candidates="results/starships/starship_like_candidates.tsv",
+    output:
+        "results/panel/panel_regions.bed",
+    params:
+        genome_ids=genome_ids,
+        strict_core=thresholds["panel"]["strict_core_fraction"],
+        soft_core=thresholds["panel"]["soft_core_fraction"],
+        shell_min=thresholds["panel"]["shell_min_fraction"],
+    log:
+        "logs/panel/classify_regions.log",
+    conda:
+        "../../envs/core.yaml"
+    shell:
+        "mkdir -p results/panel logs/panel && "
+        "python3 workflow/scripts/classify_panel_regions.py "
+        "--genome-ids {params.genome_ids} "
+        "--fai-template 'data/references/{{genome_id}}.fa.fai' "
+        "--repeat-windows-template 'results/repeats/{{genome_id}}_repeat_windows.bed' "
+        "--repeat-per-contig-template 'results/repeats/{{genome_id}}_repeat_per_contig.tsv' "
+        "--gff-template 'data/annotations/{{genome_id}}.gff3' "
+        "--orthogroups {input.orthogroups} "
+        "--starship-candidates {input.starship_candidates} "
+        "--strict-core-fraction {params.strict_core} "
+        "--soft-core-fraction {params.soft_core} "
+        "--shell-min-fraction {params.shell_min} "
+        "--out {output} > {log} 2>&1"

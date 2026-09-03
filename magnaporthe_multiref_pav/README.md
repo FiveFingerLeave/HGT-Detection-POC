@@ -78,9 +78,13 @@ genarm, zwei unabhängige Evidenzlinien. Details: `docs/decisions.md`.
   (`CP050927.1`, `CP050928.1`) tragen tatsächlich Captain-Gene, mehrere
   als `starship_like` eingestuft — drei unabhängige Evidenzlinien
   konvergieren auf denselben Contigs. Details: `docs/decisions.md`.
-- **7.3 Regionstypen (vollständige Klassifikation aller Panel-Regionen):**
-  noch nicht implementiert (Grundlagen — Orthogruppen, Synteny, Repeats,
-  Starship-Kandidaten — liegen alle bereits vor).
+- **7.3 Regionstypen:** fertig. Alle 21.820 10-kb-Fenster über die 5
+  Panel-Genome klassifiziert (`results/panel/panel_regions.bed`):
+  75,4% strict_core, 12,5% soft_core, 6,6% repeat_ambiguous, 1,6% shell,
+  1,3% unclassified, 1,0% subtelomeric_dynamic, 1,0% accessory_chromosome,
+  0,5% starship_like. `accessory_chromosome`-Fenster liegen ausschließlich
+  auf den bereits gefundenen LpKY97-/GCA059329645_1-Mini-Chromosom-
+  Kandidaten — Konsistenzprüfung bestanden. Details: `docs/decisions.md`.
 
 **Panel-Bau (Abschnitt 8), Long-Read-Mapping, PAV, SV-Calling,
 Rarefaction: noch nicht implementiert** — siehe die einzelnen

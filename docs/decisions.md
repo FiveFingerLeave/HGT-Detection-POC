@@ -1214,3 +1214,62 @@ konvergieren auf denselben LpKY97-Contigs.
   Abstands-Puffer um den YR-Treffer, keine strukturell bestaetigte
   Elementgrenze. Terminologie bleibt daher bewusst konservativ
   ("starship_like", nicht "Starship").
+
+## 2026-09-03 — Abschnitt 7.3: vollstaendige Regionstyp-Klassifikation aller Panel-Fenster
+
+**Setup:** `workflow/scripts/classify_panel_regions.py`
+(`classify_panel_regions`-Regel) klassifiziert JEDES 10-kb-Fenster
+(`pav.window_size_bp`) aller 5 Panel-Genome in genau einen Regionstyp,
+durch Kombination aller bisherigen Phasen:
+- Orthogruppen-Praevalenz (7.1) pro Gen im Fenster, gemittelt →
+  core/shell/private-Einstufung nach den bereits auf 5 Genome
+  umskalierten Schwellen (`thresholds.yaml`).
+- Repeat-Dichte (6.3) fuer `repeat_ambiguous`/`subtelomeric_dynamic`.
+- Contig-Groesse + Gendichte (< 50 % des Median-Contigs UND < 50 % der
+  mittleren Gendichte) fuer `accessory_chromosome` - programmatische
+  Version derselben Logik, die zuvor manuell auf die 4 Kandidaten-Contigs
+  angewendet wurde.
+- Starship-like-Kandidatenfenster (7.4) als hoechste Prioritaetsstufe.
+
+**Prioritaet bei Ueberlappung:** `starship_like` > `accessory_chromosome`
+(ganzer geflaggter Contig) > `subtelomeric_dynamic` > Orthogruppen-
+basiert (strict_core/soft_core/shell/private_accessory) >
+`repeat_ambiguous` (hoher Repeat-Anteil, keine Genevidenz im Fenster) >
+`unclassified`.
+
+**Technischer Kniff (ID-Mapping):** OrthoFinder-Orthogruppen referenzieren
+Gene ueber ihre mRNA-IDs aus der Proteom-FASTA (z. B.
+`rna-gnl|PRJNA507314|PoMZ_08913-RA_mrna`), waehrend die GFF3
+`gene`-Features eigene IDs (`gene-PoMZ_08913`) mit gemeinsamem
+`locus_tag`-Attribut haben. `mrna_to_gene_id()` verbindet beide ueber
+den geteilten `locus_tag`.
+
+**Ergebnis (21.820 Fenster insgesamt):**
+
+| Regionstyp | Fenster | Anteil |
+|---|---|---|
+| `strict_core` | 16.455 | 75,4 % |
+| `soft_core` | 2.736 | 12,5 % |
+| `repeat_ambiguous` | 1.450 | 6,6 % |
+| `shell` | 346 | 1,6 % |
+| `unclassified` | 282 | 1,3 % |
+| `subtelomeric_dynamic` | 227 | 1,0 % |
+| `accessory_chromosome` | 219 | 1,0 % |
+| `starship_like` | 101 | 0,5 % |
+| `private_accessory` | 4 | 0,0 % |
+
+**Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
+AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt
+die beiden Genome mit den bereits unabhaengig gefundenen
+Mini-Chromosom-Kandidaten-Contigs. `starship_like`-Fenster verteilen sich
+ueber alle 5 Genome (17-24 je Genom), konsistent mit den 68 ueber alle
+Genome gefundenen Captain-Genen.
+
+**Noch offen:** SyRI-Syntenie (nur fuer 3/5 Genome verfuegbar, siehe
+7.2-Eintrag) ist nicht in die Klassifikation eingeflossen - koennte
+`unclassified`/`shell`-Fenster in nicht-kodierenden Bereichen praeziser
+einordnen, wo die rein genbasierte Praevalenz keine Evidenz liefert
+(1,3 % der Fenster betroffen). `mini_chromosome` (Dokument-Klasse, setzt
+verifizierte Telomer-Begrenzung voraus) wurde bewusst nicht vergeben -
+mangels Telomer-Repeat-Verifikation bleibt die konservativere
+`accessory_chromosome`-Klasse die korrekte Wahl.

@@ -1256,7 +1256,64 @@ den geteilten `locus_tag`.
 | `subtelomeric_dynamic` | 227 | 1,0 % |
 | `accessory_chromosome` | 219 | 1,0 % |
 | `starship_like` | 101 | 0,5 % |
-| `private_accessory` | 4 | 0,0 % |
+| `private_accessory` | 4 |
+
+## 2026-09-03 — Abschnitt 9.1: Stratifizierte Auswahl der 10 Pilotisolaten
+
+**Vorgehen:** Von den 17 tatsaechlich Long-Read-/Hybrid-sequenzierten
+Kandidaten im 44-Isolat-Pool (`config/samples_candidate_pool.tsv`)
+wurden 10 nach den Dokument-Kriterien (Abschnitt 9.1) ausgewaehlt.
+
+**Nebenbefund bei der Host-Pruefung:** `GCA_021764705.1` (Isolat "EA18",
+China: Enshi Hubei) war im Pool als `host=unknown` gefuehrt - eine
+gezielte NCBI-Datasets-API-Abfrage ergab `isolation_source: rice`, also
+tatsaechlich ein Oryza-Isolat (dasselbe Fehlklassifikations-Muster wie
+zuvor bei Br48/Triticum, siehe Panel-Reduktions-Eintrag oben).
+`GCA_059469275.1` (Isolat "E2", Aethiopien) blieb dagegen echt
+unbekannt (BioSample liefert nur `isolation_source: Ethiopia`, kein
+Wirt).
+
+**Finale Auswahl (`config/samples.tsv`):**
+
+| Isolat | Host | Herkunft | Begruendung |
+|---|---|---|---|
+| O219 | Oryza | Elfenbeinkueste, 1985 | Oryza-Diversitaet Westafrika |
+| TRG2 | Oryza | Thailand, 2023 | Oryza-Diversitaet Suedostasien, juengste Probe |
+| Guy11 | Oryza | Franz.-Guayana, 1979 | Benchmark-Isolat (etablierter Laborstamm) |
+| EA18 (GCA021764705_1) | Oryza | China, 2021 | Oryza-Diversitaet Ostasien, hybrid-sequenziert |
+| B71 | Triticum | Bolivien, 2012 | Weizenbrand-Pandemielinie, Ursprungskontinent |
+| ZM12 | Triticum | Sambia, 2018 | Weizenbrand-Pandemielinie, Ausbreitung nach Afrika |
+| K23_123 | Eleusine | Kenia | Pflicht-Slot, bereits heruntergeladen |
+| E34 | Eleusine | Aethiopien | Pflicht-Slot, bereits heruntergeladen |
+| TF051MC7 | Wildgrass (Lolium) | USA, 2005 | "erwartete accessory DNA"-Kriterium - gleiche Host-Gruppe wie LpKY97 (Referenzpanel), das bereits Mini-Chromosomen zeigte |
+| gw6 | Setaria | China, 2016 | Zusaetzliche Host-Diversitaet (Kolbenhirse) |
+
+4 Oryza statt der empfohlenen 2-3 (EA18 als Zusatzgewinn wegen
+Hybrid-Sequenzierung und neuer Geografie aufgenommen, keine strikte
+Regelverletzung angesichts der Bandbreitenangabe im Dokument).
+
+**Kritischer Befund - Rohdaten-Verfuegbarkeit:** Von den 8 nicht-Eleusine-
+Isolaten wurden die BioSample-Accessions gegen den 193-Lauf-Long-Read-
+SRA-Katalog (`data/ncbi_m_oryzae_sra_wgs_longread.tsv`) abgeglichen -
+**nur 3 von 8 haben dort auffindbare Rohreads:**
+- **B71** (SAMN06076154): 11 Laeufe (10x PacBio SMRT + 2x Nanopore),
+  zusammen ~45 Gb - eine der am tiefsten sequenzierten Proben im
+  gesamten Katalog.
+- **ZM12** (SAMN29254577): 5 Nanopore-Laeufe, 475 Mb bis 13,7 Gb.
+- **TF051MC7** (SAMN36850036): 1 Nanopore-Lauf, 8,2 Gb.
+
+Fuer **O219, TRG2, Guy11, EA18 und gw6** wurden KEINE Rohreads in diesem
+Katalog gefunden - entweder unter einem anderen BioProject/BioSample
+deponiert (nicht von der urspruenglichen SRA-Suchanfrage erfasst) oder
+tatsaechlich nicht separat von der Assembly hochgeladen. Bleibt als
+offener Punkt fuer eine gezieltere Nachsuche (z. B. direkte
+SRA-Websuche nach Isolatnamen statt nur BioSample-Kreuzreferenz).
+
+**Konsequenz:** Von den 10 Pilotisolaten haben aktuell **5 von 10**
+(K23_123, E34, B71, ZM12, TF051MC7) real auffindbare/bereits
+heruntergeladene Rohdaten - genug fuer einen ersten Mapping-Pilotlauf
+(Phase V), aber die vollstaendige 10-Isolat-Stratifizierung aus
+Abschnitt 9.1 ist noch nicht mit echten Daten hinterlegt. 0,0 % |
 
 **Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
 AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt

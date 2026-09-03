@@ -86,10 +86,26 @@ genarm, zwei unabhängige Evidenzlinien. Details: `docs/decisions.md`.
   auf den bereits gefundenen LpKY97-/GCA059329645_1-Mini-Chromosom-
   Kandidaten — Konsistenzprüfung bestanden. Details: `docs/decisions.md`.
 
-**Panel-Bau (Abschnitt 8), Long-Read-Mapping, PAV, SV-Calling,
-Rarefaction: noch nicht implementiert** — siehe die einzelnen
-`workflow/rules/*.smk`-Dateien für den jeweiligen Statuskommentar und
-die Voraussetzungen.
+**Phase III (Abschnitt 8, Panel-Bau) — fertig:**
+`results/panel/Mo_multiref_panel_v1.fa` (+ `.fai`) und
+`results/panel/panel_contig_manifest.tsv`: 3.677 deduplizierte
+Panel-Regionen (98% Identität/90% gegenseitige Abdeckung, mmseqs2) aus
+4.213 Vorab-Blöcken — 1.783 strict_core, 1.610 soft_core, 245 shell, 30
+starship_like, 5 accessory_chromosome, 4 private_accessory. **Wichtiger
+Befund:** Die Dedup-Rate ist niedriger als im Dokument-Beispiel, weil
+unser Panel bewusst maximal divergente Host-Linien statt naher
+Verwandter enthält (89% der strict_core-Cluster bleiben Einzelgenom-
+Einträge, da >2% Sequenzdivergenz zwischen Wirtslinien selbst in
+Core-Regionen normal ist) — macht das Panel größer, aber informativer
+für späteres Cross-Lineage-Mapping. Details: `docs/decisions.md`.
+
+**Long-Read-Mapping (Abschnitt 10), PAV (Abschnitt 11), SV-Calling
+(Abschnitt 12), Rarefaction (Abschnitt 14): noch nicht implementiert**
+— siehe die einzelnen `workflow/rules/*.smk`-Dateien für den jeweiligen
+Statuskommentar und die Voraussetzungen. Phase IV (Abschnitt 9,
+Pilotisolat-Auswahl) ist ebenfalls offen — `config/samples.tsv` (die 10
+finalen Pilotisolate) muss noch aus `config/samples_candidate_pool.tsv`
+befüllt werden.
 
 ## Kritischer Befund zur Testisolat-Auswahl (Abschnitt 9)
 

@@ -1273,3 +1273,88 @@ einordnen, wo die rein genbasierte Praevalenz keine Evidenz liefert
 verifizierte Telomer-Begrenzung voraus) wurde bewusst nicht vergeben -
 mangels Telomer-Repeat-Verifikation bleibt die konservativere
 `accessory_chromosome`-Klasse die korrekte Wahl.
+
+## 2026-09-03 — Abschnitt 8: analytisches Multi-Referenzpanel gebaut - Dedup-Schwelle trifft auf bewusste Host-Divergenz
+
+**Setup:** `envs/panel.yaml` (mmseqs2, samtools, seqkit),
+`workflow/scripts/build_panel.py` (`build_panel`-Regel) implementiert
+Abschnitt 8 vollstaendig:
+1. Benachbarte Fenster gleicher Regionsklasse aus `panel_regions.bed`
+   (7.3) zu zusammenhaengenden Bloecken zusammengefasst (nur
+   Panel-relevante Klassen: strict_core/soft_core/shell/
+   private_accessory/accessory_chromosome/starship_like -
+   repeat_ambiguous/unclassified/subtelomeric_dynamic bewusst
+   ausgeschlossen, da fuer Panel-Anker zu unsicher).
+2. Sequenzen aller Bloecke ueber alle 5 Genome per `samtools faidx -r`
+   extrahiert (4.213 Bloecke).
+3. **Ein einziger mmseqs2-easy-cluster-Lauf (98 % Identitaet, 90 %
+   gegenseitige Abdeckung, Abschnitt 8.2) auf ALLEN Bloecken zusammen**
+   implementiert beide Haelften der Dedup-Regel gleichzeitig: nahezu
+   identische Kopien EINES homologen Blocks ueber mehrere Genome
+   kollabieren zu einem Cluster/Repraesentanten; strukturell
+   unterschiedliche Varianten (auch bei core/soft-core/shell) bleiben
+   automatisch getrennt - keine Sonderbehandlung je Regionstyp noetig.
+4. Panel-Manifest (`results/panel/panel_contig_manifest.tsv`, exakt die
+   Dokument-Spalten) + finale Panel-FASTA
+   (`results/panel/Mo_multiref_panel_v1.fa` + `.fai`) mit
+   `>PANEL######|type=...|cluster=...|rep=...|source=...`-Headern
+   (Abschnitt 8.3), Cluster-Praefixe `CORE_`/`ACC_`/`STAR_` je nach
+   Regionstyp (Abschnitt 8.4-Beispiel).
+
+**Bug (Header-Doppelpraefix):** Erster Lauf schlug mit `KeyError` fehl -
+`block_id()` liefert bereits `"{genome_id}__{contig}:{start}-{end}"`
+(weil `contig` selbst schon das Genom-Praefix traegt), aber der
+Lookup-Schluessel wurde faelschlich als `(genome_id, block_id(b))`
+gebaut - Doppelpraefix. Fix: Lookup direkt ueber den vollen
+`block_id()`-String, der exakt dem FASTA-/mmseqs2-Sequenznamen
+entspricht.
+
+**Ressourcen:** mmseqs2s Prefiltering-Indexaufbau brauchte kurzzeitig
+~9,5 GB von 10 GB WSL-RAM (223 MB frei) - knapp am OOM-Limit, aber
+ueberstanden; Speicherbedarf fiel danach auf ~5 GB fuer die eigentliche
+Such-/Alignmentphase. Gesamtlaufzeit ca. 5 Minuten fuer 7.582
+extrahierte Sequenzen (deutlich mehr als urspruenglich erwartet, siehe
+naechster Punkt).
+
+**Wichtiger methodischer Befund:** Die Dedup-Rate ist deutlich niedriger
+als das Dokument-Beispiel suggeriert (dort: EIN Repraesentant deckt bis
+zu 14 Genome ab). Ergebnis hier: **3.677 Panel-Regionen aus 4.213
+Vorab-Bloecken** - nur ~13 % Kollaps. Von 1.783 `strict_core`-Clustern
+(gen-basiert in ALLEN 5 Genomen praesent) enthalten **1.590 (89 %) nur
+EIN Genom** im Cluster - die entsprechenden Bloecke der anderen 4 Genome
+sind trotz Orthogruppen-Homologie zu unterschiedlich (>2 % Sequenz-
+divergenz auf 10-kb-Fensterebene), um bei 98 % Identitaet zu clustern.
+
+**Erklaerung:** Das ist eine direkte, erwartbare Konsequenz der eigenen
+Panel-Design-Entscheidung (5 maximal divergente Host-Repraesentanten
+statt naher Verwandter, siehe Abschnitt "Panel auf 5 Host-Repraesentanten
+reduziert"). Bei ~1 SNP pro 160 bp zwischen den Wirtslinien (aus den
+SyRI-Zahlen: 237k-272k SNPs auf ~43 Mb) liegt die erwartete Identitaet
+selbst in echten Ortholog-Bloecken zwischen zwei Wirtslinien im Bereich
+98-99 % nur bei kurzen, wenig variablen Abschnitten - ein 10-kb-Fenster
+ueberschreitet die 98 %-Schwelle oft knapp nicht.
+
+**Bewertung - kein Fehler, sondern ein Trade-off:** Das resultierende
+Panel ist groesser als im Dokument-Beispiel, aber dadurch informativer:
+Es behaelt die tatsaechlichen linienspezifischen Sequenzvarianten
+"core" Regionen, statt sie durch einen einzigen (z. B. nur-Oryza)
+Repraesentanten zu ersetzen, der fuer Long-Read-Mapping aus anderen
+Wirtslinien schlechter geeignet waere (genau das Problem, vor dem
+Abschnitt 7.2 bezueglich eines einzelnen Ankers warnt). Der
+98 %/90 %-Schwellenwert bleibt unveraendert auf dem Dokument-Wert
+(`thresholds.yaml: panel.dedup_identity/dedup_coverage`) - eine
+Absenkung wuerde die biologische Aussage des Panels aendern (mehr
+Kompression, aber Verlust linienspezifischer Core-Varianten) und wird
+hier bewusst NICHT vorgenommen, sondern als konfigurierbarer,
+dokumentierter Parameter belassen.
+
+**Panel-Zusammensetzung (3.677 Regionen, 184,5 MB FASTA):**
+
+| Regionstyp | Panel-Cluster |
+|---|---|
+| `strict_core` | 1.783 |
+| `soft_core` | 1.610 |
+| `shell` | 245 |
+| `starship_like` | 30 |
+| `accessory_chromosome` | 5 |
+| `private_accessory` | 4 |

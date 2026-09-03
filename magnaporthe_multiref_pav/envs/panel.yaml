@@ -1,0 +1,10 @@
+# Phase III (Section 8): Panel-Bau. mmseqs2 fuer die 98%/90%-Dedup-
+# Clusterung (Abschnitt 8.2), samtools fuer Sequenzextraktion/faidx.
+name: multiref-panel
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - mmseqs2
+  - samtools
+  - seqkit

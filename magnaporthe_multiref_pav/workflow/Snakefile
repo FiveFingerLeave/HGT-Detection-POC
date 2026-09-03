@@ -46,9 +46,24 @@ import os
 if os.path.exists(config["samples_tsv"]):
     samples = pd.read_csv(config["samples_tsv"], sep="\t", dtype=str, keep_default_na=False)
     sample_ids = samples["sample_id"].tolist()
+    # Section 9/10: only the isolates with actually downloaded raw reads
+    # (downloaded_run != "NA") can be mapped - see docs/decisions.md,
+    # 5 of 10 stratified pilot isolates currently qualify.
+    mappable_samples = samples[samples["downloaded_run"] != "NA"]
+    sample_fastq = {
+        row["sample_id"]: f"data/longreads/{row['downloaded_run']}.fastq.gz"
+        for _, row in mappable_samples.iterrows()
+    }
+    sample_preset = {
+        row["sample_id"]: row["minimap2_preset"] for _, row in mappable_samples.iterrows()
+    }
+    mappable_sample_ids = mappable_samples["sample_id"].tolist()
 else:
     samples = None
     sample_ids = []
+    sample_fastq = {}
+    sample_preset = {}
+    mappable_sample_ids = []
 
 
 include: "rules/qc.smk"

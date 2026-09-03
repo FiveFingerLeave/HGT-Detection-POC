@@ -99,13 +99,24 @@ Einträge, da >2% Sequenzdivergenz zwischen Wirtslinien selbst in
 Core-Regionen normal ist) — macht das Panel größer, aber informativer
 für späteres Cross-Lineage-Mapping. Details: `docs/decisions.md`.
 
-**Long-Read-Mapping (Abschnitt 10), PAV (Abschnitt 11), SV-Calling
-(Abschnitt 12), Rarefaction (Abschnitt 14): noch nicht implementiert**
-— siehe die einzelnen `workflow/rules/*.smk`-Dateien für den jeweiligen
-Statuskommentar und die Voraussetzungen. Phase IV (Abschnitt 9,
-Pilotisolat-Auswahl) ist ebenfalls offen — `config/samples.tsv` (die 10
-finalen Pilotisolate) muss noch aus `config/samples_candidate_pool.tsv`
-befüllt werden.
+**Phase IV (Abschnitt 9, Pilotisolat-Auswahl) — fertig für 5/10:**
+10 stratifizierte Pilotisolate ausgewählt (`config/samples.tsv`), 5
+davon mit real heruntergeladenen/QC-geprüften Rohdaten (B71, ZM12,
+K23_123, E34, TF051MC7).
+
+**Phase V (Abschnitt 10, Long-Read-Mapping) — fertig für die 5
+verfügbaren Isolate:** Alle gegen das Panel gemappt (minimap2,
+Preset je nach tatsächlicher Plattform: map-pb für PacBio-RAW, map-ont
+für Nanopore). Mapping-Raten 71,6–99,5% (primär). **Wichtigster
+Befund:** Eine winzige akzessorische Region (35-kb-Contig aus dem
+Avena-Referenzgenom) zeigt bei allen 5 Isolaten — trotz unterschiedlicher
+Wirtslinien — extrem hohe Coverage (300–4.000×), ein möglicher Hinweis
+auf ein wirtsübergreifendes Multi-Kopie-Element (Interpretation noch
+vorläufig, MAPQ-Filterung steht aus). Details: `docs/decisions.md`.
+
+**PAV-Analyse (Abschnitt 11), SV-Calling (Abschnitt 12), Rarefaction
+(Abschnitt 14): noch nicht implementiert** — siehe die einzelnen
+`workflow/rules/*.smk`-Dateien für den jeweiligen Statuskommentar.
 
 ## Kritischer Befund zur Testisolat-Auswahl (Abschnitt 9)
 

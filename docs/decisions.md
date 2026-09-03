@@ -1341,7 +1341,84 @@ CPU-intensiv (mehrere hundert Prozent CPU bei fasterq-dump, ein Kern zu
 100 % bei gzip ueber mehrere Minuten) - macht den Host-Rechner
 zwischenzeitlich spuerbar traege, aber unproblematisch fuer die
 Datenintegritaet. Auf Nutzerwunsch unveraendert mit voller
-Geschwindigkeit durchlaufen lassen statt Thread-Zahl zu drosseln. 0,0 % |
+Geschwindigkeit durchlaufen lassen statt Thread-Zahl zu drosseln.
+
+## 2026-09-03 — Abschnitt 10.1: Long-Read-Mapping aller 5 verfuegbaren Pilotisolate gegen das Panel
+
+**Setup:** `workflow/rules/mapping.smk` implementiert `minimap2_map` →
+`mapping_flagstat` → `mapping_coverage_by_contig` exakt nach
+Dokument-Befehl (Abschnitt 10.1). Preset pro Isolat anhand der
+tatsaechlichen SRA-Plattform gewaehlt (nicht pauschal ont/hifi wie im
+Dokument-Beispiel): `map-pb` fuer die drei PacBio-RAW/CLR-Isolate
+(B71, K23_123, E34 - KEINE HiFi/CCS-Reads), `map-ont` fuer die zwei
+Nanopore-Isolate (ZM12, TF051MC7). Siehe `config/samples.tsv`,
+Spalte `minimap2_preset`.
+
+**Bug 1 (OOM):** Erster Lauf mit `--cores 14` liess Snakemake 4 Samples
+gleichzeitig starten (je `threads: 3`) - `samtools sort`s Standard-
+Speicherreservierung (~768 MB/Thread) summierte sich ueber 4 parallele
+Jobs auf >10 GB und loeste einen OOM-Kill aus (`dmesg` bestaetigt,
+Prozess `minimap2` getoetet trotz nur ~700 MB eigenem RSS - die
+eigentliche Ursache war `samtools sort`, nicht minimap2 selbst). Fix:
+`-m 512M` explizit gesetzt, Lauf mit `--cores 3` (effektiv seriell)
+wiederholt.
+
+**Bug 2 (WSL-Instabilitaet, Hochfrequenz-Rueckfall):** Nach dem
+OOM-Fix schlug der Lauf zweimal in Folge reproduzierbar direkt nach dem
+minimap2-Indexaufbau fehl (RAM dabei unauffaellig, kein OOM) - `dmesg`
+zeigte das fruehere EXT4-Remount-/Journal-Korruption-Muster im
+~100-130-Sekunden-Takt wieder auftreten, obwohl `autoMemoryReclaim=
+disabled` unveraendert in `.wslconfig` gesetzt war. Ursache nicht
+abschliessend geklaert (evtl. eine vom Vortag verschiedene Stoerquelle
+am selben Tag/Boot). Ein sauberer `wsl --shutdown` + Neustart behob es
+sofort - danach lief der komplette 5-Isolate-Mapping-Lauf ueber
+~2,5 Stunden durchgehend stabil ohne weitere Unterbrechung. Zusaetzlich
+wurde eine Retry-Schleife (`run_mapping_retry.sh`, bis zu 15 Versuche
+mit 15 s Pause) in das Ausfuehrungsskript eingebaut, um kuenftige
+transiente Aussetzer automatisch abzufangen.
+
+**Laufzeit:** Deutlich laenger als anhand der Basenzahl geschaetzt -
+`--secondary=yes` gegen ein 3.677-Sequenzen-Panel mit vielen
+homologen/redundanten core-Regionen erzeugt sehr viele Sekundäralignments
+und dadurch sehr grosse BAM-Dateien (2,4-10,6 GB je Isolat). Gesamtlauf
+fuer alle 5 Isolate: ca. 2,5 Stunden (seriell wegen Speicherlimit).
+
+**Ergebnis (`samtools flagstat`):**
+
+| Isolat | Primaer gemappt | Gesamt gemappt (inkl. Secondary) | BAM-Groesse |
+|---|---|---|---|
+| TF051MC7 | 99,54 % | 99,92 % | 10,6 GB |
+| ZM12 | 92,96 % | 98,38 % | 5,7 GB |
+| K23_123 | 91,89 % | 97,91 % | 2,4 GB |
+| E34 | 77,53 % | 93,67 % | 6,1 GB |
+| B71 | 71,62 % | 94,37 % | 4,0 GB |
+
+B71s auffaellig niedrigere Mapping-Rate (71,62 %) ist noch nicht
+untersucht - moeglicher Hinweis auf hoehere Divergenz der bolivianischen
+Weizenbrand-Linie zum Panel oder auf Datenqualitaetsunterschiede
+(einzelner PacBio-RS/Sequel-Lauf, aeltere Chemie).
+
+**Wichtigster Einzelbefund - moegliches wirtsuebergreifendes
+Multi-Kopie-Element:** `PANEL001785` (`accessory_chromosome`, Cluster
+`ACC_002`, Repraesentant `GCA059329645_1__CM181349.1`, ein winziger
+35-kb-Contig aus dem Avena-Referenzgenom) zeigt bei **ALLEN 5**
+Testisolaten - trotz voellig unterschiedlicher Wirtslinien (Triticum,
+Eleusine, Wildgrass) - eine extrem hohe mittlere Tiefe (300x bis
+knapp 4.000x, weit ueber der 20-200x-Gesamtgenomcoverage der jeweiligen
+Isolate). Ebenso auffaellig: `PANEL001948` (`shell`,
+`GCA059329645_1__CM181340.1:60001-90000`) mit aehnlich extremer Tiefe
+bei allen 5 Isolaten.
+
+**Vorsicht bei der Interpretation:** Eine derart extreme Tiefe deutet
+eher auf ein hochrepetitives Multi-Kopie-Element (z. B. rRNA-Gencluster)
+als auf eine normale Einzelkopie-Region hin - genau das Szenario, vor
+dem Abschnitt 10.2 warnt ("Eine Region mit hoher Homologie zu mehreren
+Referenzen darf nicht allein ueber den primaeren Alignmenttreffer
+zugeschrieben werden"). Vor einer belastbaren Interpretation als
+"wirtsuebergreifendes akzessorisches Element" muss dies mit
+MAPQ-gefilterten Alignments (Abschnitt 10.2, PAV-Auswertungsebene 2)
+gegengeprueft werden - noch nicht durchgefuehrt (naechster Schritt,
+Phase VI). 0,0 % |
 
 **Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
 AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt

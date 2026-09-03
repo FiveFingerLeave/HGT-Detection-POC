@@ -1417,8 +1417,95 @@ Referenzen darf nicht allein ueber den primaeren Alignmenttreffer
 zugeschrieben werden"). Vor einer belastbaren Interpretation als
 "wirtsuebergreifendes akzessorisches Element" muss dies mit
 MAPQ-gefilterten Alignments (Abschnitt 10.2, PAV-Auswertungsebene 2)
-gegengeprueft werden - noch nicht durchgefuehrt (naechster Schritt,
-Phase VI). 0,0 % |
+gegengeprueft werden - siehe naechster Eintrag (Abschnitt 11), wo genau
+das gemacht wurde: das Signal hat sich bestaetigt.
+
+## 2026-09-03 — Abschnitt 11: Fensterbasierte PAV-Analyse - zwei Starship-like-Regionen wirtsuebergreifend bestaetigt
+
+**Setup:** `workflow/rules/pav.smk` implementiert Abschnitt 11 komplett:
+`panel_windows` (10-kb-Fenster ueber die Panel-FASTA, Abschnitt 11.1) →
+`mosdepth_unique` (MAPQ ≥ 20, mosdepth-Standard schliesst secondary/
+supplementary bereits aus - die quantitative PAV-Ebene) +
+`mosdepth_all` (`--flag 1540`: nur unmapped/qcfail/dup ausschliessen,
+secondary/supplementary BEHALTEN - die Homologie-Kontrollebene,
+Abschnitt 10.2) → `pav_call` (Present/Absent/Uncertain je Fenster nach
+Regionstyp-spezifischen Breadth-Schwellen aus `thresholds.yaml`, plus
+`ambiguous_multimapping`, wenn die Breadth-Differenz zwischen "all" und
+"unique" > 0,3 betraegt) → `pav_matrix` (Panel-Region x Isolat-Matrix,
+Mehrheitsentscheid ueber die Fenster einer Panel-Region).
+
+**Technischer Kniff:** Da unsere Panel-FASTA-Header selbst bereits alle
+Metadaten tragen (`>PANEL000001|type=...|cluster=...|rep=...|source=...`,
+keine Leerzeichen), ist der mosdepth-"chrom"-Wert direkt der volle
+Header-String - `panel_id`/`region_type` werden direkt daraus geparst,
+kein separater Manifest-Join noetig.
+
+**Bug:** `mosdepth` war in KEINER tatsaechlich existierenden Environment
+installiert (`envs/core.yaml` wurde nie real als `multiref-core`
+angelegt - alle bisherigen `qc.smk`-Laeufe nutzten stattdessen die
+aeltere, vorbestehende `qc_env`, die kein mosdepth enthielt). Behoben
+durch `mamba install -n qc_env mosdepth` statt eine neue Environment
+anzulegen (pragmatisch, da `qc_env` ohnehin schon fuer alle
+core-Werkzeuge in Gebrauch ist).
+
+**Laufzeit:** mosdepth ist erheblich schneller als minimap2/samtools
+sort - alle 5 Isolate (2 Ebenen x 5 = 10 mosdepth-Laeufe + 5 pav_call +
+1 pav_matrix) liefen in **~10 Minuten** komplett durch, verglichen mit
+den ~2,5 Stunden fuer das vorausgehende Mapping.
+
+**Ergebnis (3.677 Panel-Regionen x 5 Isolate):**
+
+| Call-Klasse | B71 | ZM12 | K23_123 | E34 | TF051MC7 |
+|---|---|---|---|---|---|
+| present | 854 | 1269 | 1261 | 1403 | 1413 |
+| absent | 546 | 328 | 537 | 309 | 351 |
+| uncertain | 153 | 196 | 170 | 237 | 359 |
+| ambiguous_multimapping | 2124 | 1884 | 1709 | 1728 | 1554 |
+
+**`ambiguous_multimapping` ist die haeufigste Klasse in allen 5
+Isolaten (42-58 % der Panel-Regionen)** - direkte Konsequenz der
+bereits dokumentierten schwachen Panel-Dedup-Rate (89 % der
+strict_core-Cluster blieben Einzelgenom-Eintraege, siehe Abschnitt-8-
+Eintrag): viele nur leicht unterschiedliche Panel-Regionen ziehen sich
+gegenseitig Multi-Mapping-Signal.
+
+**Haupt-Befund: 399 von 3.677 Panel-Regionen sind bei ALLEN 5 Isolaten
+eindeutig "present"** (unabhaengig von deren Wirtslinie):
+
+| Regionstyp | Anzahl |
+|---|---|
+| soft_core | 294 |
+| strict_core | 84 |
+| shell | 18 |
+| **starship_like** | **2** |
+| accessory_chromosome | 1 |
+
+**Die einzelne `accessory_chromosome`-Region ist exakt `PANEL001785`**
+(der zuvor auffaellige Avena-spezifische 35-kb-Contig, siehe Abschnitt-
+10.1-Eintrag) - **bestaetigt bei MAPQ ≥ 20 als echtes Present-Signal in
+allen 5 Isolaten**, nicht als Multi-Mapping-Artefakt (waere sonst als
+`ambiguous_multimapping` klassifiziert worden). Das Signal haelt der
+strengeren Pruefung stand.
+
+**Die beiden `starship_like`-Regionen, die in allen 5 Testisolaten
+(Triticum x2, Eleusine x2, Wildgrass x1) unabhaengig von der Wirtslinie
+als praesent bestaetigt wurden:**
+
+| Panel-ID | Quelle | Laenge | Repeat-Anteil | In wie vielen Referenzen |
+|---|---|---|---|---|
+| PANEL003659 | Br48 (Triticum), `AP027063.1:170001-200000` | 30 kb | 78,4 % | nur 1 (Br48-spezifisch im Panel) |
+| PANEL003670 | Avena, `CM181346.1:3530001-3560000` | 30 kb | 48,9 % | 2 (Avena + Br48/Triticum) |
+
+**Einordnung:** Damit ist die POC-Kernfrage - Nachweisbarkeit
+wirtsuebergreifender Starship-like-Elemente per Long-Read-Mapping gegen
+das Multi-Referenzpanel - mit echten Daten UND einer strengen
+Multi-Mapping-Kontrolle positiv demonstriert. Beide Kandidaten
+verdienen vorrangige manuelle Nachpruefung (z. B. Alignment-Visualisierung,
+Cargo-Gen-Identitaet zwischen Referenz und Testisolaten) vor einer
+Publikations-reifen Aussage - die Terminologie bleibt bewusst
+"starship_like", keine strukturell bestaetigten Starships (siehe
+Abschnitt-7.4-Einschraenkung: keine echte Boundary-/Insertionsstellen-
+Detektion durchgefuehrt). 0,0 % |
 
 **Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
 AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt

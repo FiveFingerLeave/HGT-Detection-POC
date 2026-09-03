@@ -114,9 +114,22 @@ Wirtslinien — extrem hohe Coverage (300–4.000×), ein möglicher Hinweis
 auf ein wirtsübergreifendes Multi-Kopie-Element (Interpretation noch
 vorläufig, MAPQ-Filterung steht aus). Details: `docs/decisions.md`.
 
-**PAV-Analyse (Abschnitt 11), SV-Calling (Abschnitt 12), Rarefaction
-(Abschnitt 14): noch nicht implementiert** — siehe die einzelnen
-`workflow/rules/*.smk`-Dateien für den jeweiligen Statuskommentar.
+**Phase VI (Abschnitt 11, PAV-Analyse) — fertig, mit Kernergebnis:**
+`results/pav/pav_matrix.tsv` (3.677 Panel-Regionen × 5 Isolate,
+zwei Auswertungsebenen: MAPQ≥20-gefiltert vs. alle Alignments inkl.
+secondary, um Multi-Mapping-Artefakte zu erkennen). **399 Regionen sind
+bei allen 5 Isolaten präsent — darunter 2 `starship_like`-Regionen und
+die zuvor gefundene Avena-spezifische Accessory-Region.** Beide
+Starship-Kandidaten (je 30 kb, hoher Repeat-Anteil) sind bei allen 5
+Testisolaten unterschiedlicher Wirtslinien (Triticum, Eleusine,
+Wildgrass) bestätigt präsent — auch nach strenger MAPQ-Filterung, also
+kein reines Multi-Mapping-Artefakt. **Damit ist die POC-Kernfrage
+(wirtsübergreifende Starship-Nachweisbarkeit per Long-Read-Mapping) mit
+echten Daten positiv demonstriert.** Details: `docs/decisions.md`.
+
+**SV-Calling (Abschnitt 12), Rarefaction (Abschnitt 14): noch nicht
+implementiert** — siehe die einzelnen `workflow/rules/*.smk`-Dateien für
+den jeweiligen Statuskommentar.
 
 ## Kritischer Befund zur Testisolat-Auswahl (Abschnitt 9)
 

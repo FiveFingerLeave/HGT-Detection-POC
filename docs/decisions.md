@@ -1313,7 +1313,35 @@ SRA-Websuche nach Isolatnamen statt nur BioSample-Kreuzreferenz).
 (K23_123, E34, B71, ZM12, TF051MC7) real auffindbare/bereits
 heruntergeladene Rohdaten - genug fuer einen ersten Mapping-Pilotlauf
 (Phase V), aber die vollstaendige 10-Isolat-Stratifizierung aus
-Abschnitt 9.1 ist noch nicht mit echten Daten hinterlegt. 0,0 % |
+Abschnitt 9.1 ist noch nicht mit echten Daten hinterlegt.
+
+**B71/ZM12/TF051MC7 heruntergeladen (je EIN SRA-Lauf, nicht alle
+verfuegbaren):** Bei B71 und ZM12 existieren mehrere Laeufe (11 bzw. 5);
+da das Dokument selbst nur einen Pilot-Startwert von ~20x nennt, wurde
+je nur der kleinste/ein einzelner Lauf heruntergeladen statt aller
+(B71: nur `SRR6232287`, ~11,9 GB Archivgroesse, statt aller 11 Laeufe
+zusammen >45 GB). Ergebnis (`seqkit stats`/NanoPlot):
+
+| Isolat | Lauf | Reads | N50 | Coverage (vs. 44,5 Mb) |
+|---|---|---|---|---|
+| B71 | SRR6232287 | 163.478 | 35.779 bp | ~81x |
+| ZM12 | SRR19868246 | 397.795 | 20.605 bp | ~108x |
+| TF051MC7 | SRR30725258 | 325.797 | 34.671 bp | ~184x |
+
+**Wichtiger Hinweis zur PacBio/Nanopore-Archivgroesse:** Die `.sra`-
+Archivgroesse kann die reine Basenzahl deutlich uebersteigen (B71:
+3,59 Gb Basen laut Katalog, aber 11,9 GB Downloadgroesse - aeltere
+PacBio-RS/Sequel-Rohformate speichern zusaetzliche Kinetik-/Trace-Daten
+mit ab, nicht nur Basecalls). Vor weiteren Downloads aus diesem Katalog
+immer die `size_MB`-Spalte pruefen, nicht nur die Basenzahl abschaetzen.
+
+**Ressourcen-Beobachtung:** `fasterq-dump`/`gzip` fuer diese grossen
+Einzeldateien (7-10 GB unkomprimierte FASTQ) sind erwartungsgemaess
+CPU-intensiv (mehrere hundert Prozent CPU bei fasterq-dump, ein Kern zu
+100 % bei gzip ueber mehrere Minuten) - macht den Host-Rechner
+zwischenzeitlich spuerbar traege, aber unproblematisch fuer die
+Datenintegritaet. Auf Nutzerwunsch unveraendert mit voller
+Geschwindigkeit durchlaufen lassen statt Thread-Zahl zu drosseln. 0,0 % |
 
 **Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
 AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt

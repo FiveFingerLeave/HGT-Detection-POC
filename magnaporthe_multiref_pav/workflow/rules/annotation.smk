@@ -1,21 +1,20 @@
-# Phase I (Section 6.2): einheitliche Genannotation ueber alle 5
-# Panel-Referenzen (BRAKER3/Liftoff + InterProScan/eggNOG-mapper +
-# OrthoFinder).
+# Phase I (Section 6.2): uniform gene annotation across all 5 panel
+# references (BRAKER3/Liftoff + InterProScan/eggNOG-mapper + OrthoFinder).
 #
-# Status: TEILWEISE implementiert. BRAKER3 (ab-initio) bleibt blockiert
-# (braucht eine separat zu beschaffende GeneMark-ES/ET-Lizenzdatei, siehe
-# https://github.com/Gaius-Augustus/BRAKER - kein reiner conda-Install).
-# InterProScan/eggNOG-mapper (Funktionsannotation) und OrthoFinder
-# (Abschnitt 7.1) ebenfalls noch nicht implementiert.
+# Status: PARTIALLY implemented. BRAKER3 (ab-initio) remains blocked
+# (needs a separately obtained GeneMark-ES/ET license file, see
+# https://github.com/Gaius-Augustus/BRAKER - not a pure conda install).
+# InterProScan/eggNOG-mapper (functional annotation) and OrthoFinder
+# (Section 7.1) are also not yet implemented.
 #
-# Stattdessen: Liftoff ueberträgt die einzige vorhandene echte Annotation
-# (GCA004346965_1, aus NCBI) auf alle 5 Panel-Genome (inkl. sich selbst,
-# als Konsistenzpruefung/Umbenennungsschritt). Das Dokument selbst warnt
-# ausdruecklich, dass Lift-over allein akzessorische Gene unterschaetzen
-# kann, besonders in nichtsyntenischen/subtelomerischen/repeat-reichen
-# Bereichen - genau dort, wo die vier in repeats.smk gefundenen
-# Mini-/Accessory-Chromosom-Kandidaten liegen. De-novo-Annotation dieser
-# Bereiche bleibt ein offener Punkt (siehe docs/decisions.md).
+# Instead: Liftoff transfers the single available real annotation
+# (GCA004346965_1, from NCBI) onto all 5 panel genomes (including itself,
+# as a consistency check/renaming step). The document itself explicitly
+# warns that lift-over alone can underestimate accessory genes, especially
+# in non-syntenic/subtelomeric/repeat-rich regions - exactly where the four
+# mini-/accessory-chromosome candidates found in repeats.smk are located.
+# De-novo annotation of these regions remains an open point (see
+# docs/decisions.md).
 
 
 rule liftoff_annotation:

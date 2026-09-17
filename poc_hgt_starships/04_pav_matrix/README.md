@@ -1,9 +1,9 @@
-# Phase 4 - Presence/Absence-Matrix (Pan-Accessory-Genom)
+# Phase 4 - Presence/Absence Matrix (Pan-Accessory Genome)
 
-Pangenom-PAV ueber alle Panel-Genome, ergaenzt um synteny-/alignment-basierte Detektion nicht-genischer akzessorischer Regionen.
+Pangenome PAV across all panel genomes, supplemented with synteny-/alignment-based detection of non-genic accessory regions.
 
-**Tools:** Panaroo/PIRATE/Roary (Gen-PAV), minimap2/Cactus/pggb (Whole-Genome-Alignment/Pangenom-Graph).
-**Input:** Genmodelle aus 02_annotation, Starship-Katalog aus 03_starship_calls.
-**Output:** binaere PAV-Matrix (Isolate x Elemente), annotiert nach Starship vs. Nicht-Starship.
+**Tools:** Panaroo/PIRATE/Roary (gene PAV), minimap2/Cactus/pggb (whole-genome alignment/pangenome graph).
+**Input:** gene models from 02_annotation, Starship catalog from 03_starship_calls.
+**Output:** binary PAV matrix (isolates x elements), annotated as Starship vs. non-Starship.
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

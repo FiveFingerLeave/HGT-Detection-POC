@@ -1,1478 +1,1458 @@
-# Methodische Entscheidungen
+# Methodological Decisions
 
-## 2026-09-01 — Projekt-Reset auf Basis des POC-Workflow-Dokuments
+## 2026-09-01 — Project reset based on the POC workflow document
 
-**Entscheidung:** Das gesamte bisherige Pipeline-Setup (Assembly-basierte
-Contig-Klassifikation: `normalize_fasta_headers.py`, Starfish-Integration,
-Repeat-/Telomer-/Synteny-Heuristiken, Multi-Referenzpanel für
-Core-Konsens, BUSCO/QUAST-QC) wurde entfernt. Neuaufbau auf Basis von
-`Dokumentation/POC Workflow – HGT Machbarkeitsstudie M. oryzae.md`, das an
-das Dissertationsexposé "Population Genomics of Horizontal Gene Transfer
-in Magnaporthe oryzae" (WP1.2–WP1.4) gekoppelt ist.
+**Decision:** The entire previous pipeline setup (assembly-based contig
+classification: `normalize_fasta_headers.py`, Starfish integration,
+repeat/telomere/synteny heuristics, multi-reference panel for core
+consensus, BUSCO/QUAST QC) was removed. Rebuilt from scratch based on
+`Documentation/POC_Workflow_HGT_Feasibility_Study_M_oryzae.md`, which is
+tied to the dissertation proposal "Population Genomics of Horizontal Gene
+Transfer in Magnaporthe oryzae" (WP1.2–WP1.4).
 
-**Begründung:** Das POC-Dokument beschreibt einen grundlegend anderen
-methodischen Ansatz als das, was zuvor iterativ aufgebaut wurde:
-Kurzread-Mapping gegen ein Multireferenzpanel mit Coverage-/PAV-basierter
-Kandidatendetektion (bwa-mem2/mosdepth), ergänzt um Starfish/Stargraph
-(strukturbasiert) und PCA/ARI-Clustering (Host-Lineage-Diskordanz als
-HGT-Evidenz) — nicht die zuvor gebaute Assembly-interne
-Contig-Heuristik. Beide Ansätze parallel im selben Repo zu pflegen hätte
-Verwirrung gestiftet (Nutzerwunsch: "es sollen nur relevante
-Informationen zum POC hinterlegt sein").
+**Rationale:** The POC document describes a fundamentally different
+methodological approach from what had previously been built up
+iteratively: short-read mapping against a multi-reference panel with
+coverage-/PAV-based candidate detection (bwa-mem2/mosdepth), complemented
+by Starfish/Stargraph (structure-based) and PCA/ARI clustering
+(host-lineage discordance as HGT evidence) — not the previously built
+assembly-internal contig heuristic. Maintaining both approaches in
+parallel in the same repo would have caused confusion (user request:
+"only information relevant to the POC should be kept in the repo").
 
-**Was erhalten blieb:**
-- Git-Historie (alle vorherigen Commits weiterhin abrufbar)
-- `Dokumentation/` (alle Planungsnotizen, inkl. des neuen POC-Dokuments)
-- `assemblies/` (4,1 GB bereits heruntergeladene NCBI-Genome, nicht in
-  Git, reiner lokaler Cache)
-- NCBI-Isolat-/Sequenzlisten in `data/` und `input/metadata/`
+**What was preserved:**
+- Git history (all previous commits remain retrievable)
+- `Documentation/` (all planning notes, including the new POC document)
+- `assemblies/` (4.1 GB of already downloaded NCBI genomes, not tracked
+  in Git, a purely local cache)
+- NCBI isolate/sequence lists in `data/` and `input/metadata/`
 
-**Was neu aufgebaut wurde (siehe unten für Details):**
-- Repo-Struktur exakt nach der im POC-Dokument empfohlenen Gliederung
-  (`data/references/`, `data/isolates_poc/`, `envs/`, `workflow/`,
-  `results/`, `power_analysis/`)
-- Vier Environment-Definitionen (`envs/mapping.yaml`, `starfish.yaml`,
+**What was rebuilt from scratch (see below for details):**
+- Repo structure exactly following the layout recommended in the POC
+  document (`data/references/`, `data/isolates_poc/`, `envs/`,
+  `workflow/`, `results/`, `power_analysis/`)
+- Four environment definitions (`envs/mapping.yaml`, `starfish.yaml`,
   `python.yaml`, `r.yaml`)
-- Snakemake-Grundgerüst (`workflow/Snakefile` + `rules/{mapping,pav,
-  starfish,cluster}.smk`), exakt an die im Dokument vorgegebenen Befehle
-  angelehnt, lauffähig sobald `config/samples.tsv` und
-  `data/references/panel_manifest.tsv` befüllt sind
-- Vier neue Skripte: `pav_call.py`, `build_pav_matrix.py`,
+- Snakemake skeleton (`workflow/Snakefile` + `rules/{mapping,pav,
+  starfish,cluster}.smk`), closely modeled on the commands specified in
+  the document, ready to run once `config/samples.tsv` and
+  `data/references/panel_manifest.tsv` are populated
+- Four new scripts: `pav_call.py`, `build_pav_matrix.py`,
   `cluster_and_score.py`, `validate_clustering_synthetic.py`
-- `power_analysis/glmm_power_sim.R` (aus dem Dokument übernommen)
+- `power_analysis/glmm_power_sim.R` (adopted from the document)
 
-## 2026-09-01 — Umfassender NCBI-Sequenzdatensatz (SRA, nicht nur Assemblies)
+## 2026-09-01 — Comprehensive NCBI sequence dataset (SRA, not just assemblies)
 
-**Entscheidung:** Zusätzlich zur bereits vorhandenen Assembly-Liste
-(`data/ncbi_m_oryzae_assemblies.tsv`/`.jsonl`, ~46 Einträge) wurde der
-komplette NCBI-SRA-Katalog für *Pyricularia oryzae* abgerufen
+**Decision:** In addition to the already existing assembly list
+(`data/ncbi_m_oryzae_assemblies.tsv`/`.jsonl`, ~46 entries), the complete
+NCBI SRA catalog for *Pyricularia oryzae* was retrieved
 (`data/ncbi_m_oryzae_sra_runs.tsv`, via NCBI E-Utilities
-esearch/efetch, `rettype=runinfo`): **3.902 Sequenzierläufe**.
-Gefilterte Teilmengen:
-- `data/ncbi_m_oryzae_sra_wgs_illumina.tsv` — 1.754 WGS-Kurzread-Läufe
-  (Illumina) — Kandidatenpool für den POC-Isolat-Subset (Abschnitt 1)
-- `data/ncbi_m_oryzae_sra_wgs_longread.tsv` — 193 WGS-Long-Read-Läufe
-  (Nanopore/PacBio) — Kandidatenpool für Referenzpanel-Kandidaten
+esearch/efetch, `rettype=runinfo`): **3,902 sequencing runs**.
+Filtered subsets:
+- `data/ncbi_m_oryzae_sra_wgs_illumina.tsv` — 1,754 WGS short-read runs
+  (Illumina) — candidate pool for the POC isolate subset (Section 1)
+- `data/ncbi_m_oryzae_sra_wgs_longread.tsv` — 193 WGS long-read runs
+  (Nanopore/PacBio) — candidate pool for reference-panel candidates
 
-**Begründung:** Der POC-Ansatz (Kurzread-Mapping gegen Multireferenzpanel)
-braucht tatsächliche Rohreads pro Isolat, nicht nur fertige Assemblies.
-Die bisherige Assembly-Liste (46 Einträge) deckt nur einen Bruchteil der
-tatsächlich bei NCBI verfügbaren *M. oryzae*-Sequenzierdaten ab.
+**Rationale:** The POC approach (short-read mapping against a
+multi-reference panel) requires actual raw reads per isolate, not just
+finished assemblies. The previous assembly list (46 entries) covers only
+a fraction of the *M. oryzae* sequencing data actually available at
+NCBI.
 
-**Verteilung nach Bibliotheksstrategie:** 1.971 WGS, 1.204 RNA-Seq, 435
-ChIP-Seq, 86 WCS, 55 Sonstige, 43 WGA, 30 ncRNA-Seq, 25 Bisulfite-Seq, 20
-RIP-Seq, 7 Amplicon. Nach Plattform: 3.639 Illumina, 164 Oxford Nanopore,
+**Distribution by library strategy:** 1,971 WGS, 1,204 RNA-Seq, 435
+ChIP-Seq, 86 WCS, 55 other, 43 WGA, 30 ncRNA-Seq, 25 bisulfite-seq, 20
+RIP-Seq, 7 amplicon. By platform: 3,639 Illumina, 164 Oxford Nanopore,
 51 PacBio, 19 DNBSEQ, 17 LS454, 12 BGISEQ.
 
-**Konsequenz:** Vor Auswahl des tatsächlichen POC-Isolat-Subsets (4–6
-Referenzen + 10–20 Isolate) müssen aus `ncbi_m_oryzae_sra_wgs_illumina.tsv`
-gezielt Isolate nach Host-Lineage-Abdeckung ausgewählt werden (Reis,
-Weizen, Fingerhirse, Wildgras je nach Verfügbarkeit) — noch nicht
-geschehen, `config/samples.tsv` ist aktuell nur eine leere Vorlage.
+**Consequence:** Before selecting the actual POC isolate subset (4–6
+references + 10–20 isolates), isolates need to be selected from
+`ncbi_m_oryzae_sra_wgs_illumina.tsv` according to host-lineage coverage
+(rice, wheat, finger millet, wild grass depending on availability) —
+not yet done; `config/samples.tsv` is currently only an empty template.
 
-## 2026-09-01 — PAV-Calling: Breadth aus mosdepth-Thresholds, nicht nur mittlere Tiefe
+## 2026-09-01 — PAV calling: breadth from mosdepth thresholds, not just mean depth
 
-**Entscheidung:** `pav_call.py` berechnet die Breadth (Anteil der Region
-mit Coverage ≥ `present_depth`) aus mosdepth's `--thresholds`-Ausgabe
-(`<prefix>.thresholds.bed.gz`), nicht aus der mittleren Tiefe in
-`<prefix>.regions.bed.gz` allein.
+**Decision:** `pav_call.py` computes breadth (the fraction of a region
+with coverage ≥ `present_depth`) from mosdepth's `--thresholds` output
+(`<prefix>.thresholds.bed.gz`), not from the mean depth in
+`<prefix>.regions.bed.gz` alone.
 
-**Begründung:** Das POC-Dokument nennt beide Schwellen (Breadth UND
-Tiefe) als Kriterium ("80–90 % Breadth bei ≥5× Tiefe"), aber sein
-Beispielaufruf übergibt `pav_call.py` nur die `regions.bed.gz`-Datei
-(reine mittlere Tiefe pro Region) — daraus lässt sich keine echte Breadth
-ableiten (eine Region kann hohe mittlere Tiefe durch einen kleinen,
-extrem gut abgedeckten Teilbereich haben, obwohl der Großteil der Region
-gar nicht abgedeckt ist). Die `mosdepth --by`-Regel wurde daher um
-`--thresholds {present_depth}` ergänzt.
+**Rationale:** The POC document names both thresholds (breadth AND
+depth) as criteria ("80–90% breadth at ≥5× depth"), but its example
+invocation passes `pav_call.py` only the `regions.bed.gz` file (pure
+mean depth per region) — no genuine breadth can be derived from that (a
+region can have high mean depth from a small, extremely well-covered
+sub-portion even though most of the region is not covered at all). The
+`mosdepth --by` rule was therefore extended with
+`--thresholds {present_depth}`.
 
-**Konsequenz:** `workflow/rules/pav.smk`s `mosdepth_coverage`-Regel
-erzeugt jetzt zwei Ausgabedateien (`.regions.bed.gz` für die Tiefe,
-`.thresholds.bed.gz` für die Breadth); `pav_call.py` nimmt beide separat
-entgegen (`--mosdepth-regions`, `--mosdepth-thresholds`).
+**Consequence:** The `mosdepth_coverage` rule in `workflow/rules/pav.smk`
+now produces two output files (`.regions.bed.gz` for depth,
+`.thresholds.bed.gz` for breadth); `pav_call.py` accepts both separately
+(`--mosdepth-regions`, `--mosdepth-thresholds`).
 
-## 2026-09-01 — Region-Klassifikation (core/candidate) über eine gemeinsame BED-Datei
+## 2026-09-01 — Region classification (core/candidate) via a shared BED file
 
-**Entscheidung:** `data/references/candidate_regions.bed` bekommt eine
-5. Spalte `region_class` (`core` oder `candidate`), statt core-Marker und
-Kandidatenregionen in getrennten Dateien/getrennten PAV-Läufen zu führen.
-`pav_call.py` reicht diese Spalte durch, `build_pav_matrix.py` splittet
-die kombinierte `candidate_table.tsv` danach in zwei Matrizen für
-Abschnitt 3 (PCA/ARI-Clustering).
+**Decision:** `data/references/candidate_regions.bed` gets a 5th column,
+`region_class` (`core` or `candidate`), instead of keeping core markers
+and candidate regions in separate files/separate PAV runs.
+`pav_call.py` passes this column through, and `build_pav_matrix.py`
+then splits the combined `candidate_table.tsv` into two matrices for
+Section 3 (PCA/ARI clustering).
 
-**Begründung:** Das Dokument trennt konzeptionell "Core-Genom-Marker"
-(genomweit, außerhalb der Kandidatenregionen) von "Kandidaten-Regionen"
-(aus Abschnitt 2), spezifiziert aber keine konkrete Dateistruktur dafür.
-Eine gemeinsame BED-Datei mit Klassenspalte vermeidet einen doppelten
-Mapping-/mosdepth-Lauf (einmal pro Regionsklasse) und hält die
-Zuordnung an einer Stelle nachvollziehbar.
+**Rationale:** The document conceptually separates "core genome markers"
+(genome-wide, outside the candidate regions) from "candidate regions"
+(from Section 2), but does not specify a concrete file structure for
+this. A shared BED file with a class column avoids a duplicated
+mapping/mosdepth run (once per region class) and keeps the assignment
+traceable in a single place.
 
-## 2026-09-01 — Synthetischer Clustering-Validierungstest: ehrlicher Befund zur Methodensensitivität
+## 2026-09-01 — Synthetic clustering validation test: an honest finding on method sensitivity
 
-**Entscheidung:** `validate_clustering_synthetic.py` (POC-Dokument
-Abschnitt 3, "jetzt schon möglich") läuft als Monte-Carlo-Simulation über
-standardmäßig 20 Wiederholungen, nicht als Einzellauf.
+**Decision:** `validate_clustering_synthetic.py` (POC document Section 3,
+"already possible now") runs as a Monte Carlo simulation over 20
+repetitions by default, not as a single run.
 
-**Begründung/Befund:** Ein einzelner Testlauf mit injizierter
-lineage-übergreifender Teilung EINER Kandidatenregion (wie im Dokument
-wörtlich beschrieben: "15 % der Isolate teilen eine 'fremde'
-Kandidatenregion") zeigt je nach Zufalls-Seed stark unterschiedliche
-Ergebnisse: bei 5 Kandidatenregionen und 30 % Empfänger-Isolaten zeigten
-nur ~30 % der Einzelläufe (Seeds) einen klaren ARI-Abfall (>0,2); der
-gemittelte ARI-Abfall über 20 Wiederholungen liegt bei nur ~0,15 — nicht
-zuverlässig genug für ein robustes Diagnosekriterium. Bei mehr
-Kandidatenregionen (z. B. 10–30) verschwindet das Signal noch stärker,
-da unveränderte, streng lineage-treue Regionen die PCA/k-means-Struktur
-dominieren.
+**Rationale/finding:** A single test run with an injected cross-lineage
+sharing of ONE candidate region (as literally described in the document:
+"15% of isolates share a 'foreign' candidate region") shows strongly
+different results depending on the random seed: with 5 candidate regions
+and 30% recipient isolates, only ~30% of individual runs (seeds) showed
+a clear ARI drop (>0.2); the averaged ARI drop over 20 repetitions is
+only ~0.15 — not reliable enough for a robust diagnostic criterion. With
+more candidate regions (e.g., 10–30), the signal disappears even more,
+since unchanged, strictly lineage-faithful regions dominate the
+PCA/k-means structure.
 
-**Wichtiger Befund für die tatsächliche Methodik (nicht nur ein
-Test-Problem):** Ein aggregierter ARI-Wert über die GESAMTE
-Kandidaten-Matrix ist nur schwach sensitiv für ein einzelnes echtes
-HGT-Signal, wenn es unter mehreren unauffälligen Kandidatenregionen
-verdünnt wird. Für die reale Analyse empfiehlt sich daher zusätzlich zur
-aggregierten ARI ein **Pro-Region-Diskordanztest** (z. B.
-Lineage-Reinheit pro einzelner Kandidatenregion), bevor man sich allein
-auf eine gesamthafte PCA/ARI-Kennzahl verlässt. Dies ist noch nicht
-implementiert.
+**Important finding for the actual methodology (not just a test
+artifact):** An aggregated ARI value over the ENTIRE candidate matrix is
+only weakly sensitive to a single genuine HGT signal when it is diluted
+among several inconspicuous candidate regions. For the real analysis, a
+**per-region discordance test** is therefore recommended in addition to
+the aggregated ARI (e.g., lineage purity per individual candidate
+region), before relying solely on an overall PCA/ARI metric. This is not
+yet implemented.
 
-**Konsequenz:** Die Machbarkeitsfrage aus Abschnitt 3 des Dokuments
-("Pipeline muss injizierte Diskordanz korrekt erkennen") ist mit der
-aktuellen, wörtlich im Dokument beschriebenen Methode **nicht robust
-erfüllt** — das muss vor einer Förderzusage/Antragstellung transparent
-kommuniziert werden, nicht durch günstige Parameterwahl verdeckt werden.
+**Consequence:** The feasibility question from Section 3 of the document
+("the pipeline must correctly detect injected discordance") is **not
+robustly met** by the current method as literally described in the
+document — this needs to be communicated transparently before a funding
+decision/application, not concealed through favorable parameter choices.
 
-## 2026-09-01 — Pro-Region-ARI implementiert und direkt gegen aggregierte Methode verglichen
+## 2026-09-01 — Per-region ARI implemented and directly compared against the aggregated method
 
-**Entscheidung:** `cluster_and_score.py` bekommt eine neue Funktion
-`per_region_ari()`: statt einer PCA über die gesamte Kandidaten-Matrix
-wird für **jede Kandidaten-Region einzeln** der ARI zwischen ihrem
-Präsenz/Abwesenheits-Muster und der bekannten Wirtslinie berechnet
-(fehlende/"uncertain"-Werte werden pro Region ausgeschlossen, nicht
-geschätzt). `validate_clustering_synthetic.py` führt jetzt beide Methoden
-(A = aggregiertes PCA/k-means-ARI wie im Dokument beschrieben, B =
-Pro-Region-ARI) auf denselben synthetischen Daten aus und vergleicht sie
-direkt. Die neue Ausgabe `results/clustering/candidate_per_region_ari.tsv`
-steht auch im echten Pipeline-Lauf zur Verfügung
-(`workflow/rules/cluster.smk`).
+**Decision:** `cluster_and_score.py` gets a new function
+`per_region_ari()`: instead of a PCA over the entire candidate matrix,
+the ARI between its presence/absence pattern and the known host lineage
+is computed **for each candidate region individually** (missing/
+"uncertain" values are excluded per region, not imputed).
+`validate_clustering_synthetic.py` now runs both methods (A = aggregated
+PCA/k-means ARI as described in the document, B = per-region ARI) on the
+same synthetic data and compares them directly. The new output
+`results/clustering/candidate_per_region_ari.tsv` is also available in
+the real pipeline run (`workflow/rules/cluster.smk`).
 
-**Ergebnis des direkten Vergleichs (Monte-Carlo, 20 Wiederholungen):**
+**Result of the direct comparison (Monte Carlo, 20 repetitions):**
 
-| Szenario | Betroffene Isolate | Methode A (aggregiert) | Methode B (Pro-Region) |
+| Scenario | Affected isolates | Method A (aggregated) | Method B (per-region) |
 |---|---|---|---|
-| 5 Kandidatenregionen, 30 % Empfänger | 12/40 | 30 % Erkennungsrate | **95 %** Erkennungsrate |
-| 30 Kandidatenregionen, 15 % Empfänger (wörtliche Dokument-Parameter) | 6/40 | **0 %** Erkennungsrate | **70 %** Erkennungsrate |
+| 5 candidate regions, 30% recipients | 12/40 | 30% detection rate | **95%** detection rate |
+| 30 candidate regions, 15% recipients (literal document parameters) | 6/40 | **0%** detection rate | **70%** detection rate |
 
-**Wichtiger methodischer Nebenbefund:** Bei 4 Wirtslinien, aber einem nur
-binären (0/1) Merkmal pro Region, kann der Pro-Region-ARI strukturell
-**nicht** nahe 1,0 liegen — nach dem Schubfachprinzip müssen mindestens
-zwei der vier Linien zufällig denselben Bit-Wert teilen, auch ganz ohne
-HGT (bei den obigen Läufen: "saubere" Regionen liegen im Schnitt bei ARI
-≈ 0,38–0,39). Aussagekräftig ist daher nicht der Absolutwert, sondern der
-**relative** Abstand: liegt die tatsächlich manipulierte Region klar unter
-dem Durchschnitt der übrigen Regionen? Das ist der Fall (0,17–0,26 vs.
-0,38–0,39) und wird über die Erkennungsrate ("korrekt als
-diskordanteste Region identifiziert") gemessen, nicht über einen
-absoluten Schwellenwert.
+**Important secondary methodological finding:** With 4 host lineages but
+only a binary (0/1) trait per region, the per-region ARI structurally
+**cannot** be close to 1.0 — by the pigeonhole principle, at least two of
+the four lineages must randomly share the same bit value, even with no
+HGT at all (in the runs above: "clean" regions average ARI ≈ 0.38–0.39).
+What is informative is therefore not the absolute value but the
+**relative** distance: is the actually manipulated region clearly below
+the average of the remaining regions? This is the case (0.17–0.26 vs.
+0.38–0.39) and is measured via the detection rate ("correctly identified
+as the most discordant region"), not via an absolute threshold.
 
-**Konsequenz:** Der Pro-Region-Test ist bei beiden getesteten Szenarien
-deutlich sensitiver als der aggregierte Ansatz, erreicht aber selbst bei
-den Dokument-eigenen Parametern (30 Regionen, nur 6 betroffene Isolate)
-nur 70 % Erkennungsrate — ebenfalls kein Selbstläufer. Für den echten
-POC-Lauf empfiehlt sich, `candidate_per_region_ari.tsv` als primäres
-Diagnosewerkzeug zu verwenden und `ari_summary.tsv` (aggregiert) nur
-ergänzend, nicht umgekehrt.
+**Consequence:** The per-region test is markedly more sensitive than the
+aggregated approach in both tested scenarios, but even with the
+document's own parameters (30 regions, only 6 affected isolates) reaches
+only a 70% detection rate — also no guaranteed win. For the real POC run,
+it is recommended to use `candidate_per_region_ari.tsv` as the primary
+diagnostic tool and `ari_summary.tsv` (aggregated) only as a supplement,
+not the other way around.
 
-## 2026-09-01 — Pro-Region-ARI operationalisiert: Klassifikation vs. reine Rangfolge
+## 2026-09-01 — Per-region ARI operationalized: classification vs. plain ranking
 
-**Entscheidung:** `classify_region_discordance()` in `cluster_and_score.py`
-macht aus dem rohen Pro-Region-ARI-Score eine tatsächliche Entscheidung
-pro Region (`discordant` / `concordant` / `uncertain`), über einen
-robusten modifizierten Z-Score (Median + MAD, nicht Mittelwert + Std —
-damit einzelne echte Ausreißer die "Normal"-Baseline nicht selbst
-verzerren). Ausgabe: `results/clustering/candidate_per_region_ari.tsv`
-bekommt eine `classification`-Spalte; Schwelle konfigurierbar über
+**Decision:** `classify_region_discordance()` in `cluster_and_score.py`
+turns the raw per-region ARI score into an actual per-region decision
+(`discordant` / `concordant` / `uncertain`), via a robust modified
+z-score (median + MAD, not mean + SD — so that individual genuine
+outliers do not themselves distort the "normal" baseline). Output:
+`results/clustering/candidate_per_region_ari.tsv` gets a
+`classification` column; the threshold is configurable via
 `config/parameters.yaml: clustering.discordance_z_threshold`.
 
-**Kalibrierung (Monte-Carlo, Standard-Szenario: 5 Kandidatenregionen, 30 %
-Empfänger, 20–30 Wiederholungen):**
+**Calibration (Monte Carlo, standard scenario: 5 candidate regions, 30%
+recipients, 20–30 repetitions):**
 
-| z-Schwelle | Sensitivität | Falsch-Positiv-Rate |
+| z-threshold | Sensitivity | False-positive rate |
 |---|---|---|
-| 0,3 | 56,7 % | 2,5 % |
-| 0,5 | 56,7–70,0 % | 2,5 % |
-| 0,7 | 40,0 % | 0,0 % |
-| 1,0 (ursprünglicher Default) | 36,7–45,0 % | 0,0 % |
+| 0.3 | 56.7% | 2.5% |
+| 0.5 | 56.7–70.0% | 2.5% |
+| 0.7 | 40.0% | 0.0% |
+| 1.0 (original default) | 36.7–45.0% | 0.0% |
 
-Default auf **z = 0,5** gesetzt (bestes gefundenes
-Sensitivität/Falsch-Positiv-Verhältnis).
+Default set to **z = 0.5** (best sensitivity/false-positive ratio
+found).
 
-**Wichtiger Befund:** Selbst mit kalibriertem Schwellenwert bleibt die
-Klassifikation (auf ~57–70 % Sensitivität) deutlich hinter der reinen
-Rangfolge-Methode zurück ("ist diese Region die niedrigst-bewertete von
-allen?", 95 % Erkennungsrate im selben Szenario). Grund: Bei nur ~5
-Kandidatenregionen pro Batch ist die Median-/MAD-Schätzung selbst
-statistisch instabil (kleine Stichprobe) — ein Absolut-Schwellenwert kann
-bei so wenigen Regionen nicht so zuverlässig kalibriert werden wie ein
-einfacher Rang-Vergleich.
+**Important finding:** Even with a calibrated threshold, the
+classification (at ~57–70% sensitivity) remains markedly behind the
+plain ranking method ("is this region the lowest-scoring of all?", 95%
+detection rate in the same scenario). Reason: with only ~5 candidate
+regions per batch, the median/MAD estimate is itself statistically
+unstable (small sample) — an absolute threshold cannot be calibrated as
+reliably with so few regions as a simple rank comparison.
 
-**Konsequenz für den echten POC-Lauf:** Bei den für einen POC realistisch
-kleinen Kandidatenzahlen (niedriger zweistelliger Bereich, laut
-Dokument-Erwartung) ist **Sortierung nach Pro-Region-ARI (aufsteigend)**
-das zuverlässigere Diagnosewerkzeug, nicht der feste
-Klassifikations-Schwellenwert. Die `classification`-Spalte bleibt als
-schnelle Grobfilterung mit sehr niedriger Falsch-Positiv-Rate nützlich,
-sollte aber nicht als alleinige Entscheidungsgrundlage dienen.
+**Consequence for the actual POC run:** Given the realistically small
+candidate counts expected for a POC (low double digits, per the
+document's expectation), **sorting by per-region ARI (ascending)** is
+the more reliable diagnostic tool, not the fixed classification
+threshold. The `classification` column remains useful as a fast, coarse
+filter with a very low false-positive rate, but should not serve as the
+sole basis for decisions.
 
-## 2026-09-01 — Drei Bugfixes beim ersten End-to-End-Lauf auf echten Daten
+## 2026-09-01 — Three bug fixes during the first end-to-end run on real data
 
-**Bug 1 (Pfad):** `workflow/rules/regions.smk` hatte
-`conda: "../envs/python.yaml"` (nur ein `../`), obwohl die Regel-Dateien
-unter `workflow/rules/` liegen und die Envs im Projekt-Root
-(`envs/python.yaml`) — nötig ist `"../../envs/python.yaml"`, wie in allen
-anderen `.smk`-Dateien. Der Lauf brach dadurch bei `core_marker_regions`
-mit `WorkflowError: Error recording metadata` ab, nachdem bereits alle 6
-Starfish-Läufe fertig waren. Behoben; die anderen drei `.smk`-Dateien
-hatten den korrekten Pfad bereits.
+**Bug 1 (path):** `workflow/rules/regions.smk` had
+`conda: "../envs/python.yaml"` (only one `../`), even though the rule
+files live under `workflow/rules/` and the envs are in the project root
+(`envs/python.yaml`) — what's needed is `"../../envs/python.yaml"`, as
+in all other `.smk` files. As a result, the run aborted at
+`core_marker_regions` with `WorkflowError: Error recording metadata`,
+after all 6 Starfish runs had already completed. Fixed; the other three
+`.smk` files already had the correct path.
 
-**Bug 2 (Ressourcen, OOM):** bwa-mem2 wurde beim Mapping von
-`TH3` durch den Linux-OOM-Killer beendet
-(`bwa-mem2.avx2` allein: 4,5 GB RSS). Die WSL2-VM war mit ihrem
-Default-Limit (50 % des Host-RAM = 7,5 GB von 16 GB) zu knapp bemessen —
-derselbe Grundtyp von Problem wie beim früheren BUSCO-OOM. Da der Host
-tatsächlich 16 GB RAM hat, wurde `C:\Users\flori\.wslconfig` neu angelegt
-(`memory=11GB`, `swap=4GB`) und WSL neu gestartet (`wsl --shutdown`).
-Zusätzlich bekamen `map_to_panel`, `map_longread_to_panel` und `fastp_qc`
-in `mapping.smk` jetzt einen expliziten `threads:`-Wert (vorher nur
-`params.threads`, d. h. Snakemake reservierte pro Job nur 1 Kern und hätte
-bei `--cores 6` mehrere 8-Thread-bwa-mem2-Prozesse gleichzeitig zulassen
-können — mit `threads:` werden sie stattdessen korrekt serialisiert).
+**Bug 2 (resources, OOM):** bwa-mem2 was killed by the Linux OOM killer
+while mapping `TH3` (`bwa-mem2.avx2` alone: 4.5 GB RSS). The WSL2 VM's
+default limit (50% of host RAM = 7.5 GB of 16 GB) was too tight for
+this — the same basic type of problem as the earlier BUSCO OOM. Since
+the host actually has 16 GB of RAM, `C:\Users\flori\.wslconfig` was
+newly created (`memory=11GB`, `swap=4GB`) and WSL restarted
+(`wsl --shutdown`). In addition, `map_to_panel`, `map_longread_to_panel`,
+and `fastp_qc` in `mapping.smk` now get an explicit `threads:` value
+(previously only `params.threads`, i.e., Snakemake reserved only 1 core
+per job and, at `--cores 6`, could have allowed several 8-thread
+bwa-mem2 processes to run simultaneously — with `threads:` they are now
+correctly serialized instead).
 
-**Bug 3 (fehlende NaN-Behandlung):** `cluster_and_score()` übergab die
-PAV-Matrix ungeprüft an `sklearn.decomposition.PCA`, die NaN-Werte
-("uncertain"-Calls) grundsätzlich ablehnt. Das fiel in den bisherigen
-Tests/synthetischen Validierungen nie auf, weil dort nur sauberes 0/1
-verwendet wurde — echte Coverage-Daten enthalten aber routinemäßig
-"uncertain"-Calls (mehrdeutige Breadth/Tiefe). Fix: Regionen, die für
-JEDE Isolat-Probe NaN sind, werden vor der PCA verworfen (keine
-Information); verbleibende NaNs werden mit dem Spaltenmittelwert
-(Präsenz-Häufigkeit über die anderen Isolate) imputiert — eine neutrale
-Standardbehandlung für fehlende genotypartige Calls. Test ergänzt
+**Bug 3 (missing NaN handling):** `cluster_and_score()` passed the PAV
+matrix to `sklearn.decomposition.PCA` unchecked, which categorically
+rejects NaN values ("uncertain" calls). This never surfaced in the
+previous tests/synthetic validations, since those used only clean 0/1
+data — but real coverage data routinely contains "uncertain" calls
+(ambiguous breadth/depth). Fix: regions that are NaN for EVERY isolate
+sample are dropped before the PCA (no information); remaining NaNs are
+imputed with the column mean (presence frequency across the other
+isolates) — a neutral default treatment for missing genotype-like calls.
+A test was added
 (`test_cluster_and_score_imputes_nan_instead_of_crashing`).
 
-## 2026-09-01 — Erster End-to-End-POC-Lauf auf echten Daten: Ergebnisse und Einschränkungen
+## 2026-09-01 — First end-to-end POC run on real data: results and limitations
 
-**Datengrundlage:** 6 Referenzgenome (70-15/Guy11 = Reis, B71 = Weizen,
-CD156 = Fingerhirse, US71 = Foxtail-Hirse, M_grisea = Fingerhirsegras als
-Schwestertaxon-Negativkontrolle), 5 Kurzread-Isolate (MZ5-1-6, E34 =
-Fingerhirse; TH3 = Reis; U167 = Fingerhirsegras; Py13.1.023 = Weizen) + 1
-Langread-Isolat (ZM1-2 = Weizen, Nanopore). 92 Starship/YR-Kandidatenregionen
-(Starfish `annotate`, alle 6 Referenzen erfolgreich annotiert, 12–18 YR-Loci
-pro Genom) + 120 Core-Marker-Fenster (20 pro Referenz) in
-`data/references/candidate_regions.bed`.
+**Data basis:** 6 reference genomes (70-15/Guy11 = rice, B71 = wheat,
+CD156 = finger millet, US71 = foxtail millet, M_grisea = finger-millet
+grass as a sister-taxon negative control), 5 short-read isolates
+(MZ5-1-6, E34 = finger millet; TH3 = rice; U167 = finger-millet grass;
+Py13.1.023 = wheat) + 1 long-read isolate (ZM1-2 = wheat, Nanopore). 92
+Starship/YR candidate regions (Starfish `annotate`, all 6 references
+successfully annotated, 12–18 YR loci per genome) + 120 core-marker
+windows (20 per reference) in `data/references/candidate_regions.bed`.
 
-**PAV-Calling-Ergebnis (`results/pav_calls/candidate_table.tsv`):**
+**PAV calling result (`results/pav_calls/candidate_table.tsv`):**
 
-| Region-Klasse | absent | present | uncertain |
+| Region class | absent | present | uncertain |
 |---|---|---|---|
 | candidate (Starship) | 415 | 55 | 82 |
 | core | 435 | 74 | 211 |
 
-**Clustering (`results/clustering/ari_summary.tsv`):** Aggregierter ARI
-für Core- UND Kandidaten-Matrix identisch bei 0,423 (k=4, n=6 Isolate) —
-bei nur 6 Isolaten und 4 Klassen ist die Zahl möglicher Partitionen so
-klein, dass ein Zusammentreffen wenig aussagekräftig ist; **diese Metrik
-ist bei der aktuellen POC-Stichprobengröße nicht belastbar** (siehe auch
-die früher dokumentierte generelle Schwäche des aggregierten ARI).
+**Clustering (`results/clustering/ari_summary.tsv`):** Aggregated ARI
+identical for both the core and the candidate matrix at 0.423 (k=4, n=6
+isolates) — with only 6 isolates and 4 classes, the number of possible
+partitions is so small that a coincidence carries little meaning; **this
+metric is not reliable at the current POC sample size** (see also the
+previously documented general weakness of aggregated ARI).
 
-**Pro-Region-ARI (`results/clustering/candidate_per_region_ari.tsv`):** 7
-von 30 auswertbaren Starship-Regionen als "discordant" eingestuft
-(z=0,5): `starship_B71_10`, `starship_CD156_3`, `starship_CD156_6`,
+**Per-region ARI (`results/clustering/candidate_per_region_ari.tsv`):** 7
+of 30 evaluable Starship regions classified as "discordant" (z=0.5):
+`starship_B71_10`, `starship_CD156_3`, `starship_CD156_6`,
 `starship_CD156_7`, `starship_CD156_12`, `starship_Guy11_3`,
-`starship_M_grisea_10`. Bei nur 6 Isolaten ist auch dieser Test statistisch
-sehr instabil (siehe frühere Kalibrierungsergebnisse bei n=40) — als
-Hinweisliste für gezielte manuelle Nachprüfung geeignet, nicht als
-Beleg.
+`starship_M_grisea_10`. With only 6 isolates, this test is also
+statistically very unstable (see the earlier calibration results at
+n=40) — suitable as a shortlist for targeted manual follow-up, not as
+evidence.
 
-**Cross-Lineage-Präsenz (händische Zusatzauswertung, nicht Teil der
-Pipeline):** 13 Fälle, in denen eine Starship-Kandidatenregion aus einem
-Referenzgenom einer ANDEREN Wirtslinie als der des Isolats als "present"
-markiert wurde (z. B. `E34`, Fingerhirse-Isolat, zeigt Präsenz für
-Starship-Loci aus `B71`/Weizen, `US71`/Foxtail-Hirse und
-`M_grisea`/Fingerhirsegras) — das wäre das erwartete Bild eines
-lineage-übergreifenden mobilen Elements, ist aber angesichts der
-Stichprobengröße als Hypothese, nicht als Nachweis zu behandeln. Bei den
-Core-Fenstern gibt es mit 34 Fällen sogar noch mehr Cross-Lineage-Präsenz,
-konzentriert vor allem auf `Py13.1.023` (21 von 34) — das deutet darauf
-hin, dass die aktuellen Core-Marker-Fenster (zufällig verteilte Fenster
-auf dem größten Contig, keine geprüften Single-Copy-Orthologen) echte,
-biologisch erwartete Konservierung zwischen Referenzen einfangen, nicht
-zuverlässig lineage-diagnostisch sind, und außerdem von
-Sequenziertiefe-Unterschieden zwischen Isolaten beeinflusst werden.
+**Cross-lineage presence (manual supplementary analysis, not part of the
+pipeline):** 13 cases in which a Starship candidate region from a
+reference genome of a DIFFERENT host lineage than the isolate's own was
+marked "present" (e.g., `E34`, a finger-millet isolate, shows presence
+for Starship loci from `B71`/wheat, `US71`/foxtail millet, and
+`M_grisea`/finger-millet grass) — this would be the expected picture of a
+cross-lineage mobile element, but given the sample size it should be
+treated as a hypothesis, not as proof. For the core windows there is
+even more cross-lineage presence, with 34 cases, concentrated mainly in
+`Py13.1.023` (21 of 34) — this suggests that the current core-marker
+windows (randomly distributed windows on the largest contig, not
+verified single-copy orthologs) capture genuine, biologically expected
+conservation between references, are not reliably lineage-diagnostic,
+and are additionally influenced by differences in sequencing depth
+between isolates.
 
-**Wichtigste Dateneinschränkung:** `U167` (Fingerhirsegras) hat in KEINER
-der 212 Regionen (weder core noch candidate) einen "present"-Call — alle
-92 Kandidaten- und 120 Core-Calls sind "absent" oder "uncertain", auch für
-Regionen aus seiner eigenen Referenzlinie (`M_grisea`). Die Rohdaten für
-`U167` (SRR14705972) sind mit 34 + 37 MB komprimierter FASTQ auffällig
-klein gegenüber den anderen Isolaten (250 MB – 1,2 GB) — die
-Sequenziertiefe reicht für dieses Isolat vermutlich grundsätzlich nicht
-aus, um gegen das 6-Genom-Panel verlässliche Presence-Calls zu erzeugen.
-`MZ5-1-6` zeigt ein ähnliches, wenn auch weniger extremes Muster (0
-"present" bei den Kandidatenregionen). **Für eine belastbare Aussage
-braucht es entweder mehr Sequenziertiefe für diese Isolate oder ihren
-Ausschluss aus der PAV-basierten Auswertung.**
+**Most important data limitation:** `U167` (finger-millet grass) has NO
+"present" call in any of the 212 regions (neither core nor candidate) —
+all 92 candidate and 120 core calls are "absent" or "uncertain", even for
+regions from its own reference lineage (`M_grisea`). The raw data for
+`U167` (SRR14705972), at 34 + 37 MB of compressed FASTQ, are noticeably
+small compared to the other isolates (250 MB – 1.2 GB) — the sequencing
+depth for this isolate is presumably fundamentally insufficient to
+produce reliable presence calls against the 6-genome panel. `MZ5-1-6`
+shows a similar, if less extreme, pattern (0 "present" calls for the
+candidate regions). **A reliable statement requires either more
+sequencing depth for these isolates or their exclusion from the
+PAV-based analysis.**
 
-**Gesamtfazit:** Die Pipeline läuft jetzt vollständig durch (QC → Mapping
-→ PAV → Clustering) und liefert reale, interpretierbare Zwischenergebnisse
-— aber bei n=6 Isolaten und ungleicher Sequenziertiefe sind weder der
-aggregierte ARI noch die Pro-Region-Diskordanzliste als eigenständiger
-Beweis für HGT zu werten. Für die Machbarkeitsstudie ist das erwartbar
-(POC-Zweck: Pipeline-Funktionsfähigkeit zeigen, nicht bereits
-Signifikanz); für einen Förderantrag sollte explizit benannt werden, dass
-die Stichprobengröße und Tiefenunterschiede aktuell die statistische
-Aussagekraft begrenzen.
+**Overall conclusion:** The pipeline now runs completely end to end (QC →
+mapping → PAV → clustering) and yields real, interpretable intermediate
+results — but at n=6 isolates and uneven sequencing depth, neither the
+aggregated ARI nor the per-region discordance list should be treated as
+standalone evidence for HGT. This is expected for the feasibility study
+(POC purpose: demonstrate pipeline functionality, not significance
+already); for a funding application it should be explicitly stated that
+sample size and depth differences currently limit statistical power.
 
-## 2026-09-01 — R-Umgebung eingerichtet, Power-Analyse ausgeführt — Ergebnis: 0 % Power in allen drei Szenarien
+## 2026-09-01 — R environment set up, power analysis run — result: 0% power in all three scenarios
 
-**Vorgeschichte:** `power_analysis/glmm_power_sim.R` wurde beim
-Projekt-Reset 1:1 aus dem POC-Dokument übernommen, aber nicht ausgeführt
-(R war nicht installiert). `envs/r.yaml` wurde jetzt via
-`conda env create -f envs/r.yaml` eingerichtet (r-base 4.3.3, glmmTMB
-1.1.9, simr 1.0.7, lme4 1.1-37) und das Skript zum ersten Mal ausgeführt.
+**Background:** `power_analysis/glmm_power_sim.R` was carried over
+verbatim from the POC document during the project reset, but never
+executed (R was not installed). `envs/r.yaml` was now set up via
+`conda env create -f envs/r.yaml` (r-base 4.3.3, glmmTMB 1.1.9, simr
+1.0.7, lme4 1.1-37) and the script was run for the first time.
 
-**Bug 1 (Druckausgabe):** `summary(powerSim(...))` liefert ein
-`data.frame` mit den Spalten `successes/trials/mean/lower/upper` — **nicht**
-`Power`. Das Original-Snippet griff auf `summary(x)$Power` zu, was immer
-`NULL` ergab; `sprintf()` mit einem `NULL`-Argument liefert in R
-`character(0)`, wodurch die gesamte Ausgabeschleife lautlos NICHTS
-druckte (kein Fehler, keine Zeile) — der erste Lauf sah dadurch fälschlich
-nach einem sauberen, aber leeren Erfolg aus. Behoben: `s$mean` (× 100 für
-Prozent), `s$successes`/`s$trials` mit ausgegeben.
+**Bug 1 (print output):** `summary(powerSim(...))` returns a
+`data.frame` with columns `successes/trials/mean/lower/upper` — **not**
+`Power`. The original snippet accessed `summary(x)$Power`, which always
+returned `NULL`; `sprintf()` with a `NULL` argument returns
+`character(0)` in R, causing the entire output loop to silently print
+NOTHING (no error, no line) — the first run therefore falsely looked
+like a clean but empty success. Fixed: now prints `s$mean` (× 100 for
+percent), along with `s$successes`/`s$trials`.
 
-**Bug 2 (methodisch, tiefer):** `powerSim()` wird im Original-Snippet
-aufgerufen, ohne den zu testenden Effekt (`effect_rr`) explizit im Modell
-zu verankern — es wird einfach der aus EINEM zufällig simulierten
-Datensatz geschätzte Koeffizient als Testziel verwendet. `simr` selbst
-kennzeichnet das explizit als **"observed power"-Berechnung**
-(`observedPowerWarning`) — ein bekannt verzerrtes, hochvarianzbehaftetes
-Verfahren, kein echter Simulations-Power-Test für einen SPEZIFIZIERTEN
-Effekt. Der eigentlich korrekte `simr`-Workflow (`fixef(fit) <- ...`, um
-den Zieleffekt vor der Simulation explizit zu setzen) wurde getestet und
-schlägt an einer echten Kompatibilitätslücke fehl: `simr` 1.0.7s
-`fixef<-`-Methode dispatcht auf einen S4-Generic, der glmmTMB-Objekte
-nicht kennt (`Error in getClass(cl): "glmmTMB" is not a defined class`).
-Ein sauberer Fix würde vermutlich einen Wechsel auf
-`lme4::glmer`/`glmer.nb` erfordern (im POC-Dokument selbst als Alternative
-genannt) — das wurde in dieser Sitzung nicht umgesetzt (Aufwand/Scope).
-Nur der Druckfehler wurde behoben; das Ergebnis unten ist die
-"observed power"-Näherung, keine rigorose Power-Analyse.
+**Bug 2 (methodological, deeper):** In the original snippet, `powerSim()`
+is called without explicitly anchoring the effect to be tested
+(`effect_rr`) in the model — it simply uses the coefficient estimated
+from ONE randomly simulated dataset as the test target. `simr` itself
+explicitly flags this as an **"observed power" calculation**
+(`observedPowerWarning`) — a known biased, high-variance procedure, not
+a genuine simulation-based power test for a SPECIFIED effect. The
+actually correct `simr` workflow (`fixef(fit) <- ...`, to explicitly set
+the target effect before simulation) was tested and fails on a genuine
+compatibility gap: `simr` 1.0.7's `fixef<-` method dispatches to an S4
+generic that does not recognize glmmTMB objects (`Error in
+getClass(cl): "glmmTMB" is not a defined class`). A clean fix would
+presumably require switching to `lme4::glmer`/`glmer.nb` (named as an
+alternative in the POC document itself) — this was not implemented in
+this session (effort/scope). Only the print bug was fixed; the result
+below is the "observed power" approximation, not a rigorous power
+analysis.
 
-**Ergebnis (200 Simulationen je Szenario):**
+**Result (200 simulations per scenario):**
 
-| Szenario | Felder×Jahre×Isolate/Feld-Jahr | Power (Donor×Starship-Interaktion) | Erfolgreiche Sims |
+| Scenario | Fields×years×isolates/field-year | Power (donor×Starship interaction) | Successful sims |
 |---|---|---|---|
-| Konservativ | 5×2×10 (100 Isolate) | **0,0 % (0,0–1,8 %)** | 0/200 |
-| Moderat | 10×2×20 (400 Isolate) | **0,0 % (0,0–1,8 %)** | 0/200 |
-| Optimistisch | 15×3×30 (1.350 Isolate) | **0,0 % (0,0–1,8 %)** | 0/200 |
+| Conservative | 5×2×10 (100 isolates) | **0.0% (0.0–1.8%)** | 0/200 |
+| Moderate | 10×2×20 (400 isolates) | **0.0% (0.0–1.8%)** | 0/200 |
+| Optimistic | 15×3×30 (1,350 isolates) | **0.0% (0.0–1.8%)** | 0/200 |
 
-Zusätzlich: Im "konservativ"-Szenario wird der Interaktionsterm
-`donor:vectorStarship` selbst — also genau der zu testende Effekt — wegen
-Rangdefizienz aus dem Modell entfernt (`dropping columns from
-rank-deficient conditional model`). Das Design (nur 5×2=10 Feld-Jahr-
-Zellen) ist zu dünn besetzt, um die volle Fixed-Effects-Struktur
-(`donor*vector + recipient*vector`, 9 Koeffizienten) überhaupt zu
-schätzen. Im moderaten/optimistischen Szenario bleibt der Zielterm zwar
-im Modell, die Power ist aber trotzdem exakt 0 % über alle 200
-Wiederholungen (0 von 200 Simulationen ergaben ein signifikantes
-Ergebnis) — deutlich unter dem, was allein durch Zufallsschwankung zu
-erwarten wäre.
+In addition: in the "conservative" scenario, the interaction term
+`donor:vectorStarship` itself — i.e., exactly the effect to be tested —
+is dropped from the model due to rank deficiency (`dropping columns from
+rank-deficient conditional model`). The design (only 5×2=10 field-year
+cells) is too sparse to even estimate the full fixed-effects structure
+(`donor*vector + recipient*vector`, 9 coefficients). In the
+moderate/optimistic scenario the target term does remain in the model,
+but power is nevertheless exactly 0% across all 200 repetitions (0 of
+200 simulations yielded a significant result) — well below what would be
+expected from random variation alone.
 
-**Einordnung:** Wegen Bug 2 (observed power statt spezifizierter Effekt)
-ist die exakte Zahl "0,0 %" nicht als präzise Powerschätzung zu
-interpretieren, sondern als starkes, reproduzierbares Warnsignal: Die
-Donor×Vektor-Interaktion ist mit dem aktuellen Modell/Design bei KEINER
-der drei POC-Stichprobengrößen zuverlässig nachweisbar — selbst nicht im
-"optimistischen" 1.350-Isolate-Szenario. Das deckt sich mit der im
-POC-Dokument selbst formulierten Faustregel ("Interaktionseffekte sind
-bei so wenigen Clustern typischerweise deutlich schwerer zu erkennen als
-Haupteffekte"), fällt hier aber schärfer aus als das Dokument selbst
-erwartet hätte.
+**Interpretation:** Because of Bug 2 (observed power instead of a
+specified effect), the exact figure "0.0%" should not be interpreted as
+a precise power estimate, but as a strong, reproducible warning signal:
+the donor×vector interaction is not reliably detectable with the current
+model/design at ANY of the three POC sample sizes — not even in the
+"optimistic" 1,350-isolate scenario. This is consistent with the rule of
+thumb stated in the POC document itself ("interaction effects are
+typically markedly harder to detect than main effects with so few
+clusters"), but turns out more pronounced here than the document itself
+would have anticipated.
 
-**Konsequenz / Empfehlung:**
-1. Interaktion vorerst nur explorativ behandeln, nicht als konfirmatorische
-   Haupthypothese (genau der im Exposé selbst vorgesehene Fallback:
-   "stepwise, beginning with simple models").
-2. Für eine belastbare Zahl vor Antragstellung: Modell auf
-   `lme4::glmer`/`glmer.nb` umstellen (dort funktioniert `simr`s
-   `fixef<-` nativ) und die Power-Analyse mit einem explizit
-   spezifizierten Zieleffekt wiederholen.
-3. Die Feld×Jahr-Zellenzahl ist der eigentliche Flaschenhals (nicht die
-   Isolatzahl pro Zelle) — mehr Felder/Jahre bringen hier vermutlich mehr
-   als mehr Isolate pro Feld-Jahr. Das spricht für eine Ausweitung der
-   räumlich-zeitlichen Diversität der Stichprobe, nicht nur ihrer Größe.
-4. Sobald reale HGT-Kandidatenraten aus Abschnitt 1–3 vorliegen,
-   `baseline_rate`/`effect_rr` durch beobachtete Werte ersetzen und
-   wiederholen — die aktuellen Platzhalterwerte sind Annahmen, keine
-   Beobachtungen.
+**Consequence/recommendation:**
+1. Treat the interaction as exploratory only for now, not as a
+   confirmatory main hypothesis (exactly the fallback already envisioned
+   in the proposal itself: "stepwise, beginning with simple models").
+2. For a reliable figure before applying for funding: switch the model
+   to `lme4::glmer`/`glmer.nb` (where `simr`'s `fixef<-` works natively)
+   and repeat the power analysis with an explicitly specified target
+   effect.
+3. The number of field×year cells is the actual bottleneck (not the
+   number of isolates per cell) — more fields/years would presumably
+   help more here than more isolates per field-year. This argues for
+   expanding the spatial-temporal diversity of the sample, not just its
+   size.
+4. Once real HGT candidate rates from Sections 1–3 are available, replace
+   `baseline_rate`/`effect_rr` with observed values and repeat — the
+   current placeholder values are assumptions, not observations.
 
-## 2026-09-01 — Globales Screening: Erweiterungspotenzial aus dem SRA-Katalog
+## 2026-09-01 — Global screening: expansion potential from the SRA catalog
 
-**Befund:** Die 15 größten BioProjects im bereits katalogisierten
-SRA-Illumina-Datensatz (`data/ncbi_m_oryzae_sra_wgs_illumina.tsv`, 1.754
-Läufe) stellen zusammen 71 % aller Läufe. Eine Titel-Stichprobe dieser
-Top-15 zeigt, dass mehrere bereits publizierte **populationsgenomische
-Multi-Standort-Studien** sind, nicht verstreute Einzeleinsendungen:
-SRP592876 (244 Läufe, Fingerhirse-Isolate Ostafrika), SRP132141 (88,
+**Finding:** The 15 largest BioProjects in the already cataloged
+SRA Illumina dataset (`data/ncbi_m_oryzae_sra_wgs_illumina.tsv`, 1,754
+runs) together account for 71% of all runs. A title sample of these
+top 15 shows that several are already-published **multi-site population
+genomics studies**, not scattered individual submissions: SRP592876
+(244 runs, finger-millet isolates East Africa), SRP132141 (88,
 "Population Genomic Analysis of the Rice Blast Fungus... Expansion of
-Three Main Clades"), SRP288432 (48, Populationsgenetik Subsahara-Afrika),
-ERP109496 (55, "verschiedene Standorte in Afrika"), SRP076116 (43,
-Weizenbrand Brasilien/B71-Linie).
+Three Main Clades"), SRP288432 (48, population genetics sub-Saharan
+Africa), ERP109496 (55, "various locations in Africa"), SRP076116 (43,
+wheat blast Brazil/B71 lineage).
 
-**Konsequenz:** Für Abschnitt 3 (PCA/ARI-Screening) lässt sich die
-Wirtslinien-Diversität und Isolatzahl direkt aus bereits publizierten
-Daten massiv erweitern, ohne neue Feldarbeit. Rechnerisch/technisch kein
-Hindernis (n=50 ≈ 5 h Mapping, ≈ 66 GB Speicher, beides auf dem
-aktuellen Rechner machbar). Statistischer Referenzpunkt für "ab welcher
-Stichprobe realistische Ergebnisse zu erwarten sind": die eigene
-synthetische Validierung (`validate_clustering_synthetic.py`, Default
-n=40 = 4 Linien × 10 Isolate) erreichte dort 70–95 % Erkennungsrate für
-die Pro-Region-Methode — bei n=6 (aktueller POC-Lauf) strukturell nicht
-erreichbar. Faustregel: **mindestens ~8–10 Isolate pro Wirtslinie**.
+**Consequence:** For Section 3 (PCA/ARI screening), host-lineage
+diversity and isolate count can be massively expanded directly from
+already-published data, without new fieldwork. Computationally/
+technically no obstacle (n=50 ≈ 5 h mapping, ≈ 66 GB storage, both
+feasible on the current machine). Statistical reference point for "at
+what sample size realistic results can be expected": the project's own
+synthetic validation (`validate_clustering_synthetic.py`, default n=40 =
+4 lineages × 10 isolates) achieved a 70–95% detection rate there for the
+per-region method — structurally unreachable at n=6 (current POC run).
+Rule of thumb: **at least ~8–10 isolates per host lineage**.
 
-**Wichtige Einschränkung:** Das globale Screening verbessert nur
-Abschnitt 3, nicht automatisch die GLMM-Power aus Abschnitt 4 (siehe
-oben) — dafür fehlt den meisten SRA-Einträgen die nötige
-Feld/Jahr-Struktur. Ob die oben genannten Multi-Standort-Studien genug
-Geo-/Zeit-Metadaten in ihren Supplements für eine Annäherung an das
-Feld/Jahr-Design liefern, ist ein offener Prüfschritt.
+**Important limitation:** The global screening only improves Section 3,
+not automatically the GLMM power from Section 4 (see above) — most SRA
+entries lack the necessary field/year structure for that. Whether the
+multi-site studies named above provide enough geo/time metadata in their
+supplements to approximate the field/year design is an open check.
 
-## 2026-09-01 — Pivot: neues Workflow-Dokument (`POC_HGT_Starships_Workflow.md`), alte Kurzread-Coverage-Pipeline entfernt
+## 2026-09-01 — Pivot: new workflow document (`POC_HGT_Starships_Workflow.md`), old short-read coverage pipeline removed
 
-**Entscheidung:** Der Nutzer hat ein neues, deutlich umfassenderes
-Workflow-Dokument bereitgestellt
-(`Dokumentation/POC_HGT_Starships_Workflow.md`, ursprünglich
-`C:\Users\flori\Downloads\POC_HGT_Starships_Workflow.md`) und angewiesen,
-alles bisher Erstellte zu entfernen, was unter dem neuen Ansatz nicht mehr
-gebraucht wird. Das alte Kurzread-Coverage-Pipeline-Setup (`workflow/`,
-`config/`, `power_analysis/`, alte `tests/`, `data/references/panel_manifest.tsv`
-und `candidate_regions.bed`, die bwa-mem2-Indexdateien) wurde entfernt.
+**Decision:** The user provided a new, considerably more comprehensive
+workflow document
+(`Documentation/POC_HGT_Starships_Workflow.md`, originally
+`C:\Users\flori\Downloads\POC_HGT_Starships_Workflow.md`) and instructed
+removal of everything previously built that is no longer needed under
+the new approach. The old short-read coverage pipeline setup (`workflow/`,
+`config/`, `power_analysis/`, old `tests/`, `data/references/panel_manifest.tsv`
+and `candidate_regions.bed`, the bwa-mem2 index files) was removed.
 
-**Was sich inhaltlich ändert:** Das neue Dokument ersetzt den bisherigen
-Ansatz (Kurzread-Mapping gegen ein kleines 6-Genom-Panel + Coverage-PAV +
-PCA/ARI-Clustering) durch einen 8-Phasen-Workflow, der auf einem größeren
-(20–30 Isolate), überwiegend Long-Read-assemblierten und einheitlich
-annotierten Referenzpanel aufbaut: Assembly/QC (BUSCO, BlobTools) →
-Annotation/Repeat-Masking (funannotate/BRAKER, RepeatModeler/Masker) →
-Starship-Katalog (weiterhin `starfish`) → Pangenom-PAV (Panaroo/PIRATE/
-Roary + Alignment-basierte akzessorische Regionen) → **Sättigungs-/
-Rarefaktionsanalyse als Kernstück des POC** (Subsampling-Kurve: ab welcher
-Panelgröße flacht die Kandidatenentdeckung ab?) → Validierung (Leave-one-out
-+ echte Kurzread-Testisolate) → phylogenetische Inkongruenz (Core-Baum vs.
-Starship-Gen-Baum) → GLMM-Stichproben-/Modellkomplexitäts-Simulation (neu
-gerahmt: klonlinienbasierte simulierte Phylogenien statt Feld/Jahr-Design)
-→ Synthese/Go-No-Go-Bericht.
+**What changes substantively:** The new document replaces the previous
+approach (short-read mapping against a small 6-genome panel + coverage
+PAV + PCA/ARI clustering) with an 8-phase workflow built on a larger
+(20–30 isolates), predominantly long-read-assembled and uniformly
+annotated reference panel: assembly/QC (BUSCO, BlobTools) →
+annotation/repeat-masking (funannotate/BRAKER, RepeatModeler/Masker) →
+Starship catalog (still `starfish`) → pangenome PAV (Panaroo/PIRATE/
+Roary + alignment-based accessory regions) → **saturation/rarefaction
+analysis as the core piece of the POC** (subsampling curve: at what
+panel size does candidate discovery plateau?) → validation (leave-one-out
++ real short-read test isolates) → phylogenetic incongruence (core tree
+vs. Starship gene tree) → GLMM sample-size/model-complexity simulation
+(newly reframed: clonal-lineage-based simulated phylogenies instead of a
+field/year design) → synthesis/go-no-go report.
 
-**Was erhalten blieb (siehe README.md für Details):**
-- Git-Historie (Checkpoint-Commit vor der Bereinigung: alle entfernten
-  Dateien weiterhin über `git log`/`git show` abrufbar)
-- `Dokumentation/` (alle bisherigen Planungsnotizen + das neue Dokument)
-- `assemblies/` (6 bereits heruntergeladene Referenzgenome — Startpunkt für
-  das größere 20–30-Genom-Panel aus Phase 1)
-- `data/isolates_poc/` (5 Kurzread- + 1 Langread-Testisolat, bereits
-  heruntergeladen und QC-geprüft — direkt nutzbar für Phase 5)
-- Alle NCBI-Kataloge in `data/` und `input/metadata/`
-- `envs/starfish.yaml` (Starfish wird in Phase 2 unverändert weiter
-  gebraucht); `envs/mapping.yaml`/`python.yaml` als generische
-  Werkzeug-Bausteine (minimap2 wird in Phase 3 für Alignment-basierte
-  PAV-Detektion erneut gebraucht)
+**What was preserved (see README.md for details):**
+- Git history (checkpoint commit before the cleanup: all removed files
+  remain retrievable via `git log`/`git show`)
+- `Documentation/` (all previous planning notes + the new document)
+- `assemblies/` (6 already downloaded reference genomes — starting point
+  for the larger 20–30-genome panel from Phase 1)
+- `data/isolates_poc/` (5 short-read + 1 long-read test isolate, already
+  downloaded and QC-checked — directly usable for Phase 5)
+- All NCBI catalogs in `data/` and `input/metadata/`
+- `envs/starfish.yaml` (Starfish is still needed unchanged in Phase 2);
+  `envs/mapping.yaml`/`python.yaml` as generic tool building blocks
+  (minimap2 is needed again in Phase 3 for alignment-based PAV
+  detection)
 
-**Neu angelegt:** `poc_hgt_starships/{00_data...09_report}/` mit
-Phasen-READMEs (Input/Output/Tools je Phase, aus dem neuen Dokument
-übernommen).
+**Newly created:** `poc_hgt_starships/{00_data...09_report}/` with
+per-phase READMEs (input/output/tools per phase, adopted from the new
+document).
 
-**Bewusst zurückgestellt:** Phase 7 (Stichproben-/GLMM-Simulation) — auf
-expliziten Nutzerwunsch ("lass das GLMM erstmal außen vor") nicht jetzt
-implementiert, obwohl das neue Dokument sie vorsieht. Die frühere
-Analyse zum alten Feld/Jahr-GLMM (siehe Eintrag oben, 0 %-Power-Befund)
-bleibt als Hintergrundwissen dokumentiert, ist aber für das neu gerahmte
-Phase-7-Modell (klonlinienbasierte Simulation) nicht direkt übertragbar.
+**Deliberately deferred:** Phase 7 (sample-size/GLMM simulation) — not
+implemented now, per explicit user request ("leave the GLMM aside for
+now"), even though the new document calls for it. The earlier analysis
+of the old field/year GLMM (see entry above, the 0% power finding)
+remains documented as background knowledge but does not directly carry
+over to the newly reframed Phase 7 model (clonal-lineage-based
+simulation).
 
-**Nächster Schritt:** Phase 1 (`poc_hgt_starships/00_data/`) — Kuration
-des 20–30-Isolat-Panels aus den bereits vorhandenen NCBI-Long-Read-
-Assembly-Katalogen (`data/ncbi_m_oryzae_longread_candidates*.tsv`,
+**Next step:** Phase 1 (`poc_hgt_starships/00_data/`) — curating the
+20–30-isolate panel from the already existing NCBI long-read assembly
+catalogs (`data/ncbi_m_oryzae_longread_candidates*.tsv`,
 `ncbi_m_oryzae_longread_highquality.tsv`, `ncbi_m_oryzae_sra_wgs_longread.tsv`),
-mit Fokus auf maximale Klonlinien-/Wirtsdiversität.
+focused on maximizing clonal-lineage/host diversity.
 
-## 2026-09-02 — Vollständiger NCBI-Assembly-Katalog (605 Genome) via Datasets REST API
+## 2026-09-02 — Complete NCBI assembly catalog (605 genomes) via Datasets REST API
 
-**Entscheidung:** Statt der bisherigen ~46-Einträge-Assembly-Liste
-(`data/ncbi_m_oryzae_assemblies.tsv`, älterer, unvollständiger Pull) wurde
-ein vollständiger Neuabruf über die NCBI Datasets REST API v2
+**Decision:** Instead of the previous ~46-entry assembly list
+(`data/ncbi_m_oryzae_assemblies.tsv`, an older, incomplete pull), a
+complete re-fetch was performed via the NCBI Datasets REST API v2
 (`https://api.ncbi.nlm.nih.gov/datasets/v2/genome/taxon/318829/dataset_report`,
-txid 318829 deckt sowohl "Pyricularia oryzae" als auch das taxonomische
-Synonym "Magnaporthe oryzae" ab) durchgeführt: **605 Assemblies**, in
-einem einzigen Request (page_size=1000) vollständig abgerufen. Ergebnis in
+txid 318829 covers both "Pyricularia oryzae" and its taxonomic synonym
+"Magnaporthe oryzae"): **605 assemblies**, retrieved in full in a single
+request (page_size=1000). Result in
 `poc_hgt_starships/00_data/ncbi_pyricularia_oryzae_assemblies_full.tsv`
-(27 Spalten: Accession, Organismus, Stamm, Assembly-Level, `sequencing_tech`
-— direkt aus der API, keine Heuristik nötig —, BioSample-Host/-Isolationsquelle/
--Geo/-Sammeldatum, Contig-/Scaffold-N50/-L50, Chromosomenzahl, GC%).
+(27 columns: accession, organism, strain, assembly level,
+`sequencing_tech` — directly from the API, no heuristic needed —,
+BioSample host/isolation source/geo/collection date, contig/scaffold
+N50/L50, chromosome count, GC%).
 
-**Warum die Datasets-API statt E-Utilities:** Die Datasets-API liefert
-`assembly_stats` (N50 etc.) UND `assembly_info.sequencing_tech` UND
-eingebettete BioSample-Attribute in einem einzigen strukturierten
-JSON-Response pro Assembly — bei E-Utilities (esummary) hätte das
-mindestens 3 getrennte Abfragen pro Assembly gebraucht (Assembly-Summary,
-BioSample-Summary, ggf. Assembly-Stats-Report-Datei).
+**Why the Datasets API instead of E-Utilities:** The Datasets API
+returns `assembly_stats` (N50 etc.) AND `assembly_info.sequencing_tech`
+AND embedded BioSample attributes in a single structured JSON response
+per assembly — with E-Utilities (esummary) this would have required at
+least 3 separate queries per assembly (assembly summary, BioSample
+summary, possibly the assembly-stats report file).
 
-**Kernbefunde (Details: `poc_hgt_starships/00_data/dataset_summary.md`):**
-- **Speicher:** 24,2 GB unkomprimierte FASTA-Summe (605 Genome à
-  35–49 Mb, Median 39,9 Mb); ≈ 6,1 GB gzip-komprimiert.
-- **Host-Diversität:** 29 normalisierte Kategorien nach
-  Tippfehler-/Synonym-Bereinigung (`host_diversity_summary.tsv`);
-  dominiert von *Oryza sativa* (275), *Triticum aestivum* (59),
-  *Eleusine* spp. (41), *Urochloa* spp. (19), *Lolium* spp. (16);
-  **27 % (164/605) ohne Host-Attribut im BioSample-Datensatz.**
-- **Assembly-Level/Contig-Größe:** nur 14 "Complete Genome" (2,3 %) + 42
-  "Chromosome"-Level (6,9 %) — 66 % (398) nur Scaffold-Level mit
-  Contig-N50-Median von nur 0,06 Mb.
-- **Kein explizit T2T-geflaggtes Assembly** (0 von 605). 14 Assemblies
-  sind "gapless chromosome-level" (Contig-Zahl = Chromosomenzahl) — ein
-  Näherungskriterium für T2T-Qualität, aber ohne verifizierte
-  Telomer-Repeats an beiden Enden, daher nicht mit echtem T2T
-  gleichzusetzen.
-- **Datentyp:** 84 % Short-Read-basiert (508), 11,6 % Long-Read (70),
-  4 % Hybrid (24), Rest Sanger/historisch. Erwarteter Zusammenhang
-  bestätigt: Complete-Genome-Level ausschließlich Long-Read/Hybrid,
-  Scaffold-Level fast ausschließlich Short-Read.
+**Key findings (details: `poc_hgt_starships/00_data/dataset_summary.md`):**
+- **Storage:** 24.2 GB total uncompressed FASTA (605 genomes at
+  35–49 Mb, median 39.9 Mb); ≈ 6.1 GB gzip-compressed.
+- **Host diversity:** 29 normalized categories after typo/synonym
+  cleanup (`host_diversity_summary.tsv`); dominated by *Oryza sativa*
+  (275), *Triticum aestivum* (59), *Eleusine* spp. (41), *Urochloa* spp.
+  (19), *Lolium* spp. (16); **27% (164/605) lack a host attribute in
+  the BioSample record.**
+- **Assembly level/contig size:** only 14 "Complete Genome" (2.3%) + 42
+  "Chromosome"-level (6.9%) — 66% (398) only scaffold-level with a
+  contig N50 median of just 0.06 Mb.
+- **No assembly explicitly flagged as T2T** (0 of 605). 14 assemblies
+  are "gapless chromosome-level" (contig count = chromosome count) — an
+  approximate criterion for T2T quality, but without verified telomere
+  repeats at both ends, so not equivalent to genuine T2T.
+- **Data type:** 84% short-read-based (508), 11.6% long-read (70), 4%
+  hybrid (24), the rest Sanger/historical. Expected relationship
+  confirmed: Complete-Genome level is exclusively long-read/hybrid,
+  scaffold level almost exclusively short-read.
 
-**Konsequenz für Phase 1:** Von 605 Assemblies kommen nur die 56
-Complete-Genome-/Chromosome-Level-Einträge realistisch als
-Referenzpanel-Kandidaten in Frage (Rest zu fragmentiert für
-Starship-Boundary-Calling, siehe Dokument-Vorgabe "Repeat-Masking
-essenziell für saubere Boundary-Calls" — auf Scaffold-Level mit
-Contig-N50 ~60 kb sind Starship-Grenzen kaum sauber bestimmbar). Von
-diesen 56 sind wiederum nur die mit Host-Attribut UND ausreichender
-Klonlinien-Diversität für die 20–30-Isolat-Zielgröße relevant — noch zu
-filtern.
+**Consequence for Phase 1:** Of 605 assemblies, only the 56
+Complete-Genome/Chromosome-level entries are realistic candidates for
+the reference panel (the rest too fragmented for Starship boundary
+calling, per the document's stipulation that "repeat-masking is
+essential for clean boundary calls" — at scaffold level with a contig
+N50 of ~60 kb, Starship boundaries can hardly be determined cleanly).
+Of these 56, in turn, only those with a host attribute AND sufficient
+clonal-lineage diversity are relevant for the 20–30-isolate target size
+— still to be filtered.
 
-## 2026-09-02 — Zweiter Pivot: `multireferenzpanel_pav_workflow.md`, eigenes Projekt `magnaporthe_multiref_pav/`
+## 2026-09-02 — Second pivot: `multireference_panel_pav_workflow.md`, dedicated project `magnaporthe_multiref_pav/`
 
-**Entscheidung:** Der Nutzer hat ein drittes, noch spezifischeres
-Workflow-Dokument bereitgestellt
-(`Dokumentation/multireferenzpanel_pav_workflow.md`, 19 Abschnitte) und
-angewiesen, dessen Arbeitsschritte strikt zu befolgen und dafür eine
-eigene Ordnerstruktur zu verwenden. Anders als beim ersten Pivot (siehe
-oben) wurde NICHTS aus `poc_hgt_starships/` entfernt — das neue Dokument
-ist eine sehr viel konkretere Ausarbeitung speziell des
-Multireferenzpanel-/PAV-Teils (deckungsgleich mit
+**Decision:** The user provided a third, even more specific workflow
+document (`Documentation/multireference_panel_pav_workflow.md`, 19
+sections) and instructed that its steps be followed strictly, using a
+dedicated folder structure for it. Unlike the first pivot (see above),
+NOTHING was removed from `poc_hgt_starships/` — the new document is a
+much more concrete elaboration specifically of the multi-reference-panel/
+PAV part (congruent with
 `poc_hgt_starships/{01_assembly_qc,03_starship_calls,04_pav_matrix}`),
-nicht ein Ersatz für den gesamten 8-Phasen-Plan. Neues, eigenständiges
-Projektverzeichnis `magnaporthe_multiref_pav/` exakt nach der in
-Abschnitt 4 des Dokuments vorgegebenen Struktur angelegt
-(`config/`, `data/{references,annotations,longreads,resources}/`,
-`envs/`, `workflow/{rules,scripts}/`, `results/`, `logs/`).
+not a replacement for the entire 8-phase plan. A new, standalone project
+directory `magnaporthe_multiref_pav/` was created exactly following the
+structure specified in Section 4 of the document (`config/`,
+`data/{references,annotations,longreads,resources}/`, `envs/`,
+`workflow/{rules,scripts}/`, `results/`, `logs/`).
 
-**14-Genom-Referenzpanel identifiziert und heruntergeladen:** Die im
-Dokument geforderten "14 vollständigen Genomassemblies" entsprechen
-exakt den 14 "Complete Genome"-Einträgen aus dem tags zuvor erhobenen
-605-Genome-NCBI-Katalog (nicht neu gesucht, direkt weiterverwendet).
-Alle 14 FASTA erfolgreich über die NCBI Datasets API heruntergeladen
-(`data/references_raw/`) — **nur 1 von 14 (`GCA004346965_1`,
-Eleusine-Isolat) hat eine mitgelieferte GFF3-Annotation**, die übrigen
-13 brauchen die in Abschnitt 6.2 vorgesehene Reannotation (BRAKER3/
-Liftoff), bevor genbasierte Analysen (OrthoFinder, Abschnitt 7.1)
-möglich sind.
+**14-genome reference panel identified and downloaded:** The "14
+complete genome assemblies" required by the document correspond exactly
+to the 14 "Complete Genome" entries from the 605-genome NCBI catalog
+compiled days earlier (not searched anew, directly reused). All 14 FASTA
+files were successfully downloaded via the NCBI Datasets API
+(`data/references_raw/`) — **only 1 of 14 (`GCA004346965_1`, an
+Eleusine isolate) comes with a GFF3 annotation**; the remaining 13 need
+the reannotation (BRAKER3/Liftoff) called for in Section 6.2 before
+gene-based analyses (OrthoFinder, Section 7.1) are possible.
 
-**Kritischer Befund zur "42 Long-Read-Testisolate"-Annahme:** Das
-Dokument geht davon aus, dass 42 chromosomenbasierte Long-Read-Isolate
-für die Pilotauswahl (Abschnitt 9) zur Verfügung stehen. Der NCBI-Katalog
-liefert exakt 42 Assemblies auf Chromosome-Level (Zahlen-Übereinstimmung
-kein Zufall) — aber bei genauerer Prüfung der `sequencing_tech`-Metadaten:
-- **Nur 15 von 42 sind tatsächlich Long-Read/Hybrid-sequenziert**
-  (13 long-read + 2 hybrid); 25 sind Short-Read-basiert (überwiegend eine
-  große Charge von 22 brasilianischen Weizen-Isolaten, vermutlich
-  referenzgestützt gescaffoldet, nicht de-novo Long-Read-assembliert);
-  2 sind das historische Sanger-70-15-Duplikat (GCA/GCF_000002495.2).
-- **Host-Diversität in diesem 42er-Pool ist stark verzerrt:** 31/42
-  *Triticum*, 5 *Oryza*, je 1 *Lolium*/*Setaria*, **0 *Eleusine*.** Die
-  in Abschnitt 9.1 geforderte Stratifizierung (u. a. "2
-  Eleusine-assoziierte Isolate") ist aus diesem Pool nicht erfüllbar.
+**Critical finding on the "42 long-read test isolates" assumption:** The
+document assumes that 42 chromosome-level long-read isolates are
+available for the pilot selection (Section 9). The NCBI catalog does
+provide exactly 42 assemblies at Chromosome level (the numeric match is
+no coincidence) — but closer inspection of the `sequencing_tech`
+metadata shows:
+- **Only 15 of 42 are actually long-read/hybrid-sequenced** (13
+  long-read + 2 hybrid); 25 are short-read-based (predominantly one
+  large batch of 22 Brazilian wheat isolates, presumably
+  reference-guided scaffolded, not de novo long-read-assembled); 2 are
+  the historical Sanger 70-15 duplicate (GCA/GCF_000002495.2).
+- **Host diversity in this pool of 42 is strongly skewed:** 31/42
+  *Triticum*, 5 *Oryza*, 1 each *Lolium*/*Setaria*, **0 *Eleusine*.**
+  The stratification required in Section 9.1 (among others, "2
+  Eleusine-associated isolates") cannot be met from this pool.
 
-**Konsequenz:** Für echte Eleusine-Long-Read-Testisolate muss der
-separate SRA-Rohdaten-Katalog (`data/ncbi_m_oryzae_sra_wgs_longread.tsv`,
-193 Läufe) nach BioSample-Host-Attributen durchsucht werden — noch nicht
-geschehen. `config/samples_candidate_pool.tsv` (42 Zeilen, mit
-`platform`-Spalte) dokumentiert den vollen Pool inkl. dieser
-Einschränkung; die finalen 10 Pilotisolate (`config/samples.tsv`) sind
-deshalb noch nicht befüllt.
+**Consequence:** For genuine Eleusine long-read test isolates, the
+separate SRA raw-data catalog (`data/ncbi_m_oryzae_sra_wgs_longread.tsv`,
+193 runs) needs to be searched by BioSample host attributes — not yet
+done. `config/samples_candidate_pool.tsv` (42 rows, with a `platform`
+column) documents the full pool including this limitation; the final 10
+pilot isolates (`config/samples.tsv`) are therefore not yet populated.
 
-**Phase I (Abschnitt 6.1) ausgeführt:** `seqkit stats` für alle 14
-Referenzen (`results/qc/assembly_stats.tsv`) — konsistentes Bild (7–10
-Contigs, 42–48 Mb, N50 5,7–7,5 Mb, GC ~50 %, passend zum erwarteten
-*M. oryzae*-Profil). BUSCO (`sordariomycetes_odb10`) lief im Hintergrund
-für alle 14 Genome (env `qc_env`, bereits aus einer früheren Sitzung mit
-BUSCO vorhanden, nur `seqkit` ergänzt statt einer redundanten neuen
-Umgebung).
+**Phase I (Section 6.1) executed:** `seqkit stats` for all 14 references
+(`results/qc/assembly_stats.tsv`) — a consistent picture (7–10 contigs,
+42–48 Mb, N50 5.7–7.5 Mb, GC ~50%), matching the expected *M. oryzae*
+profile. BUSCO (`sordariomycetes_odb10`) ran in the background for all
+14 genomes (env `qc_env`, already present with BUSCO from an earlier
+session, only `seqkit` added rather than a redundant new environment).
 
-**Bewusst zurückgestellt (Umfang/Werkzeugverfügbarkeit):** Annotation
-(BRAKER3 — braucht separate GeneMark-Lizenz, kein reiner Conda-Install),
-Repeat-Masking (RepeatModeler2/EDTA), Whole-genome-Alignment/SyRI,
-OrthoFinder, Panel-Bau, Long-Read-Mapping, fensterbasierte PAV,
-SV-Calling (Sniffles2), Rarefaction. Alle als dokumentierte Stubs in
-`workflow/rules/*.smk` mit Status-Kommentar und Voraussetzungen angelegt,
-damit die Snakemake-Struktur vollständig ist und der nächste
-Implementierungsschritt pro Datei klar ist.
+**Deliberately deferred (scope/tool availability):** Annotation
+(BRAKER3 — needs a separate GeneMark license, not a pure conda install),
+repeat-masking (RepeatModeler2/EDTA), whole-genome alignment/SyRI,
+OrthoFinder, panel construction, long-read mapping, window-based PAV,
+SV calling (Sniffles2), rarefaction. All set up as documented stubs in
+`workflow/rules/*.smk` with a status comment and prerequisites, so that
+the Snakemake structure is complete and the next implementation step per
+file is clear.
 
-**Bug: BUSCO-OOM bei paralleler Ausführung.** Der erste BUSCO-Lauf
-(`--cores 2`, 2 Genome parallel) führte zu wiederholten, zunächst
-verwirrenden Abbrüchen (leere `/tmp`, `LockException`, EXT4-Un-/Remount
-und "journal corrupted or uncleanly shut down" im Kernel-Log — sah nach
-einem WSL-VM-Neustart aus). `dmesg` zeigte die eigentliche Ursache klar:
+**Bug: BUSCO OOM under parallel execution.** The first BUSCO run
+(`--cores 2`, 2 genomes in parallel) led to repeated, initially
+confusing crashes (empty `/tmp`, `LockException`, EXT4 un-/remounts, and
+"journal corrupted or uncleanly shut down" in the kernel log — it looked
+like a WSL VM restart). `dmesg` clearly showed the actual cause:
 `Out of memory: Killed process ... (python3) ... anon-rss:6897092kB` —
-ein einzelner BUSCO-Genome-Mode-Lauf (metaeuk-Genvorhersage gegen ein
-~44-Mb-Genom) braucht allein **~6,9 GB RSS**; zwei parallel sprengen die
-10 GB WSL-RAM-Grenze (+4 GB Swap) klar. Fix: `qc.smk`s
-`busco_reference`-Regel bekommt jetzt eine explizite `threads:`-Direktive
-(reserviert das volle Kernbudget pro Job), und der Lauf wird mit
-`--cores 1` (echte Serialisierung, ein Genom nach dem anderen) statt
-`--cores 2` gestartet. Erwartete Laufzeit dadurch länger (~14 × 10–20 Min
-statt parallelisiert), aber stabil.
+a single BUSCO genome-mode run (metaeuk gene prediction against a
+~44-Mb genome) alone needs **~6.9 GB RSS**; two in parallel clearly
+exceed the 10 GB WSL RAM limit (+4 GB swap). Fix: `qc.smk`'s
+`busco_reference` rule now gets an explicit `threads:` directive
+(reserving the full core budget per job), and the run is started with
+`--cores 1` (true serialization, one genome after another) instead of
+`--cores 2`. Expected runtime therefore longer (~14 × 10–20 min instead
+of parallelized), but stable.
 
-## 2026-09-02 — BUSCO-Abbrüche: tatsächliche Root Cause war WSL2 `autoMemoryReclaim`, nicht Energiesparmodus
+## 2026-09-02 — BUSCO crashes: the actual root cause was WSL2 `autoMemoryReclaim`, not power-saving mode
 
-**Vorgeschichte:** Trotz der OOM-Fixes (siehe oben) brach der serialisierte
-BUSCO-Lauf (`--cores 1`) weiterhin unvermittelt ab — ohne internen
-BUSCO-Fehler (Abbruch mitten in `hmmsearch`, teils sogar mit einem
-WSL-Interop-Fehler "Failed to start the systemd user session"). `dmesg`
-zeigte durchgehend EXT4-Un-/Remount-Zyklen der Root-Disk (`sdd`) im
-~100–130-Sekunden-Takt, begleitet von
-`systemd-journald: File ... corrupted or uncleanly shut down`.
+**Background:** Despite the OOM fixes (see above), the serialized BUSCO
+run (`--cores 1`) kept crashing unexpectedly — without an internal BUSCO
+error (aborting mid-`hmmsearch`, sometimes even with a WSL interop error
+"Failed to start the systemd user session"). `dmesg` consistently showed
+EXT4 un-/remount cycles of the root disk (`sdd`) at a ~100–130-second
+cadence, accompanied by `systemd-journald: File ... corrupted or
+uncleanly shut down`.
 
-**Erste (falsche) Hypothese:** Windows-Energiesparmodus (AC-Standby-Timeout
-45 Min) bzw. USB Selective Suspend (power-cycelt vermeintlich die Disk
-hinter `sdd`). Nutzer wurde befragt und wählte "Sleep-Timeout temporär
-deaktivieren"; beides (`STANDBYIDLE` und USB Selective Suspend, AC-Seite)
-wurde per `powercfg` deaktiviert. **Ergebnis: kein Effekt** — der
-identische Abbruch-Rhythmus trat unverändert erneut auf, diesmal mit dem
-zusätzlichen Fund, dass `/dev/sdd` gar kein externes/USB-Laufwerk ist,
-sondern die **Root-Disk der WSL2-VM selbst** (`/` und
-`/mnt/wslg/distro`, 1 TB dynamisches VHDX) — die powercfg-Hypothese war
-damit strukturell unplausibel (kein USB-Gerät betroffen) und wurde
-verworfen.
+**First (incorrect) hypothesis:** Windows power-saving mode (AC standby
+timeout 45 min) or USB Selective Suspend (presumably power-cycling the
+disk behind `sdd`). The user was asked and chose "temporarily disable
+sleep timeout"; both (`STANDBYIDLE` and USB Selective Suspend, AC side)
+were disabled via `powercfg`. **Result: no effect** — the identical
+crash rhythm recurred unchanged, this time with the additional finding
+that `/dev/sdd` is not an external/USB drive at all, but the **root disk
+of the WSL2 VM itself** (`/` and `/mnt/wslg/distro`, a 1 TB dynamic
+VHDX) — the powercfg hypothesis was thus structurally implausible (no
+USB device involved) and was discarded.
 
-**Tatsächliche Root Cause:** `C:\Users\flori\.wslconfig` hatte keine
-explizite `autoMemoryReclaim`-Einstellung, wodurch WSL2 (Version 2.7.12.0)
-den Default **`gradual`** verwendet — eine periodische
-Arbeitsspeicher-Kompaktierung der VM, die bei speicherintensiven
-Workloads (wie dem ~6,9 GB RSS BUSCO-Prozess) die VM kurz genug
-einfriert, um I/O-Timeouts auf der Root-Disk und dadurch die beobachteten
-Remounts/Journal-Korruption auszulösen. Fix: `.wslconfig` um
+**Actual root cause:** `C:\Users\flori\.wslconfig` had no explicit
+`autoMemoryReclaim` setting, causing WSL2 (version 2.7.12.0) to use the
+default **`gradual`** — a periodic memory compaction of the VM that, for
+memory-intensive workloads (like the ~6.9 GB RSS BUSCO process), freezes
+the VM just long enough to trigger I/O timeouts on the root disk and
+thereby the observed remounts/journal corruption. Fix: `.wslconfig`
+extended with
 ```
 [experimental]
 autoMemoryReclaim=disabled
 ```
-ergänzt, `wsl --shutdown` ausgeführt (sauberer Neustart, `uptime` bestätigt
-0 Min), BUSCO-Lauf erneut gestartet. **Ergebnis: alle 14 Genome liefen ohne
-Unterbrechung durch.** Die powercfg-Änderungen wurden auf die
-ursprünglichen Werte zurückgesetzt (AC-Standby 0x00000a8c/2700s,
-USB Selective Suspend AC 0x00000001/aktiviert), da sie nachweislich nicht
-die Ursache waren.
+`wsl --shutdown` executed (clean restart, `uptime` confirms 0 min),
+BUSCO run restarted. **Result: all 14 genomes completed without
+interruption.** The powercfg changes were reverted to their original
+values (AC standby 0x00000a8c/2700s, USB Selective Suspend AC
+0x00000001/enabled), since they were demonstrably not the cause.
 
-**Lektion:** Bei WSL2-VM-internen Stabilitätsproblemen (Un-/Remounts der
-Root-Disk, nicht eines Peripheriegeräts) zuerst `.wslconfig`
-(`autoMemoryReclaim`, `vmIdleTimeout`, `sparseVhd`) prüfen, bevor
-Windows-Host-Energieeinstellungen als Ursache vermutet werden — das
-Gerät hinter der scheinbar "unmount/remount"-betroffenen Disk sollte
-immer zuerst per `mount`/`lsblk` identifiziert werden (hier: `sdd` = `/`,
-kein USB-Gerät).
+**Lesson:** For stability problems internal to the WSL2 VM (un-/remounts
+of the root disk, not of a peripheral device), check `.wslconfig`
+(`autoMemoryReclaim`, `vmIdleTimeout`, `sparseVhd`) first, before
+suspecting Windows host power settings as the cause — the device behind
+the disk apparently affected by "unmount/remount" should always be
+identified first via `mount`/`lsblk` (here: `sdd` = `/`, not a USB
+device).
 
-**BUSCO-Ergebnis (`sordariomycetes_odb10`, alle 14 Referenzgenome):**
-durchweg 97,9–98,2 % Complete (größtenteils Single-Copy, Duplication
-≤0,5 %), <2 % Missing — konsistent hohe Assembly-Vollständigkeit über das
-gesamte Panel, keine Ausreißer.
+**BUSCO result (`sordariomycetes_odb10`, all 14 reference genomes):**
+consistently 97.9–98.2% complete (mostly single-copy, duplication
+≤0.5%), <2% missing — consistently high assembly completeness across
+the entire panel, no outliers.
 
-## 2026-09-02 — Eleusine-Long-Read-Lücke geschlossen: 2 echte Isolate im SRA-Rohdatenkatalog gefunden
+## 2026-09-02 — Eleusine long-read gap closed: 2 genuine isolates found in the SRA raw-data catalog
 
-**Vorgehen:** Aus `data/ncbi_m_oryzae_sra_wgs_longread.tsv` (193 Läufe) die
-158 eindeutigen BioSample-Accessions extrahiert und per NCBI E-Utilities
-(`efetch db=biosample`, Batches à 50) die BioSample-Attribute (Host,
-Isolate, Isolation Source, Geo) abgerufen (`config/longread_sra_
-biosample_hosts.tsv` im neuen Projekt gesichert, 115/158 BioSamples
-lieferten Attribute — der Rest sind ältere BioSamples ohne strukturierte
-Metadaten).
+**Approach:** From `data/ncbi_m_oryzae_sra_wgs_longread.tsv` (193 runs),
+the 158 unique BioSample accessions were extracted and their BioSample
+attributes (host, isolate, isolation source, geo) retrieved via NCBI
+E-Utilities (`efetch db=biosample`, batches of 50)
+(`config/longread_sra_biosample_hosts.tsv` saved in the new project,
+115/158 BioSamples returned attributes — the rest are older BioSamples
+without structured metadata).
 
-**Ergebnis:** Zwei Isolate mit Host `Eleucine coracana` (Fingerhirse) UND
-echten long-read-Rohdaten gefunden:
+**Result:** Two isolates found with host `Eleucine coracana`
+(finger millet) AND genuine long-read raw data:
 
-| Isolat | BioSample | SRA-Run | Plattform | Bases | Herkunft |
+| Isolate | BioSample | SRA run | Platform | Bases | Origin |
 |---|---|---|---|---|---|
-| K23/123 | SAMN08033374 | SRR6307184 | PacBio RS II | 3,31 Gb (≈74× auf 44,5 Mb) | Kenia: Busia district, Halsbrand |
-| E34 | SAMN12142210 | SRR9972918 | PacBio Sequel | 8,41 Gb (≈189×) | Äthiopien: Diga, Halsbrand |
+| K23/123 | SAMN08033374 | SRR6307184 | PacBio RS II | 3.31 Gb (≈74× at 44.5 Mb) | Kenya: Busia district, blast |
+| E34 | SAMN12142210 | SRR9972918 | PacBio Sequel | 8.41 Gb (≈189×) | Ethiopia: Diga, blast |
 
-Beide als neue Zeilen an `config/samples_candidate_pool.tsv` angehängt
-(Pool jetzt 44 statt 42 Einträge; `fastq`-Spalte trägt bereits den
-SRA-Run-Accession, da die Rohdaten anders als bei allen 42 ursprünglichen
-Chromosome-Level-Einträgen tatsächlich direkt herunterladbar sind).
-`read_n50_bp` ist hier die mittlere Subread-Länge aus der SRA-Runinfo
-(keine echte N50, da diese Kennzahl im runinfo-Format fehlt) — vor dem
-tatsächlichen Mapping-Lauf sollte die echte N50 aus den heruntergeladenen
-Reads berechnet werden.
+Both appended as new rows to `config/samples_candidate_pool.tsv`
+(pool now 44 instead of 42 entries; the `fastq` column already carries
+the SRA run accession, since unlike all 42 original chromosome-level
+entries, the raw data are actually directly downloadable here).
+`read_n50_bp` here is the mean subread length from the SRA runinfo (not
+a true N50, since this metric is absent from the runinfo format) — the
+true N50 should be computed from the downloaded reads before the actual
+mapping run.
 
-**Wichtiger Nebenbefund:** Cross-Referenz der 42 ursprünglichen
-Chromosome-Level-BioSamples gegen die 158 long-read-SRA-BioSamples ergab
-**null Überschneidungen** — keines der 42 Assemblies hat in diesem
-Katalog auffindbare Rohreads (die Long-Read-Assemblies wurden offenbar
-ohne Rohdaten-Deposit eingereicht, oder unter einem anderen BioSample als
-dem Assembly-BioSample). Das heißt: `config/samples_candidate_pool.tsv`
-enthielt bislang bei KEINEM der 42 Einträge tatsächlich ladbare FASTQ
-("assembly only" bei allen) — K23/123 und E34 sind damit nicht nur der
-Eleusine-Fix, sondern aktuell die EINZIGEN beiden Einträge im gesamten
-Pool mit real verfügbaren Rohdaten. Für die übrigen Host-Gruppen
-(Triticum, Oryza, Lolium, Setaria) muss vor der finalen 10-Pilotisolate-
-Auswahl (Abschnitt 9.1) ebenfalls im SRA-Katalog nach Rohdaten gesucht
-werden, nicht nur nach Assemblies — noch nicht geschehen.
+**Important secondary finding:** Cross-referencing the 42 original
+chromosome-level BioSamples against the 158 long-read SRA BioSamples
+yielded **zero overlaps** — none of the 42 assemblies has raw reads
+findable in this catalog (the long-read assemblies were apparently
+submitted without a raw-data deposit, or under a different BioSample
+than the assembly's BioSample). This means: so far NONE of the 42
+entries in `config/samples_candidate_pool.tsv` actually had loadable
+FASTQ ("assembly only" for all of them) — K23/123 and E34 are thus not
+only the Eleusine fix but currently the ONLY two entries in the entire
+pool with genuinely available raw data. For the remaining host groups
+(Triticum, Oryza, Lolium, Setaria), the SRA catalog must likewise be
+searched for raw data, not just assemblies, before the final selection
+of 10 pilot isolates (Section 9.1) — not yet done.
 
-## 2026-09-02 — Repeat-Masking (Abschnitt 6.3): eigene, schlanke Environment statt der schweren `annotation.yaml`
+## 2026-09-02 — Repeat-masking (Section 6.3): a dedicated, lightweight environment instead of the heavy `annotation.yaml`
 
-**Entscheidung:** `envs/repeats.yaml` (neu, `multiref-repeats`) mit nur
-`repeatmodeler=2.0.5`, `repeatmasker=4.1.7`, `bedtools`, `seqkit`,
-`samtools` angelegt, statt RepeatModeler/RepeatMasker aus der bereits
-geplanten `envs/annotation.yaml` zu installieren (die zusätzlich BRAKER3,
-liftoff, eggnog-mapper, orthofinder, diamond, iqtree bündelt — ein
-gemeinsamer Install-Versuch aller dieser Pakete wäre langsamer und
-fragiler gewesen, insbesondere wegen BRAKER3s GeneMark-Lizenzabhängigkeit,
-die ohnehin separat behandelt werden muss).
+**Decision:** `envs/repeats.yaml` (new, `multiref-repeats`) created with
+only `repeatmodeler=2.0.5`, `repeatmasker=4.1.7`, `bedtools`, `seqkit`,
+`samtools`, instead of installing RepeatModeler/RepeatMasker from the
+already-planned `envs/annotation.yaml` (which additionally bundles
+BRAKER3, liftoff, eggnog-mapper, orthofinder, diamond, iqtree — a
+combined install attempt of all these packages would have been slower
+and more fragile, especially because of BRAKER3's GeneMark license
+dependency, which has to be handled separately anyway).
 
-**`workflow/rules/repeats.smk` implementiert** (vorher reiner Stub):
+**`workflow/rules/repeats.smk` implemented** (previously a pure stub):
 `index_reference_fai` (samtools faidx) → `build_repeat_database`
-(BuildDatabase, NCBI-Engine) → `run_repeatmodeler` (mit `-LTRStruct` für
-LTR-Retrotransposon-Sensitivität) → `run_repeatmasker` (mit der
-genomspezifischen RepeatModeler-Bibliothek) → `repeat_windows`
-(`workflow/scripts/repeat_windows.sh`: RepeatMasker-`.out` → BED →
-`bedtools merge`/`coverage` gegen ein Fenstergitter). Fenstergröße wird
-aus `config/thresholds.yaml: pav.window_size_bp` (10 kb) übernommen,
-nicht neu definiert — damit lässt sich die Repeat-Dichte pro Fenster
-später direkt mit der windowbasierten PAV-Klassifikation (Abschnitt 8)
-joinen, exakt wie im Dokument gefordert ("Repeat-Anteil" als Spalte der
-finalen Panel-Tabelle, Abschnitt 8.4/8.5). Dafür musste
-`workflow/Snakefile` erweitert werden, um `config/thresholds.yaml`
-selbst einzulesen (`thresholds = yaml.safe_load(...)`) — vorher wurde die
-Datei nur referenziert, nie geparst.
+(BuildDatabase, NCBI engine) → `run_repeatmodeler` (with `-LTRStruct` for
+LTR retrotransposon sensitivity) → `run_repeatmasker` (using the
+genome-specific RepeatModeler library) → `repeat_windows`
+(`workflow/scripts/repeat_windows.sh`: RepeatMasker `.out` → BED →
+`bedtools merge`/`coverage` against a window grid). Window size is taken
+from `config/thresholds.yaml: pav.window_size_bp` (10 kb), not redefined
+— this lets the repeat density per window later be joined directly with
+the window-based PAV classification (Section 8), exactly as required by
+the document ("repeat fraction" as a column of the final panel table,
+Section 8.4/8.5). This required extending `workflow/Snakefile` to parse
+`config/thresholds.yaml` itself (`thresholds = yaml.safe_load(...)`) —
+previously the file was only referenced, never parsed.
 
-**Wie bei BUSCO:** `run_repeatmodeler`/`run_repeatmasker` bekommen ein
-explizites `threads:` (= `config["threads_default"]`), um bei `--cores`
-gleich dem Threadwert eine echte Serialisierung zu erzwingen — RepeatModeler
-ist ähnlich speicher-/zeitintensiv wie BUSCO, mehrere parallele Läufe auf
-der 10-GB-WSL2-VM sind ein bekanntes Risiko (siehe BUSCO-OOM oben).
+**As with BUSCO:** `run_repeatmodeler`/`run_repeatmasker` get an
+explicit `threads:` (= `config["threads_default"]`) to force true
+serialization when `--cores` equals the thread value — RepeatModeler is
+similarly memory-/time-intensive as BUSCO, and multiple parallel runs on
+the 10 GB WSL2 VM are a known risk (see BUSCO OOM above).
 
-**Pilotlauf vor Vollausführung:** Da RepeatModeler2 mit `-LTRStruct` für
-Genome dieser Größe laut Literatur mehrere Stunden pro Genom brauchen
-kann und 14 Genome seriell potenziell 1–4+ Tage bedeuten, wurde zunächst
-NUR `GCA036493215_1` (kleinstes Genom im Panel, 42,5 Mb) als Zeitpilot
-gestartet, bevor alle 14 als langer Hintergrundlauf committed werden.
+**Pilot run before full execution:** Since RepeatModeler2 with
+`-LTRStruct` can, per the literature, take several hours per genome for
+genomes this size, and 14 genomes run serially could potentially mean
+1–4+ days, only `GCA036493215_1` (the smallest genome in the panel,
+42.5 Mb) was first started as a timing pilot, before committing to all
+14 as a long background run.
 
-**Pilotlauf-Ergebnis (Zeitmessung):** Runde 1 (RepeatScout, größte
-Stichprobe) brauchte 63 Minuten für `GCA036493215_1` — davon allein 56
-Minuten für EINE einzelne, ungewöhnlich kopienreiche Repeat-Familie
-("family-0"; die übrigen 88 entdeckten Familien liefen in Sekunden bis
-niedrigen Minuten durch). RepeatModeler ist dabei, anders als BUSCO,
-**kaum speicherhungrig** (~1 GB RSS statt ~7 GB) — die 10-GB-WSL2-Grenze
-ist hier kein Thema, der Engpass ist rein CPU-/Zeit-gebunden. Damit ist
-echte Parallelisierung über mehrere Genome hinweg (statt serieller
-Ausführung wie bei BUSCO) sowohl möglich als auch sinnvoll.
+**Pilot-run result (timing):** Round 1 (RepeatScout, largest sample)
+took 63 minutes for `GCA036493215_1` — of which 56 minutes alone were
+spent on ONE unusually copy-rich repeat family ("family-0"; the
+remaining 88 discovered families completed in seconds to low minutes).
+Unlike BUSCO, RepeatModeler is **barely memory-hungry** (~1 GB RSS
+instead of ~7 GB) — the 10 GB WSL2 limit is not an issue here, the
+bottleneck is purely CPU-/time-bound. This makes genuine parallelization
+across multiple genomes (instead of serial execution as with BUSCO) both
+possible and sensible.
 
-## 2026-09-02 — Panel auf 5 Host-Repräsentanten reduziert (POC-Scope-Abweichung vom Dokument) + Repeat-Masking parallelisiert
+## 2026-09-02 — Panel reduced to 5 host representatives (POC scope deviation from the document) + repeat-masking parallelized
 
-**Wichtig:** Das Dokument (`multireferenzpanel_pav_workflow.md`) selbst
-sieht KEINE Reduktion des 14-Genom-Katalogs vor — es geht durchgängig von
-allen 14 Genomen aus. Die folgende Reduktion ist eine bewusste,
-nutzergetriebene POC-Scope-Entscheidung (Rechenaufwand senken), keine
-Vorgabe aus dem Dokument, und wird hier als Abweichung transparent
-dokumentiert.
+**Important:** The document (`multireference_panel_pav_workflow.md`)
+itself does NOT call for a reduction of the 14-genome catalog — it
+consistently assumes all 14 genomes. The following reduction is a
+deliberate, user-driven POC scope decision (to reduce computational
+cost), not a document requirement, and is documented here transparently
+as a deviation.
 
-**Entscheidung:** Statt aller 14 Complete-Genome-Referenzen wird für
-Repeat-Masking, Annotation und Panel-Bau nur noch **ein Repräsentant pro
-Host-Typ** verwendet (5 Genome). `config/references.tsv` (aktiv, von
-`workflow/Snakefile` gelesen) enthält jetzt nur diese 5 Zeilen; der volle
-14-Genom-Katalog ist unverändert in
-`config/references_full_catalog_14genomes.tsv` archiviert (die bereits
-abgeschlossenen BUSCO-Ergebnisse für alle 14 bleiben gültig und werden
-nicht verworfen, laufen aber nicht weiter durch nachfolgende
-Pipeline-Schritte).
+**Decision:** Instead of all 14 Complete-Genome references, only **one
+representative per host type** (5 genomes) is now used for
+repeat-masking, annotation, and panel construction.
+`config/references.tsv` (active, read by `workflow/Snakefile`) now
+contains only these 5 rows; the full 14-genome catalog remains archived
+unchanged in `config/references_full_catalog_14genomes.tsv` (the already
+completed BUSCO results for all 14 remain valid and are not discarded,
+but do not proceed further through subsequent pipeline steps).
 
-**Host-Typ-Tally und Korrektur einer Fehlklassifikation:** Ursprünglich
-wurde `GCA036493215_1` als `host_group=unknown` geführt (das `host`-Feld
-war im NCBI-BioSample-Datensatz leer). Eine gezielte Nachfrage bei der
-NCBI Datasets API (`accession/GCA_036493215.1/dataset_report`) ergab
-jedoch: Es handelt sich um **Br48**, ein Weizen-infizierendes Isolat aus
-Brasilien (BioSample-Attribut `strain: "wheat infecting strain"`,
-`geo_loc_name: Brazil`), UND die zugehörige BioProject-Beschreibung
-lautet explizit "**Telomere-to-telomere genome assembly of Pyricularia
-oryzae Br48**" (PRJDB14561) — ein selbstdeklariertes T2T-Assembly (7
-Contigs = 7 Chromosomen, `contig_l50=3`). `host`/`host_group` wurden
-entsprechend auf `Triticum aestivum`/`triticum` korrigiert. Damit sind es
-nur **5 echte Host-Typen** unter den 14 Genomen (Oryza, Triticum,
-Wildgrass/Lolium, Eleusine, Avena), nicht 6 wie zunächst angenommen.
+**Host-type tally and correction of a misclassification:** Originally,
+`GCA036493215_1` was carried as `host_group=unknown` (the `host` field
+was empty in the NCBI BioSample record). A targeted follow-up query to
+the NCBI Datasets API (`accession/GCA_036493215.1/dataset_report`)
+revealed, however, that it is **Br48**, a wheat-infecting isolate from
+Brazil (BioSample attribute `strain: "wheat infecting strain"`,
+`geo_loc_name: Brazil`), AND the associated BioProject description
+explicitly reads "**Telomere-to-telomere genome assembly of Pyricularia
+oryzae Br48**" (PRJDB14561) — a self-declared T2T assembly (7 contigs =
+7 chromosomes, `contig_l50=3`). `host`/`host_group` were corrected
+accordingly to `Triticum aestivum`/`triticum`. This leaves only **5
+genuine host types** among the 14 genomes (Oryza, Triticum,
+wild grass/Lolium, Eleusine, Avena), not 6 as initially assumed.
 
-**Repräsentantenauswahl:**
+**Representative selection:**
 
-| Host-Typ | Kandidaten (14-Katalog) | Gewählt | Begründung |
+| Host type | Candidates (14-genome catalog) | Chosen | Rationale |
 |---|---|---|---|
-| Oryza | 7015, Guy11, 95HPH4, 95085, P131 | **7015** | kanonischer Referenzstamm "70-15", Feldstandard in praktisch jeder vergleichenden *M.-oryzae*-Genomstudie |
-| Triticum | GCA059330735_1, GCA059330115_1, GCA059330025_1, GCA059330365_1, Br48 | **GCA036493215_1 (Br48)** | einziges explizit T2T-deklariertes Genom im gesamten Panel — direkt relevant für saubere Starship-/Mini-Chromosom-Boundary-Calls (Abschnitt 6.3/8), wichtiger als der marginal höhere Contig-N50 der Alternativen |
-| Wildgrass | LpKY97, GCA059329725_1 | **LpKY97** | etablierter, in der Literatur verwendeter Referenzstamm für die Lolium-Linie |
-| Eleusine | GCA004346965_1 | GCA004346965_1 | einzige Complete-Genome-Option |
-| Avena | GCA059329645_1 | GCA059329645_1 | einzige Complete-Genome-Option |
+| Oryza | 7015, Guy11, 95HPH4, 95085, P131 | **7015** | canonical reference strain "70-15", a field standard in practically every comparative *M. oryzae* genome study |
+| Triticum | GCA059330735_1, GCA059330115_1, GCA059330025_1, GCA059330365_1, Br48 | **GCA036493215_1 (Br48)** | the only explicitly T2T-declared genome in the entire panel — directly relevant for clean Starship/mini-chromosome boundary calls (Section 6.3/8), more important than the marginally higher contig N50 of the alternatives |
+| Wild grass | LpKY97, GCA059329725_1 | **LpKY97** | an established reference strain used in the literature for the Lolium lineage |
+| Eleusine | GCA004346965_1 | GCA004346965_1 | only Complete-Genome option |
+| Avena | GCA059329645_1 | GCA059329645_1 | only Complete-Genome option |
 
-`GCA036493215_1` (Br48) behält seine Genome-ID (Accession-basiert statt
-"Br48"), obwohl der Strain-Name jetzt bekannt ist — der bereits laufende
-RepeatModeler-Pilotlauf (siehe oben) nutzt exakt diesen Wildcard-Wert;
-eine Umbenennung hätte den bisherigen Fortschritt verwaist.
+`GCA036493215_1` (Br48) keeps its genome ID (accession-based rather than
+"Br48"), even though the strain name is now known — the already-running
+RepeatModeler pilot run (see above) uses exactly this wildcard value;
+renaming would have orphaned the progress made so far.
 
-**Bekannter Trade-off:** Die Reduktion verliert Within-Host-Diversität
-(z. B. 5 statt 1 Oryza-Genom, 5 statt 1 Triticum-Genom) — Starships, die
-nur in einer Teilmenge der Isolate EINES Host-Typs vorkommen, werden vom
-5-Genom-Panel nicht erfasst. Für die POC-Kernfrage (Nachweisbarkeit von
-Starships/Accessory-Chromosomen ÜBER Host-Grenzen hinweg per Long-Read-
-Mapping) ist das akzeptabel; für eine spätere Vollanalyse/Publikation
-sollte auf den vollen 14-Genom-Katalog zurückgegriffen werden.
+**Known trade-off:** The reduction loses within-host diversity (e.g., 5
+instead of 1 Oryza genome, 5 instead of 1 Triticum genome) — Starships
+that occur only in a subset of isolates of ONE host type will not be
+captured by the 5-genome panel. This is acceptable for the POC's core
+question (detectability of Starships/accessory chromosomes ACROSS host
+boundaries via long-read mapping); for a later full analysis/publication
+the full 14-genome catalog should be used.
 
-**Windows-Ruhezustand deaktiviert (diesmal aus echtem Grund, nicht als
-Fehldiagnose):** Anders als beim früheren BUSCO-Abbruch (wo Sleep/USB-
-Suspend fälschlich verdächtigt wurden) besteht hier ein reales Risiko —
-mehrstündige Hintergrundläufe würden durch tatsächlichen Ruhezustand
-(nicht nur Bildschirmschoner) pausiert/unterbrochen. Auf Nutzerwunsch
-`STANDBYIDLE` und `HIBERNATEIDLE` für AC und DC auf 0 (deaktiviert)
-gesetzt. **Ursprungswerte zum späteren Zurücksetzen:** AC-Standby
-0x00000a8c (2700s/45min), DC-Standby 0x00000708 (1800s/30min),
-DC-Ruhezustand 0x0003f480 (259200s/3 Tage), AC-Ruhezustand war bereits 0.
-Sollte zurückgesetzt werden, sobald die aktuellen Mehrtages-Hintergrund-
-läufe (Repeat-Masking) abgeschlossen sind.
+**Windows sleep mode disabled (this time for a genuine reason, not a
+misdiagnosis):** Unlike the earlier BUSCO crash (where sleep/USB suspend
+were falsely suspected), there is a real risk here — multi-hour
+background runs would be paused/interrupted by actual sleep mode (not
+just the screen saver). At the user's request, `STANDBYIDLE` and
+`HIBERNATEIDLE` were set to 0 (disabled) for both AC and DC. **Original
+values for later restoration:** AC standby 0x00000a8c (2700s/45min), DC
+standby 0x00000708 (1800s/30min), DC hibernate 0x0003f480
+(259200s/3 days), AC hibernate was already 0. Should be restored once
+the current multi-day background runs (repeat-masking) are complete.
 
-**Repeat-Masking parallelisiert:** Da RepeatModeler kaum RAM braucht
-(siehe Pilotlauf-Befund oben), laufen jetzt alle 5 Panel-Genome
-GLEICHZEITIG statt seriell: der bereits laufende Br48-Pilot (8 Threads,
-unverändert weitergelaufen) plus ein zweiter, per `--nolock` parallel
-gestarteter Snakemake-Lauf für die restlichen 4 Genome (`7015`,
-`LpKY97`, `GCA004346965_1`, `GCA059329645_1`, je 3 Threads,
-`config.yaml: threads_default` dafür von 8 auf 3 gesenkt). `--nolock`
-ist hier sicher, da beide Läufe disjunkte Zielgenome und damit disjunkte
-Ausgabedateien haben. Ressourcen-Check bei 5 parallelen Läufen: 4,5 GB
-RAM (von 10 GB), Load Average ~10 (von 14 Kernen) — stabil, kein
-OOM-Risiko.
+**Repeat-masking parallelized:** Since RepeatModeler barely needs RAM
+(see pilot-run finding above), all 5 panel genomes now run
+SIMULTANEOUSLY instead of serially: the already-running Br48 pilot
+(8 threads, continued unchanged) plus a second Snakemake run started in
+parallel via `--nolock` for the remaining 4 genomes (`7015`, `LpKY97`,
+`GCA004346965_1`, `GCA059329645_1`, 3 threads each,
+`config.yaml: threads_default` lowered from 8 to 3 for this). `--nolock`
+is safe here since both runs target disjoint genomes and therefore
+disjoint output files. Resource check with 5 parallel runs: 4.5 GB RAM
+(of 10 GB), load average ~10 (of 14 cores) — stable, no OOM risk.
 
-**Ergebnis (alle 5 Genome fertig):** Die 4 parallelisierten Genome
-brauchten zusammen nur ~2:48 h Wandzeit (13:40-16:29 Uhr) statt der ~8 h,
-die eine serielle Ausführung (4 x ~2 h wie beim Br48-Piloten) gekostet
-hätte - die Parallelisierung war die richtige Entscheidung.
+**Result (all 5 genomes complete):** The 4 parallelized genomes together
+needed only ~2:48 h of wall time (13:40–16:29) instead of the ~8 h a
+serial run (4 × ~2 h as with the Br48 pilot) would have cost —
+parallelization was the right call.
 
-| Genom | Host | Laufzeit (RepeatModeler) | Familien | Genomweiter Repeat-Anteil |
+| Genome | Host | Runtime (RepeatModeler) | Families | Genome-wide repeat fraction |
 |---|---|---|---|---|
-| 7015 | Oryza | 1:46 h | 76 | 16,47 % |
-| LpKY97 | Wildgrass | 2:06 h | 203 | 14,53 % |
-| GCA059329645_1 | Avena | 2:21 h | 133 | 11,66 % |
-| GCA004346965_1 | Eleusine | 2:46 h | 94 | 11,58 % |
-| GCA036493215_1 (Br48) | Triticum | 1:59 h | 138 | 10,12 % |
+| 7015 | Oryza | 1:46 h | 76 | 16.47% |
+| LpKY97 | Wild grass | 2:06 h | 203 | 14.53% |
+| GCA059329645_1 | Avena | 2:21 h | 133 | 11.66% |
+| GCA004346965_1 | Eleusine | 2:46 h | 94 | 11.58% |
+| GCA036493215_1 (Br48) | Triticum | 1:59 h | 138 | 10.12% |
 
-**Wichtiger biologischer Befund - zwei klare Mini-/Accessory-Chromosom-
-Kandidaten** (aus results/repeats/{genome_id}_repeat_per_contig.tsv,
-Muster: deutlich kleinerer Contig + deutlich höherer Repeat-Anteil als
-der Rest des Genoms):
+**Important biological finding — two clear mini-/accessory-chromosome
+candidates** (from results/repeats/{genome_id}_repeat_per_contig.tsv,
+pattern: markedly smaller contig + markedly higher repeat fraction than
+the rest of the genome):
 
-- LpKY97 (Wildgrass): CP050927.1 (3,0 Mb, 56,3 % Repeat) und CP050928.1
-  (0,9 Mb, kleinster Contig, 53,0 % Repeat) - beide massiv über dem
-  restlichen Genom (6-17 % bei den übrigen 7 Contigs).
-- GCA059329645_1 (Avena): CM181343.1 (1,3 Mb, 45,4 %) und CM181341.1
-  (1,2 Mb, 24,4 %) - ebenfalls deutlich über dem Genomdurchschnitt (11,7 %).
-- Bei 7015, GCA004346965_1 und Br48 gibt es KEINEN vergleichbaren
-  Ausreißer (alle Contigs groß, 4,0-8,8 Mb, Repeat-Anteil im normalen
-  Bereich 4,8-22 %) - diese 3 Assemblies scheinen entweder keine separat
-  assemblierten Mini-/Accessory-Chromosomen zu enthalten, oder diese
-  wurden nicht als eigene Contigs aufgelöst.
+- LpKY97 (wild grass): CP050927.1 (3.0 Mb, 56.3% repeat) and CP050928.1
+  (0.9 Mb, smallest contig, 53.0% repeat) - both massively above the
+  rest of the genome (6-17% for the other 7 contigs).
+- GCA059329645_1 (Avena): CM181343.1 (1.3 Mb, 45.4%) and CM181341.1
+  (1.2 Mb, 24.4%) - likewise clearly above the genome average (11.7%).
+- For 7015, GCA004346965_1, and Br48 there is NO comparable outlier (all
+  contigs large, 4.0-8.8 Mb, repeat fraction in the normal range
+  4.8-22%) - these 3 assemblies appear either not to contain separately
+  assembled mini-/accessory chromosomes, or these were not resolved as
+  their own contigs.
 
-**Konsequenz:** Diese vier Contigs (LpKY97 x 2, GCA059329645_1 x 2) sind
-starke erste Kandidaten für accessory_chromosome/mini_chromosome
-(Abschnitt 8.2-Klassifikation) und sollten bei der späteren
-Starship-Suche (Abschnitt 6.4/DUF3435-Scan) und Panel-Klassifikation
-(Abschnitt 8) prioritär geprüft werden - noch nicht geschehen, da
-Starship-Annotation (starships.smk) weiterhin ein unimplementierter Stub
-ist.
+**Consequence:** These four contigs (LpKY97 x 2, GCA059329645_1 x 2) are
+strong initial candidates for accessory_chromosome/mini_chromosome
+(Section 8.2 classification) and should be given priority review in the
+later Starship search (Section 6.4/DUF3435 scan) and panel
+classification (Section 8) - not yet done, since Starship annotation
+(starships.smk) remains an unimplemented stub.
 
-## 2026-09-02 — Abschnitt 6.2 (teilweise): Liftoff-Genannotation für alle 5 Panel-Genome, Mini-Chromosom-Hypothese durch Gendichte bestätigt
+## 2026-09-02 — Section 6.2 (partial): Liftoff gene annotation for all 5 panel genomes, mini-chromosome hypothesis confirmed by gene density
 
-**Entscheidung:** Da BRAKER3 (De-novo-Annotation, Abschnitt 6.2) weiter
-an der fehlenden GeneMark-Lizenz blockiert ist, wurde stattdessen
-**Liftoff** eingesetzt (eigene, leichte `envs/liftoff.yaml`, getrennt von
-der schweren `envs/annotation.yaml`) - die einzige echte, aus NCBI
-vorhandene Annotation (`GCA004346965_1`, 13.521 Gene) wurde auf alle 5
-Panel-Genome übertragen (inkl. Selbst-Liftoff von `GCA004346965_1` auf
-sich selbst, als Umbenennungsschritt: die rohe GFF3 nutzt die
-ORIGINALEN Contig-IDs, Liftoff produziert Output mit den umbenannten
-`{genome_id}__{contig}`-IDs passend zu `data/references/*.fa`).
+**Decision:** Since BRAKER3 (de novo annotation, Section 6.2) remains
+blocked by the missing GeneMark license, **Liftoff** was used instead
+(dedicated, lightweight `envs/liftoff.yaml`, separate from the heavy
+`envs/annotation.yaml`) - the only genuine annotation available from
+NCBI (`GCA004346965_1`, 13,521 genes) was transferred to all 5 panel
+genomes (including a self-liftoff of `GCA004346965_1` onto itself, as a
+renaming step: the raw GFF3 uses the ORIGINAL contig IDs, while Liftoff
+produces output with the renamed `{genome_id}__{contig}` IDs matching
+`data/references/*.fa`).
 
-**Bug (Race Condition):** Beim ersten parallelen Lauf (4 Genome
-gleichzeitig, gleiche Referenz-GFF3) schlug `LpKY97` mit
-`UnboundLocalError: cannot access local variable 'feature_db'` fehl -
-Liftoffs interner gffutils-Schritt baut standardmäßig eine
-SQLite-Datenbank-Datei neben der Eingabe-GFF3; alle 4 Jobs versuchten
-gleichzeitig, dieselbe Datei zu schreiben (Race Condition, gleiches
-Grundmuster wie beim früheren BUSCO-Lineage-Download). Fix: `LpKY97`
-allein (ohne Konkurrenz) neu gestartet — lief sofort erfolgreich durch.
+**Bug (race condition):** In the first parallel run (4 genomes
+simultaneously, same reference GFF3), `LpKY97` failed with
+`UnboundLocalError: cannot access local variable 'feature_db'` -
+Liftoff's internal gffutils step by default builds an SQLite database
+file next to the input GFF3; all 4 jobs simultaneously tried to write
+the same file (a race condition, the same basic pattern as the earlier
+BUSCO lineage download). Fix: `LpKY97` restarted alone (without
+contention) - completed successfully right away.
 
-**Ergebnis (Gene übertragen / nicht gemappt, von 13.521 Ausgangsgenen):**
+**Result (genes transferred / not mapped, out of 13,521 source genes):**
 
-| Genom | Host | Gene übertragen | Nicht gemappt | Anteil |
+| Genome | Host | Genes transferred | Not mapped | Fraction |
 |---|---|---|---|---|
-| GCA004346965_1 | Eleusine (Selbst-Liftoff) | 13.518 | 3 | 99,98 % |
-| GCA036493215_1 (Br48) | Triticum | 13.209 | 312 | 97,7 % |
-| GCA059329645_1 | Avena | 13.231 | 290 | 97,9 % |
-| LpKY97 | Wildgrass | 13.256 | 265 | 98,0 % |
-| 7015 | Oryza | 12.787 | 734 | 94,6 % |
+| GCA004346965_1 | Eleusine (self-liftoff) | 13,518 | 3 | 99.98% |
+| GCA036493215_1 (Br48) | Triticum | 13,209 | 312 | 97.7% |
+| GCA059329645_1 | Avena | 13,231 | 290 | 97.9% |
+| LpKY97 | Wild grass | 13,256 | 265 | 98.0% |
+| 7015 | Oryza | 12,787 | 734 | 94.6% |
 
-Der Verlust korreliert sinnvoll mit der phylogenetischen/Host-Distanz zum
-Eleusine-Ursprungsgenom (Oryza am weitesten entfernt → höchster Verlust)
-— ein gutes Plausibilitätssignal für die Methode selbst.
+The loss correlates sensibly with phylogenetic/host distance from the
+Eleusine source genome (Oryza most distant → highest loss) - a good
+plausibility signal for the method itself.
 
-**Wichtige Zusatzbestätigung der Mini-Chromosom-Kandidaten (siehe voriger
-Eintrag):** Gendichte pro Contig zeigt für alle vier zuvor per
-Repeat-Anteil geflaggten Contigs eine drastisch ERNIEDRIGTE Gendichte —
-genau das erwartete Doppelsignal (repeat-reich UND genarm):
+**Important additional confirmation of the mini-chromosome candidates
+(see previous entry):** Gene density per contig shows a drastically
+REDUCED gene density for all four contigs previously flagged by repeat
+fraction - exactly the expected dual signal (repeat-rich AND gene-poor):
 
-| Contig | Größe | Gene | Gendichte | Vergleich Genomdurchschnitt |
+| Contig | Size | Genes | Gene density | Comparison to genome average |
 |---|---|---|---|---|
-| LpKY97 CP050927.1 | 3,0 Mb | 119 | ~40/Mb | ~300-400/Mb sonst — **~8-10x niedriger** |
-| LpKY97 CP050928.1 | 0,9 Mb | 43 | ~48/Mb | ~8x niedriger |
-| GCA059329645_1 CM181343.1 | 1,3 Mb | 129 | ~99/Mb | ~327/Mb sonst — **~3x niedriger** |
-| GCA059329645_1 CM181341.1 | 1,2 Mb | 297 | ~247/Mb | leicht unterdurchschnittlich |
+| LpKY97 CP050927.1 | 3.0 Mb | 119 | ~40/Mb | ~300-400/Mb elsewhere - **~8-10x lower** |
+| LpKY97 CP050928.1 | 0.9 Mb | 43 | ~48/Mb | ~8x lower |
+| GCA059329645_1 CM181343.1 | 1.3 Mb | 129 | ~99/Mb | ~327/Mb elsewhere - **~3x lower** |
+| GCA059329645_1 CM181341.1 | 1.2 Mb | 297 | ~247/Mb | slightly below average |
 
-**Konsequenz:** `LpKY97__CP050927.1`, `LpKY97__CP050928.1` und
-`GCA059329645_1__CM181343.1` sind jetzt durch ZWEI unabhängige
-Evidenzlinien (hoher Repeat-Anteil + stark erniedrigte Gendichte)
-gestützte Kandidaten für `accessory_chromosome`/`mini_chromosome` —
-deutlich robuster als jede einzelne Evidenz allein.
-`GCA059329645_1__CM181341.1` bleibt ein schwächerer Sekundärkandidat.
-Fehlende Teile für vollständigen Abschnitt 6.2: BRAKER3-De-novo-Annotation
-(gerade in diesen genarmen/repeat-reichen Bereichen wichtig, siehe
-Dokument-Warnung "Lift-over allein kann accessory Gene unterschätzen"),
-InterProScan/eggNOG-Funktionsannotation, OrthoFinder (Abschnitt 7.1).
+**Consequence:** `LpKY97__CP050927.1`, `LpKY97__CP050928.1`, and
+`GCA059329645_1__CM181343.1` are now candidates for
+`accessory_chromosome`/`mini_chromosome` supported by TWO independent
+lines of evidence (high repeat fraction + strongly reduced gene
+density) - markedly more robust than either piece of evidence alone.
+`GCA059329645_1__CM181341.1` remains a weaker secondary candidate.
+Missing pieces for a complete Section 6.2: BRAKER3 de novo annotation
+(particularly important in these gene-poor/repeat-rich regions, per the
+document's warning that "lift-over alone can underestimate accessory
+genes"), InterProScan/eggNOG functional annotation, OrthoFinder
+(Section 7.1).
 
-## 2026-09-02 — Abschnitt 7.1 (OrthoFinder): gffread-Stopcodon-Zeichen ließ diamond 2.2.6 haengen statt zu fehlern
+## 2026-09-02 — Section 7.1 (OrthoFinder): a gffread stop-codon character made diamond 2.2.6 hang instead of erroring
 
-**Setup:** Eigene `envs/orthofinder.yaml` (orthofinder, diamond, mafft,
-iqtree, gffread), getrennt von `envs/annotation.yaml`. `gffread -y`
-extrahiert Proteinsequenzen aus den Liftoff-GFF3 (`extract_proteome`-
-Regel), dann `orthofinder -f ... -S diamond -M msa -T iqtree3` (Dokument
-schreibt `-T iqtree`, die installierte OrthoFinder-Version v3.1.5 nennt
-die Methode aber `iqtree3` - inhaltlich dieselbe Wahl). `-t`/`-a` an die
-14 verfügbaren Kerne angepasst (Dokument-Beispiel: 32/16). `-o` liess
-sich nicht wie geplant nutzen (verlangt ein noch nicht existierendes
-Zielverzeichnis, kollidiert mit Snakemakes automatischem Anlegen von
-Output-Elternverzeichnissen) - stattdessen laeuft OrthoFinder mit seinem
-Standardpfad (`OrthoFinder/Results_<Datum>/` im Proteom-Verzeichnis) und
-wird danach per `mv` an den festen Zielpfad verschoben.
+**Setup:** Dedicated `envs/orthofinder.yaml` (orthofinder, diamond,
+mafft, iqtree, gffread), separate from `envs/annotation.yaml`.
+`gffread -y` extracts protein sequences from the Liftoff GFF3
+(`extract_proteome` rule), then `orthofinder -f ... -S diamond -M msa
+-T iqtree3` (the document writes `-T iqtree`, but the installed
+OrthoFinder version v3.1.5 names the method `iqtree3` - the same choice
+in substance). `-t`/`-a` adjusted to the 14 available cores (document
+example: 32/16). `-o` could not be used as planned (it requires a
+not-yet-existing target directory, which conflicts with Snakemake's
+automatic creation of output parent directories) - instead OrthoFinder
+runs with its default path (`OrthoFinder/Results_<date>/` in the
+proteome directory) and is afterwards moved to the fixed target path via
+`mv`.
 
-**Bug 1 (trivial):** Erster Lauf schlug mit
-`UnboundLocalError: cannot access local variable 'feature_db'` fehl -
-falsch, das war der LIFTOFF-Fehler aus dem vorigen Eintrag, hier nicht
-relevant, siehe oben.
+**Bug 1 (trivial):** The first run failed with
+`UnboundLocalError: cannot access local variable 'feature_db'` -
+misleading; this was the LIFTOFF error from the previous entry, not
+relevant here, see above.
 
-**Bug 2 (ernst, mehrstündiger Fehlschlag):** `orthofinder -T iqtree`
-schlug sofort fehl ("Invalid argument for option -T: iqtree... Valid
-options are: fasttree, raxml, raxml-ng, iqtree3") - behoben durch
-`iqtree3` statt `iqtree`.
+**Bug 2 (serious, a multi-hour failure):** `orthofinder -T iqtree`
+failed immediately ("Invalid argument for option -T: iqtree... Valid
+options are: fasttree, raxml, raxml-ng, iqtree3") - fixed by using
+`iqtree3` instead of `iqtree`.
 
-**Bug 3 (der eigentliche Zeitfresser, ~1 Stunde verloren):** Der
-`diamond makedb`-Schritt (erster echter Rechenschritt) HING sich aus
-scheinbar unerklärlichen Gründen auf - kein Fehler, keine
-Fortschrittsmeldung, 0 % CPU-Last nach Minuten. Erste Hypothese (durch
-zeitliche Koinzidenz mit einem erneuten, deutlich selteneren
-EXT4-Remount-Ereignis im `dmesg`-Log, ca. 4,7 h nach dem letzten
-WSL-Neustart) war ein Wiederauftreten des früheren WSL-Stabilitätsbugs -
-diese Hypothese wurde VERWORFEN, nachdem ein zweiter, sauber isolierter
-Versuch (System sonst völlig ruhig, `load average` ~0, kein neues
-`dmesg`-Ereignis) exakt denselben Haenger reproduzierte. Systematische
-Eingrenzung: `diamond makedb` haengt sowohl single- als auch
-multi-threaded, sowohl auf der vollen Proteindatei als auch auf einer
-1000-Zeilen-Teilmenge - das schliesst Bibliotheks-/CPU-Architektur- oder
-Datei-Groessenprobleme aus. Ein Test mit `diamond=2.1.9` (statt der
-per Dependency-Resolution installierten neueren Version) lieferte
-sofort einen echten Fehler statt eines Haengers: `Error reading input
+**Bug 3 (the actual time sink, ~1 hour lost):** The `diamond makedb`
+step (the first genuine compute step) HUNG for seemingly inexplicable
+reasons - no error, no progress message, 0% CPU load after minutes. The
+first hypothesis (based on temporal coincidence with another, much
+rarer EXT4 remount event in the `dmesg` log, about 4.7 h after the last
+WSL restart) was a recurrence of the earlier WSL stability bug - this
+hypothesis was DISCARDED after a second, cleanly isolated attempt
+(system otherwise completely quiet, `load average` ~0, no new `dmesg`
+event) reproduced the exact same hang. Systematic narrowing: `diamond
+makedb` hangs both single- and multi-threaded, both on the full protein
+file and on a 1000-line subset - this rules out library/CPU-
+architecture or file-size problems. A test with `diamond=2.1.9` (instead
+of the newer version installed via dependency resolution) immediately
+produced a genuine error instead of a hang: `Error reading input
 stream at line 11: Invalid character (.) in sequence`.
 
-**Ursache:** `gffread -y` markiert nicht sauber uebersetzbare Codons
-(u. a. Stopcodons, aber auch Codons an Exon-Grenzen mit Frame-Rest) im
-Proteinoutput mit einem Punkt (`.`) - dieses Zeichen ist aber NICHT Teil
-des von diamond akzeptierten Aminosaeurealphabets. diamond v2.2.6
-(zunaechst installierte Version) haengt sich bei diesem ungueltigen
-Zeichen komplett auf, statt einen Fehler zu werfen - ein echter Bug in
-dieser diamond-Version, kein WSL-/Ressourcenproblem.
+**Cause:** `gffread -y` marks codons that cannot be translated cleanly
+(among them stop codons, but also codons at exon boundaries with a
+leftover frame) in the protein output with a period (`.`) - but this
+character is NOT part of the amino-acid alphabet accepted by diamond.
+diamond v2.2.6 (the initially installed version) hangs completely on
+this invalid character instead of throwing an error - a genuine bug in
+this diamond version, not a WSL/resource problem.
 
-**Fix:** `extract_proteome`-Regel ersetzt jetzt `.` (und vorsorglich `-`)
-in Sequenzzeilen (nicht Headerzeilen) durch `X` (unbekannte
-Aminosaeure) via `sed '/^>/!{s/\./X/g; s/-/X/g}'`, bevor die
-Proteindatei geschrieben wird. Ein direkter Downgrade auf `diamond=2.1.9`
-wurde versucht, aber verworfen: `mamba install diamond=2.1.9` in der
-bestehenden Environment loeste einen Abhaengigkeitskonflikt und
-DEINSTALLIERTE `orthofinder` komplett (OrthoFinder erfordert eine
-neuere diamond-Version). Die Environment wurde daher mit `orthofinder`
-UND der von ihm bevorzugten diamond-Version neu aufgesetzt; die
-Input-Bereinigung allein genuegte, um den Haenger zu beheben - diamond
-2.2.6 funktioniert einwandfrei auf sauberem Input.
+**Fix:** The `extract_proteome` rule now replaces `.` (and, as a
+precaution, `-`) in sequence lines (not header lines) with `X` (unknown
+amino acid) via `sed '/^>/!{s/\./X/g; s/-/X/g}'` before writing the
+protein file. A direct downgrade to `diamond=2.1.9` was attempted but
+discarded: `mamba install diamond=2.1.9` in the existing environment
+triggered a dependency conflict and COMPLETELY UNINSTALLED `orthofinder`
+(OrthoFinder requires a newer diamond version). The environment was
+therefore rebuilt with `orthofinder` AND the diamond version it prefers;
+cleaning the input alone was sufficient to fix the hang - diamond 2.2.6
+works flawlessly on clean input.
 
-**Lektion:** Wenn ein Rechenschritt bei 0 % CPU-Last unerklaerlich
-haengt, nicht vorschnell auf ein Infrastrukturproblem (WSL, Ressourcen)
-schliessen, nur weil frueher ein echtes Infrastrukturproblem vorlag -
-zeitliche Koinzidenz mit einem alten Symptommuster (hier: das seltene
-EXT4-Remount-Ereignis) kann taeuschen. Ein isolierter Minimaltest
-(kleinste Eingabedatei, single-threaded, alternative Toolversion) klaert
-das schneller als eine erneute Infrastruktur-Diagnose.
+**Lesson:** When a compute step hangs inexplicably at 0% CPU load, do
+not jump to blaming an infrastructure problem (WSL, resources) just
+because a genuine infrastructure problem occurred earlier - temporal
+coincidence with an old symptom pattern (here: the rare EXT4 remount
+event) can be misleading. An isolated minimal test (smallest input
+file, single-threaded, alternative tool version) clarifies this faster
+than another round of infrastructure diagnosis.
 
-**Zweites Laufzeitproblem nach dem Diamond-Fix:** Mit dem Dokument-Befehl
-`-M msa -T iqtree3` lief die Orthogruppen-Zuordnung selbst (diamond+MCL)
-zwar in Minuten durch, aber die anschliessende Gen-Baum-Inferenz rief
-`iqtree3` (mit ModelFinder) EINZELN pro Orthogruppe auf - bei >11.000
-Orthogruppen und >15 Minuten pro Baum (beobachtet an zwei laufenden
-Prozessen mit 100 % CPU-Last ueber >15 Min ohne Fertigstellung) haette
-das mehrere Tage bis Wochen gedauert. Fuer den in Abschnitt 7.1
-eigentlich benoetigten Output (Orthogroups.tsv als Grundlage der
-genbasierten PAV-Klassifikation) ist die Gen-Baum-Verfeinerungsschicht
-nicht erforderlich. Fix: `-M dendroblast` statt `-M msa -T iqtree3` -
-liefert dieselbe Orthogruppen-Zuordnung (unveraendert durch diamond+MCL
-bestimmt), ohne die teure MSA/Baum-Schicht. Lief danach in wenigen
-Minuten komplett durch.
+**Second runtime problem after the diamond fix:** With the document's
+command `-M msa -T iqtree3`, the orthogroup assignment itself
+(diamond+MCL) completed in minutes, but the subsequent gene-tree
+inference called `iqtree3` (with ModelFinder) INDIVIDUALLY per
+orthogroup - with >11,000 orthogroups and >15 minutes per tree (observed
+on two running processes at 100% CPU load for >15 min without
+completing), this would have taken several days to weeks. For the output
+actually needed in Section 7.1 (Orthogroups.tsv as the basis for
+gene-based PAV classification), the gene-tree refinement layer is not
+required. Fix: `-M dendroblast` instead of `-M msa -T iqtree3` -
+delivers the same orthogroup assignment (unchanged, determined by
+diamond+MCL) without the expensive MSA/tree layer. Completed fully in a
+few minutes afterward.
 
-**Ergebnis (13.226 Orthogruppen, 66.000 Gene, 5 Genome):**
+**Result (13,226 orthogroups, 66,000 genes, 5 genomes):**
 
-| Kennzahl | Wert |
+| Metric | Value |
 |---|---|
-| Gene in Orthogruppen | 65.600 (99,4 %) |
-| Nicht zugeordnete Gene | 400 (0,6 %) |
-| Orthogruppen mit allen 5 Spezies | 12.259 (92,7 %) |
-| Single-copy-Orthogruppen | 12.042 |
-| Spezies-spezifische Orthogruppen | 7 |
+| Genes in orthogroups | 65,600 (99.4%) |
+| Unassigned genes | 400 (0.6%) |
+| Orthogroups with all 5 species | 12,259 (92.7%) |
+| Single-copy orthogroups | 12,042 |
+| Species-specific orthogroups | 7 |
 
-**Praevalenzverteilung** (Grundlage fuer die Neuskalierung der
-Abschnitt-7.3-Schwellenwerte, siehe `config/thresholds.yaml`):
+**Prevalence distribution** (basis for rescaling the Section 7.3
+thresholds, see `config/thresholds.yaml`):
 
-| Praesenz | Orthogruppen | Anteil |
+| Prevalence | Orthogroups | Fraction |
 |---|---|---|
-| 5/5 (strict_core) | 12.259 | 92,7 % |
-| 4/5 (soft_core, NEU) | 589 | 4,5 % |
-| 2-3/5 (shell, NEU) | 371 | 2,8 % |
-| 1/5 (private_accessory) | 7 | 0,1 % |
+| 5/5 (strict_core) | 12,259 | 92.7% |
+| 4/5 (soft_core, NEW) | 589 | 4.5% |
+| 2-3/5 (shell, NEW) | 371 | 2.8% |
+| 1/5 (private_accessory) | 7 | 0.1% |
 
-**Schwellenwert-Neuskalierung:** Die Dokument-Schwellen sind fuer 14
-Referenzen kalibriert (`soft_core: 13/14=0,93`, `shell: 3-12/14`). Bei
-nur 5 moeglichen Praesenzstufen (1/5 bis 5/5) waere der alte
-`soft_core`-Schwellenwert 0,93 NIE erreichbar gewesen (naechste Stufe
-unter 1,0 ist 4/5=0,80) - alle 589 Orthogruppen mit 4/5-Praesenz waeren
-faelschlich als "shell" statt "soft_core" eingestuft worden.
-`config/thresholds.yaml` jetzt auf `strict_core=1,00`, `soft_core=0,80`
-(4/5), `shell_min=0,40` (2/5, alles darunter = `private_accessory`)
-umgestellt - qualitativ dieselbe Rangfolge wie im Dokument, nur an die
-kleinere, diskrete Panelgroesse angepasst.
+**Threshold rescaling:** The document's thresholds are calibrated for 14
+references (`soft_core: 13/14=0.93`, `shell: 3-12/14`). With only 5
+possible prevalence levels (1/5 to 5/5), the old `soft_core` threshold
+of 0.93 would NEVER have been reachable (the next level below 1.0 is
+4/5=0.80) - all 589 orthogroups with 4/5 prevalence would have been
+misclassified as "shell" instead of "soft_core".
+`config/thresholds.yaml` was now switched to `strict_core=1.00`,
+`soft_core=0.80` (4/5), `shell_min=0.40` (2/5, everything below =
+`private_accessory`) - qualitatively the same ordering as in the
+document, just adapted to the smaller, discrete panel size.
 
-## 2026-09-02 — Abschnitt 7.2: Whole-genome Alignments (MUMmer4/SyRI) - SyRI erfordert gleiche Chromosomenzahl
+## 2026-09-02 — Section 7.2: whole-genome alignments (MUMmer4/SyRI) - SyRI requires an equal chromosome count
 
 **Setup:** `envs/wga.yaml` (mummer4, syri), `workflow/rules/wga.smk`
-implementiert `nucmer_align` → `delta_filter` → `show_coords` → `run_syri`
-exakt nach Dokument-Befehl (Abschnitt 7.2). Statt eines einzelnen Ankers
-laufen alle 10 ungerichteten Paare des 5-Genom-Panels
-(`itertools.combinations`, `genome_pairs` im Snakefile) - das Dokument
-warnt explizit vor der Verzerrung durch einen einzelnen Oryza-Anker.
+implements `nucmer_align` → `delta_filter` → `show_coords` → `run_syri`
+exactly per the document's command (Section 7.2). Instead of a single
+anchor, all 10 undirected pairs of the 5-genome panel are run
+(`itertools.combinations`, `genome_pairs` in the Snakefile) - the
+document explicitly warns against the bias introduced by a single
+Oryza anchor.
 
-**Bug 1:** SyRI (installierte Version) verlangt `-d <delta-Datei>`
-zusaetzlich zu `-c <coords>` fuer SNP/Indel-Identifikation - das
-Dokument-Beispiel laesst `-d` weg, was mit
-`ERROR - CIGAR string or .delta file is required` fehlschlaegt (die
-Table-Coords aus `show-coords -THrd` enthalten kein CIGAR). Fix: `-d
-{filtered.delta}` ergaenzt. Ausserdem erwartet `--prefix` nur den
-Dateinamen-Zusatz, nicht einen kompletten Pfad - `--dir` separat
-gesetzt (sonst Crash-Warnung).
+**Bug 1:** SyRI (the installed version) requires `-d <delta file>` in
+addition to `-c <coords>` for SNP/indel identification - the document's
+example omits `-d`, which fails with
+`ERROR - CIGAR string or .delta file is required` (the table coords
+from `show-coords -THrd` contain no CIGAR). Fix: `-d {filtered.delta}`
+added. In addition, `--prefix` expects only the filename suffix, not a
+full path - `--dir` set separately (otherwise a crash warning).
 
-**Bug 2 (methodische Grenze, kein reiner Software-Fehler):** SyRI
-verlangt fuer seine Whole-genome-1:1-Chromosomenzuordnung, dass
-Referenz- und Query-Genom die GLEICHE Anzahl Contigs/Chromosomen haben
-(`ERROR - Unequal number of chromosomes in the genomes`). Unser
-5-Genom-Panel hat aber bewusst unterschiedliche Contigzahlen (7015=7,
-Br48=7, GCA004346965_1=7, **LpKY97=9**, **GCA059329645_1=10**) - und die
-"ueberzaehligen" Contigs sind exakt die bereits als Mini-/Accessory-
-Chromosom-Kandidaten geflaggten (siehe repeats.smk-Befund oben: LpKY97s
-2 kleine repeat-/genarme Contigs, GCA059329645_1s 2 kleine Contigs).
-**7 von 10 Paaren** (jedes mit LpKY97 oder GCA059329645_1) sind daher
-fuer SyRI nicht direkt nutzbar.
+**Bug 2 (a methodological limit, not a pure software bug):** SyRI
+requires, for its whole-genome 1:1 chromosome assignment, that the
+reference and query genome have the SAME number of contigs/chromosomes
+(`ERROR - Unequal number of chromosomes in the genomes`). Our 5-genome
+panel, however, deliberately has differing contig counts (7015=7,
+Br48=7, GCA004346965_1=7, **LpKY97=9**, **GCA059329645_1=10**) - and the
+"extra" contigs are exactly the ones already flagged as mini-/accessory-
+chromosome candidates (see the repeats.smk finding above: LpKY97's 2
+small repeat-/gene-poor contigs, GCA059329645_1's 2 small contigs).
+**7 of 10 pairs** (each involving LpKY97 or GCA059329645_1) are
+therefore not directly usable for SyRI.
 
-**Fix (Scope-Anpassung, in `workflow/Snakefile` als `syri_pairs`
-umgesetzt):** `nucmer`/`show-coords` laufen fuer ALLE 10 Paare (liefert
-rohe Alignment-Coverage, funktioniert unabhaengig von der
-Chromosomenzahl). SyRIs vollstaendige Syntenie-/SV-Klassifikation laeuft
-nur fuer die 3 Paare mit gleicher Contigzahl (alle 7-Contig-Genome
-untereinander: `7015↔Br48`, `7015↔GCA004346965_1`,
-`Br48↔GCA004346965_1`). Kein Daten- oder Informationsverlust fuer die
-Mini-/Accessory-Chromosom-Frage selbst - die betroffenen Contigs sind
-durch Repeat-/Gendichte-Evidenz bereits gut belegt; SyRI haette dafuer
-ohnehin keine sinnvolle 1:1-Chromosomenzuordnung liefern koennen.
+**Fix (scope adjustment, implemented in `workflow/Snakefile` as
+`syri_pairs`):** `nucmer`/`show-coords` run for ALL 10 pairs (yields raw
+alignment coverage, works independently of chromosome count). SyRI's
+full synteny/SV classification runs only for the 3 pairs with equal
+contig counts (all 7-contig genomes against each other: `7015↔Br48`,
+`7015↔GCA004346965_1`, `Br48↔GCA004346965_1`). No loss of data or
+information for the mini-/accessory-chromosome question itself - the
+affected contigs are already well supported by repeat-/gene-density
+evidence; SyRI could not have provided a meaningful 1:1 chromosome
+assignment for them anyway.
 
-**Ergebnis (3 SyRI-Klassifikationen, jeweils >600.000 Zeilen):**
-durchweg dominiert von SNP (237k-272k) und kleinen Indels (INS/DEL,
-20-32k), mit mehreren hundert syntenischen Bloecken (SYN/SYNAL,
-132-304 bzw. 699-877) und einer kleinen, aber vorhandenen Zahl an
-Strukturvarianten (Inversionen INV/INVAL/INVDP, Duplikationen DUP/DUPAL,
-Translokationen TRANS/TRANSAL) - biologisch plausibel fuer eng
-verwandte *M.-oryzae*-Isolate unterschiedlicher Wirtslinien.
+**Result (3 SyRI classifications, each >600,000 lines):** consistently
+dominated by SNPs (237k-272k) and small indels (INS/DEL, 20-32k), with
+several hundred syntenic blocks (SYN/SYNAL, 132-304 and 699-877
+respectively) and a small but present number of structural variants
+(inversions INV/INVAL/INVDP, duplications DUP/DUPAL, translocations
+TRANS/TRANSAL) - biologically plausible for closely related
+*M. oryzae* isolates from different host lineages.
 
-## 2026-09-02 — Abschnitt 7.4: Starship-/Captain-Kandidaten (starfish) - Mini-Chromosom-Fund bestaetigt
+## 2026-09-02 — Section 7.4: Starship/Captain candidates (starfish) - mini-chromosome finding confirmed
 
 **Setup:** `envs/starships.yaml` (starfish, metaeuk, hmmer, mmseqs2,
-blast) - identisch zur bereits erfolgreich getesteten globalen
-`starfish_env` aus einer frueheren Sitzung
-(`Dokumentation/Starfish_bisherige_Schritte.md`), hier als
-Projekt-lokale Kopie fuer Reproduzierbarkeit angelegt, aber fuer den
-tatsaechlichen Lauf wurde die bereits funktionierende globale
-`starfish_env` direkt wiederverwendet (spart Neuinstallation der
-mitgelieferten HMM-/Referenzproteindatenbanken unter `$CONDA_PREFIX/db`).
+blast) - identical to the already successfully tested global
+`starfish_env` from an earlier session
+(`Documentation/Starfish_Progress_Log.md`), created here as a
+project-local copy for reproducibility, but the already-working global
+`starfish_env` was directly reused for the actual run (saves
+reinstalling the bundled HMM/reference protein databases under
+`$CONDA_PREFIX/db`).
 
-`starfish annotate` lief in EINEM gemeinsamen Multi-Genome-Lauf ueber
-alle 5 Panel-Genome (2-Spalten-Assembly-TSV), mit `-s '__'` als
-Separator passend zu unserer bestehenden
-`{genome_id}__{contig}`-Kopfzeilenkonvention (Standard waere `_`, was
-bei Genome-IDs mit eigenem Unterstrich wie `GCA036493215_1` falsch
-geparst haette). Zusaetzlich `--gff` mit den Liftoff-Genmodellen
-uebergeben, um vorhandene Gene mit neu vorhergesagten YR-Genen
-abzugleichen.
+`starfish annotate` ran in ONE combined multi-genome run across all 5
+panel genomes (2-column assembly TSV), with `-s '__'` as the separator
+matching our existing `{genome_id}__{contig}` header convention (the
+default would be `_`, which would have parsed genome IDs with their own
+underscore, like `GCA036493215_1`, incorrectly). Additionally, `--gff`
+was passed with the Liftoff gene models to reconcile existing genes with
+newly predicted YR genes.
 
-**Bekannte Einschraenkung (nicht kritisch):** Die interne
-Namens-Uebernahme aus den Liftoff-GFF3 schlug fehl
-(`does not have a parse-able featureID using namefield 'Name='`) - unsere
-Liftoff-GFF3 speichert Gennamen ueber `locus_tag=`, nicht `Name=`
-(Starfish-Default). Dadurch wurden 0 bestehende Gene mit neuen YR-Treffern
-verknuepft ("no metaeuk genes intersect..."). Dies wurde NICHT behoben,
-da die nachfolgende Cargo-Gen-Analyse ohnehin eigenstaendig gegen die
-Liftoff-GFF3 per Koordinatenueberlappung erfolgt (siehe unten) - die
-interne Starfish-Verknuepfung war dafuer nicht erforderlich.
+**Known limitation (not critical):** The internal name matching against
+the Liftoff GFF3 failed
+(`does not have a parse-able featureID using namefield 'Name='`) - our
+Liftoff GFF3 stores gene names via `locus_tag=`, not `Name=` (Starfish's
+default). As a result, 0 existing genes were linked to new YR hits ("no
+metaeuk genes intersect..."). This was NOT fixed, since the subsequent
+cargo-gene analysis is carried out independently against the Liftoff
+GFF3 via coordinate overlap anyway (see below) - the internal Starfish
+link was not required for that.
 
-**Ergebnis `starfish annotate`:** **68 HMM-validierte YR-/Captain-Gene**
-gefunden (7015: 17, LpKY97: 16, GCA004346965_1: 13, GCA036493215_1: 12,
+**`starfish annotate` result:** **68 HMM-validated YR/Captain genes**
+found (7015: 17, LpKY97: 16, GCA004346965_1: 13, GCA036493215_1: 12,
 GCA059329645_1: 10) - `results/starships/panel_YR.filt.gff`.
 
-**Synthese-Skript (`workflow/scripts/classify_starship_candidates.py`,
-Regel `classify_starship_candidates`):** Kombiniert pro YR-Treffer:
-- Fenstergroesse (zentriert auf den Treffer, mindestens 20 kb gemaess
-  `thresholds.yaml: starship.min_region_length_bp`, an Contig-Enden
-  gekappt via `.fai`),
-- mittleren Repeat-Anteil im Fenster (`repeats.smk`-Output,
-  ueberlappungsgewichtet),
-- Anzahl Cargo-Gene im Fenster (Liftoff-GFF3, reine
-  Koordinatenueberlappung - unabhaengig von der oben gescheiterten
-  Starfish-internen Verknuepfung).
+**Synthesis script (`workflow/scripts/classify_starship_candidates.py`,
+rule `classify_starship_candidates`):** For each YR hit, combines:
+- window size (centered on the hit, at least 20 kb per
+  `thresholds.yaml: starship.min_region_length_bp`, clipped at contig
+  ends via `.fai`),
+- mean repeat fraction in the window (`repeats.smk` output,
+  overlap-weighted),
+- number of cargo genes in the window (Liftoff GFF3, pure coordinate
+  overlap - independent of the failed internal Starfish link above).
 
-Konservative Klassifikation (angelehnt an Abschnitt 7.4, aber ohne
-SyRI-Syntenie-Kreuzreferenz - siehe "Noch offen" unten):
-`starship_like` nur wenn Mindestgroesse UND mindestens 1 Cargo-Gen UND
-Repeat-Anteil im Fenster ≥1,5x Genomdurchschnitt; sonst
-`duf3435_candidate_contextual` (mindestens eines der Kriterien erfuellt)
-oder `duf3435_candidate_only` (kein Kontext, reiner HMM-Treffer - "ein
-DUF3435-Treffer allein reicht nicht", Dokument-Zitat).
+Conservative classification (modeled on Section 7.4, but without SyRI
+synteny cross-reference - see "still open" below): `starship_like` only
+when minimum size AND at least 1 cargo gene AND repeat fraction in the
+window ≥1.5x the genome average; otherwise
+`duf3435_candidate_contextual` (at least one criterion met) or
+`duf3435_candidate_only` (no context, a pure HMM hit - "a DUF3435 hit
+alone is not sufficient", per the document).
 
-**Ergebnis (68 Kandidaten insgesamt):**
+**Result (68 candidates total):**
 
-| Klassifikation | Anzahl |
+| Classification | Count |
 |---|---|
 | `starship_like` | 35 |
 | `duf3435_candidate_contextual` | 32 |
 | `duf3435_candidate_only` | 1 |
 
-**Wichtigster Befund - Ringschluss mit den Mini-Chromosom-Kandidaten:**
-Die beiden bereits durch Repeat-Anteil UND Gendichte als
-Mini-Chromosom-Kandidaten geflaggten LpKY97-Contigs tragen tatsaechlich
-Captain/YR-Gene:
-- `LpKY97__CP050927.1` (3,0 Mb, 56,3 % Repeat, 119 Gene): YR59
-  (`starship_like`, 2 Cargo-Gene, 44 % Repeat im Fenster) und YR60
+**Most important finding - closing the loop with the mini-chromosome
+candidates:** The two LpKY97 contigs already flagged as mini-chromosome
+candidates by both repeat fraction AND gene density do in fact carry
+Captain/YR genes:
+- `LpKY97__CP050927.1` (3.0 Mb, 56.3% repeat, 119 genes): YR59
+  (`starship_like`, 2 cargo genes, 44% repeat in the window) and YR60
   (`duf3435_candidate_contextual`).
-- `LpKY97__CP050928.1` (0,9 Mb, 53,0 % Repeat, 43 Gene): YR61-64, davon
-  YR62 und YR63 als `starship_like` eingestuft.
+- `LpKY97__CP050928.1` (0.9 Mb, 53.0% repeat, 43 genes): YR61-64, of
+  which YR62 and YR63 are classified as `starship_like`.
 
-Bei `GCA059329645_1`s Mini-Chromosom-Kandidaten (`CM181343.1`,
-`CM181341.1`) wurden dagegen KEINE YR-Treffer gefunden - kein
-Widerspruch, sondern ein zusaetzliches Differenzierungsmerkmal: nicht
-jede akzessorische/repeat-reiche Region muss ein aktives
-Captain-getriebenes Element tragen.
+For `GCA059329645_1`'s mini-chromosome candidates (`CM181343.1`,
+`CM181341.1`), by contrast, NO YR hits were found - not a
+contradiction, but an additional differentiating feature: not every
+accessory/repeat-rich region has to carry an active Captain-driven
+element.
 
-**Damit ist die Kernfrage des Projekts (Nachweisbarkeit von Starships/
-Accessory-Chromosomen mittels dieser Multi-Evidenz-Pipeline) am
-5-Genom-Panel selbst positiv beantwortet** - drei unabhaengige
-Evidenzlinien (Repeat-Anteil, Gendichte, Captain-Gen-Praesenz)
-konvergieren auf denselben LpKY97-Contigs.
+**This answers the project's core question (detectability of Starships/
+accessory chromosomes via this multi-evidence pipeline) positively on
+the 5-genome panel itself** - three independent lines of evidence
+(repeat fraction, gene density, Captain-gene presence) converge on the
+same LpKY97 contigs.
 
-**Noch offen fuer eine vollstaendigere 7.4-Klassifikation:**
-- SyRI-Syntenie-Kreuzreferenz (nur fuer die 3 kompatiblen Genome
-  moeglich, siehe voriger Eintrag) ist noch nicht in die
-  Klassifikation eingebaut.
-- Echte Boundary-/Insertionsstellen-Detektion (Starfish-Folgeschritte
-  jenseits von `annotate`, z. B. flankierende direkte Wiederholungen)
-  wurde nicht durchgefuehrt - die aktuelle Fenstergroesse ist ein reiner
-  Abstands-Puffer um den YR-Treffer, keine strukturell bestaetigte
-  Elementgrenze. Terminologie bleibt daher bewusst konservativ
-  ("starship_like", nicht "Starship").
+**Still open for a more complete Section 7.4 classification:**
+- SyRI synteny cross-reference (possible only for the 3 compatible
+  genomes, see previous entry) is not yet incorporated into the
+  classification.
+- Genuine boundary/insertion-site detection (Starfish follow-up steps
+  beyond `annotate`, e.g., flanking direct repeats) was not carried
+  out - the current window size is purely a distance buffer around the
+  YR hit, not a structurally confirmed element boundary. Terminology
+  therefore remains deliberately conservative ("starship_like", not
+  "Starship").
 
-## 2026-09-03 — Abschnitt 7.3: vollstaendige Regionstyp-Klassifikation aller Panel-Fenster
+## 2026-09-03 — Section 7.3: complete region-type classification of all panel windows
 
 **Setup:** `workflow/scripts/classify_panel_regions.py`
-(`classify_panel_regions`-Regel) klassifiziert JEDES 10-kb-Fenster
-(`pav.window_size_bp`) aller 5 Panel-Genome in genau einen Regionstyp,
-durch Kombination aller bisherigen Phasen:
-- Orthogruppen-Praevalenz (7.1) pro Gen im Fenster, gemittelt →
-  core/shell/private-Einstufung nach den bereits auf 5 Genome
-  umskalierten Schwellen (`thresholds.yaml`).
-- Repeat-Dichte (6.3) fuer `repeat_ambiguous`/`subtelomeric_dynamic`.
-- Contig-Groesse + Gendichte (< 50 % des Median-Contigs UND < 50 % der
-  mittleren Gendichte) fuer `accessory_chromosome` - programmatische
-  Version derselben Logik, die zuvor manuell auf die 4 Kandidaten-Contigs
-  angewendet wurde.
-- Starship-like-Kandidatenfenster (7.4) als hoechste Prioritaetsstufe.
+(`classify_panel_regions` rule) classifies EVERY 10-kb window
+(`pav.window_size_bp`) of all 5 panel genomes into exactly one region
+type, by combining all previous phases:
+- Orthogroup prevalence (7.1) per gene in the window, averaged →
+  core/shell/private classification according to the thresholds already
+  rescaled to 5 genomes (`thresholds.yaml`).
+- Repeat density (6.3) for `repeat_ambiguous`/`subtelomeric_dynamic`.
+- Contig size + gene density (< 50% of the median contig AND < 50% of
+  the mean gene density) for `accessory_chromosome` - a programmatic
+  version of the same logic previously applied manually to the 4
+  candidate contigs.
+- Starship-like candidate windows (7.4) as the highest priority level.
 
-**Prioritaet bei Ueberlappung:** `starship_like` > `accessory_chromosome`
-(ganzer geflaggter Contig) > `subtelomeric_dynamic` > Orthogruppen-
-basiert (strict_core/soft_core/shell/private_accessory) >
-`repeat_ambiguous` (hoher Repeat-Anteil, keine Genevidenz im Fenster) >
+**Priority on overlap:** `starship_like` > `accessory_chromosome`
+(entire flagged contig) > `subtelomeric_dynamic` > orthogroup-based
+(strict_core/soft_core/shell/private_accessory) > `repeat_ambiguous`
+(high repeat fraction, no gene evidence in the window) >
 `unclassified`.
 
-**Technischer Kniff (ID-Mapping):** OrthoFinder-Orthogruppen referenzieren
-Gene ueber ihre mRNA-IDs aus der Proteom-FASTA (z. B.
-`rna-gnl|PRJNA507314|PoMZ_08913-RA_mrna`), waehrend die GFF3
-`gene`-Features eigene IDs (`gene-PoMZ_08913`) mit gemeinsamem
-`locus_tag`-Attribut haben. `mrna_to_gene_id()` verbindet beide ueber
-den geteilten `locus_tag`.
+**Technical trick (ID mapping):** OrthoFinder orthogroups reference
+genes via their mRNA IDs from the proteome FASTA (e.g.,
+`rna-gnl|PRJNA507314|PoMZ_08913-RA_mrna`), while the GFF3 `gene`
+features have their own IDs (`gene-PoMZ_08913`) with a shared
+`locus_tag` attribute. `mrna_to_gene_id()` connects the two via the
+shared `locus_tag`.
 
-**Ergebnis (21.820 Fenster insgesamt):**
+**Result (21,820 windows total):**
 
-| Regionstyp | Fenster | Anteil |
+| Region type | Windows | Fraction |
 |---|---|---|
-| `strict_core` | 16.455 | 75,4 % |
-| `soft_core` | 2.736 | 12,5 % |
-| `repeat_ambiguous` | 1.450 | 6,6 % |
-| `shell` | 346 | 1,6 % |
-| `unclassified` | 282 | 1,3 % |
-| `subtelomeric_dynamic` | 227 | 1,0 % |
-| `accessory_chromosome` | 219 | 1,0 % |
-| `starship_like` | 101 | 0,5 % |
+| `strict_core` | 16,455 | 75.4% |
+| `soft_core` | 2,736 | 12.5% |
+| `repeat_ambiguous` | 1,450 | 6.6% |
+| `shell` | 346 | 1.6% |
+| `unclassified` | 282 | 1.3% |
+| `subtelomeric_dynamic` | 227 | 1.0% |
+| `accessory_chromosome` | 219 | 1.0% |
+| `starship_like` | 101 | 0.5% |
 | `private_accessory` | 4 |
 
-## 2026-09-03 — Abschnitt 9.1: Stratifizierte Auswahl der 10 Pilotisolaten
+## 2026-09-03 — Section 9.1: stratified selection of the 10 pilot isolates
 
-**Vorgehen:** Von den 17 tatsaechlich Long-Read-/Hybrid-sequenzierten
-Kandidaten im 44-Isolat-Pool (`config/samples_candidate_pool.tsv`)
-wurden 10 nach den Dokument-Kriterien (Abschnitt 9.1) ausgewaehlt.
+**Approach:** Of the 17 candidates actually long-read/hybrid-sequenced
+in the 44-isolate pool (`config/samples_candidate_pool.tsv`), 10 were
+selected according to the document's criteria (Section 9.1).
 
-**Nebenbefund bei der Host-Pruefung:** `GCA_021764705.1` (Isolat "EA18",
-China: Enshi Hubei) war im Pool als `host=unknown` gefuehrt - eine
-gezielte NCBI-Datasets-API-Abfrage ergab `isolation_source: rice`, also
-tatsaechlich ein Oryza-Isolat (dasselbe Fehlklassifikations-Muster wie
-zuvor bei Br48/Triticum, siehe Panel-Reduktions-Eintrag oben).
-`GCA_059469275.1` (Isolat "E2", Aethiopien) blieb dagegen echt
-unbekannt (BioSample liefert nur `isolation_source: Ethiopia`, kein
-Wirt).
+**Secondary finding during host checking:** `GCA_021764705.1` (isolate
+"EA18", China: Enshi Hubei) was carried in the pool as `host=unknown` -
+a targeted NCBI Datasets API query returned `isolation_source: rice`,
+i.e., actually an Oryza isolate (the same misclassification pattern as
+earlier with Br48/Triticum, see the panel-reduction entry above).
+`GCA_059469275.1` (isolate "E2", Ethiopia), by contrast, remained
+genuinely unknown (BioSample provides only `isolation_source: Ethiopia`,
+no host).
 
-**Finale Auswahl (`config/samples.tsv`):**
+**Final selection (`config/samples.tsv`):**
 
-| Isolat | Host | Herkunft | Begruendung |
+| Isolate | Host | Origin | Rationale |
 |---|---|---|---|
-| O219 | Oryza | Elfenbeinkueste, 1985 | Oryza-Diversitaet Westafrika |
-| TRG2 | Oryza | Thailand, 2023 | Oryza-Diversitaet Suedostasien, juengste Probe |
-| Guy11 | Oryza | Franz.-Guayana, 1979 | Benchmark-Isolat (etablierter Laborstamm) |
-| EA18 (GCA021764705_1) | Oryza | China, 2021 | Oryza-Diversitaet Ostasien, hybrid-sequenziert |
-| B71 | Triticum | Bolivien, 2012 | Weizenbrand-Pandemielinie, Ursprungskontinent |
-| ZM12 | Triticum | Sambia, 2018 | Weizenbrand-Pandemielinie, Ausbreitung nach Afrika |
-| K23_123 | Eleusine | Kenia | Pflicht-Slot, bereits heruntergeladen |
-| E34 | Eleusine | Aethiopien | Pflicht-Slot, bereits heruntergeladen |
-| TF051MC7 | Wildgrass (Lolium) | USA, 2005 | "erwartete accessory DNA"-Kriterium - gleiche Host-Gruppe wie LpKY97 (Referenzpanel), das bereits Mini-Chromosomen zeigte |
-| gw6 | Setaria | China, 2016 | Zusaetzliche Host-Diversitaet (Kolbenhirse) |
+| O219 | Oryza | Ivory Coast, 1985 | Oryza diversity West Africa |
+| TRG2 | Oryza | Thailand, 2023 | Oryza diversity Southeast Asia, most recent sample |
+| Guy11 | Oryza | French Guiana, 1979 | benchmark isolate (established lab strain) |
+| EA18 (GCA021764705_1) | Oryza | China, 2021 | Oryza diversity East Asia, hybrid-sequenced |
+| B71 | Triticum | Bolivia, 2012 | wheat-blast pandemic lineage, continent of origin |
+| ZM12 | Triticum | Zambia, 2018 | wheat-blast pandemic lineage, spread into Africa |
+| K23_123 | Eleusine | Kenya | mandatory slot, already downloaded |
+| E34 | Eleusine | Ethiopia | mandatory slot, already downloaded |
+| TF051MC7 | Wild grass (Lolium) | USA, 2005 | "expected accessory DNA" criterion - same host group as LpKY97 (reference panel), which already showed mini-chromosomes |
+| gw6 | Setaria | China, 2016 | additional host diversity (foxtail millet) |
 
-4 Oryza statt der empfohlenen 2-3 (EA18 als Zusatzgewinn wegen
-Hybrid-Sequenzierung und neuer Geografie aufgenommen, keine strikte
-Regelverletzung angesichts der Bandbreitenangabe im Dokument).
+4 Oryza instead of the recommended 2-3 (EA18 included as a bonus for its
+hybrid sequencing and new geography, not a strict rule violation given
+the range stated in the document).
 
-**Kritischer Befund - Rohdaten-Verfuegbarkeit:** Von den 8 nicht-Eleusine-
-Isolaten wurden die BioSample-Accessions gegen den 193-Lauf-Long-Read-
-SRA-Katalog (`data/ncbi_m_oryzae_sra_wgs_longread.tsv`) abgeglichen -
-**nur 3 von 8 haben dort auffindbare Rohreads:**
-- **B71** (SAMN06076154): 11 Laeufe (10x PacBio SMRT + 2x Nanopore),
-  zusammen ~45 Gb - eine der am tiefsten sequenzierten Proben im
-  gesamten Katalog.
-- **ZM12** (SAMN29254577): 5 Nanopore-Laeufe, 475 Mb bis 13,7 Gb.
-- **TF051MC7** (SAMN36850036): 1 Nanopore-Lauf, 8,2 Gb.
+**Critical finding - raw-data availability:** For the 8 non-Eleusine
+isolates, the BioSample accessions were cross-checked against the
+193-run long-read SRA catalog
+(`data/ncbi_m_oryzae_sra_wgs_longread.tsv`) - **only 3 of 8 have raw
+reads findable there:**
+- **B71** (SAMN06076154): 11 runs (10x PacBio SMRT + 2x Nanopore),
+  ~45 Gb combined - one of the most deeply sequenced samples in the
+  entire catalog.
+- **ZM12** (SAMN29254577): 5 Nanopore runs, 475 Mb to 13.7 Gb.
+- **TF051MC7** (SAMN36850036): 1 Nanopore run, 8.2 Gb.
 
-Fuer **O219, TRG2, Guy11, EA18 und gw6** wurden KEINE Rohreads in diesem
-Katalog gefunden - entweder unter einem anderen BioProject/BioSample
-deponiert (nicht von der urspruenglichen SRA-Suchanfrage erfasst) oder
-tatsaechlich nicht separat von der Assembly hochgeladen. Bleibt als
-offener Punkt fuer eine gezieltere Nachsuche (z. B. direkte
-SRA-Websuche nach Isolatnamen statt nur BioSample-Kreuzreferenz).
+For **O219, TRG2, Guy11, EA18, and gw6**, NO raw reads were found in
+this catalog - either deposited under a different BioProject/BioSample
+(not captured by the original SRA search query) or genuinely not
+uploaded separately from the assembly. This remains an open item for a
+more targeted follow-up search (e.g., a direct SRA web search by
+isolate name instead of only a BioSample cross-reference).
 
-**Konsequenz:** Von den 10 Pilotisolaten haben aktuell **5 von 10**
-(K23_123, E34, B71, ZM12, TF051MC7) real auffindbare/bereits
-heruntergeladene Rohdaten - genug fuer einen ersten Mapping-Pilotlauf
-(Phase V), aber die vollstaendige 10-Isolat-Stratifizierung aus
-Abschnitt 9.1 ist noch nicht mit echten Daten hinterlegt.
+**Consequence:** Of the 10 pilot isolates, **5 of 10** (K23_123, E34,
+B71, ZM12, TF051MC7) currently have genuinely findable/already
+downloaded raw data - enough for a first mapping pilot run (Phase V),
+but the full 10-isolate stratification from Section 9.1 is not yet
+backed by real data.
 
-**B71/ZM12/TF051MC7 heruntergeladen (je EIN SRA-Lauf, nicht alle
-verfuegbaren):** Bei B71 und ZM12 existieren mehrere Laeufe (11 bzw. 5);
-da das Dokument selbst nur einen Pilot-Startwert von ~20x nennt, wurde
-je nur der kleinste/ein einzelner Lauf heruntergeladen statt aller
-(B71: nur `SRR6232287`, ~11,9 GB Archivgroesse, statt aller 11 Laeufe
-zusammen >45 GB). Ergebnis (`seqkit stats`/NanoPlot):
+**B71/ZM12/TF051MC7 downloaded (one SRA run each, not all available
+ones):** For B71 and ZM12, multiple runs exist (11 and 5, respectively);
+since the document itself names only a pilot starting value of ~20x,
+only the smallest/a single run was downloaded per isolate instead of
+all of them (B71: only `SRR6232287`, ~11.9 GB archive size, instead of
+all 11 runs combined >45 GB). Result (`seqkit stats`/NanoPlot):
 
-| Isolat | Lauf | Reads | N50 | Coverage (vs. 44,5 Mb) |
+| Isolate | Run | Reads | N50 | Coverage (vs. 44.5 Mb) |
 |---|---|---|---|---|
-| B71 | SRR6232287 | 163.478 | 35.779 bp | ~81x |
-| ZM12 | SRR19868246 | 397.795 | 20.605 bp | ~108x |
-| TF051MC7 | SRR30725258 | 325.797 | 34.671 bp | ~184x |
+| B71 | SRR6232287 | 163,478 | 35,779 bp | ~81x |
+| ZM12 | SRR19868246 | 397,795 | 20,605 bp | ~108x |
+| TF051MC7 | SRR30725258 | 325,797 | 34,671 bp | ~184x |
 
-**Wichtiger Hinweis zur PacBio/Nanopore-Archivgroesse:** Die `.sra`-
-Archivgroesse kann die reine Basenzahl deutlich uebersteigen (B71:
-3,59 Gb Basen laut Katalog, aber 11,9 GB Downloadgroesse - aeltere
-PacBio-RS/Sequel-Rohformate speichern zusaetzliche Kinetik-/Trace-Daten
-mit ab, nicht nur Basecalls). Vor weiteren Downloads aus diesem Katalog
-immer die `size_MB`-Spalte pruefen, nicht nur die Basenzahl abschaetzen.
+**Important note on PacBio/Nanopore archive size:** The `.sra` archive
+size can substantially exceed the raw base count (B71: 3.59 Gb bases per
+the catalog, but an 11.9 GB download size - older PacBio RS/Sequel raw
+formats also store additional kinetics/trace data, not just base
+calls). Before further downloads from this catalog, always check the
+`size_MB` column rather than estimating from the base count alone.
 
-**Ressourcen-Beobachtung:** `fasterq-dump`/`gzip` fuer diese grossen
-Einzeldateien (7-10 GB unkomprimierte FASTQ) sind erwartungsgemaess
-CPU-intensiv (mehrere hundert Prozent CPU bei fasterq-dump, ein Kern zu
-100 % bei gzip ueber mehrere Minuten) - macht den Host-Rechner
-zwischenzeitlich spuerbar traege, aber unproblematisch fuer die
-Datenintegritaet. Auf Nutzerwunsch unveraendert mit voller
-Geschwindigkeit durchlaufen lassen statt Thread-Zahl zu drosseln.
+**Resource observation:** `fasterq-dump`/`gzip` for these large
+individual files (7-10 GB uncompressed FASTQ) are, as expected,
+CPU-intensive (several hundred percent CPU for fasterq-dump, one core
+at 100% for gzip over several minutes) - makes the host machine
+noticeably sluggish in the meantime, but unproblematic for data
+integrity. At the user's request, this was left running at full speed
+rather than throttling the thread count.
 
-## 2026-09-03 — Abschnitt 10.1: Long-Read-Mapping aller 5 verfuegbaren Pilotisolate gegen das Panel
+## 2026-09-03 — Section 10.1: long-read mapping of all 5 available pilot isolates against the panel
 
-**Setup:** `workflow/rules/mapping.smk` implementiert `minimap2_map` →
-`mapping_flagstat` → `mapping_coverage_by_contig` exakt nach
-Dokument-Befehl (Abschnitt 10.1). Preset pro Isolat anhand der
-tatsaechlichen SRA-Plattform gewaehlt (nicht pauschal ont/hifi wie im
-Dokument-Beispiel): `map-pb` fuer die drei PacBio-RAW/CLR-Isolate
-(B71, K23_123, E34 - KEINE HiFi/CCS-Reads), `map-ont` fuer die zwei
-Nanopore-Isolate (ZM12, TF051MC7). Siehe `config/samples.tsv`,
-Spalte `minimap2_preset`.
+**Setup:** `workflow/rules/mapping.smk` implements `minimap2_map` →
+`mapping_flagstat` → `mapping_coverage_by_contig` exactly per the
+document's command (Section 10.1). Preset chosen per isolate based on
+the actual SRA platform (not blanket ont/hifi as in the document's
+example): `map-pb` for the three PacBio RAW/CLR isolates (B71, K23_123,
+E34 - NO HiFi/CCS reads), `map-ont` for the two Nanopore isolates
+(ZM12, TF051MC7). See `config/samples.tsv`, column `minimap2_preset`.
 
-**Bug 1 (OOM):** Erster Lauf mit `--cores 14` liess Snakemake 4 Samples
-gleichzeitig starten (je `threads: 3`) - `samtools sort`s Standard-
-Speicherreservierung (~768 MB/Thread) summierte sich ueber 4 parallele
-Jobs auf >10 GB und loeste einen OOM-Kill aus (`dmesg` bestaetigt,
-Prozess `minimap2` getoetet trotz nur ~700 MB eigenem RSS - die
-eigentliche Ursache war `samtools sort`, nicht minimap2 selbst). Fix:
-`-m 512M` explizit gesetzt, Lauf mit `--cores 3` (effektiv seriell)
-wiederholt.
+**Bug 1 (OOM):** The first run with `--cores 14` let Snakemake start 4
+samples simultaneously (`threads: 3` each) - `samtools sort`'s default
+memory reservation (~768 MB/thread) summed to >10 GB across 4 parallel
+jobs and triggered an OOM kill (`dmesg` confirms, the `minimap2` process
+was killed despite only ~700 MB of its own RSS - the actual cause was
+`samtools sort`, not minimap2 itself). Fix: `-m 512M` set explicitly,
+run repeated with `--cores 3` (effectively serial).
 
-**Bug 2 (WSL-Instabilitaet, Hochfrequenz-Rueckfall):** Nach dem
-OOM-Fix schlug der Lauf zweimal in Folge reproduzierbar direkt nach dem
-minimap2-Indexaufbau fehl (RAM dabei unauffaellig, kein OOM) - `dmesg`
-zeigte das fruehere EXT4-Remount-/Journal-Korruption-Muster im
-~100-130-Sekunden-Takt wieder auftreten, obwohl `autoMemoryReclaim=
-disabled` unveraendert in `.wslconfig` gesetzt war. Ursache nicht
-abschliessend geklaert (evtl. eine vom Vortag verschiedene Stoerquelle
-am selben Tag/Boot). Ein sauberer `wsl --shutdown` + Neustart behob es
-sofort - danach lief der komplette 5-Isolate-Mapping-Lauf ueber
-~2,5 Stunden durchgehend stabil ohne weitere Unterbrechung. Zusaetzlich
-wurde eine Retry-Schleife (`run_mapping_retry.sh`, bis zu 15 Versuche
-mit 15 s Pause) in das Ausfuehrungsskript eingebaut, um kuenftige
-transiente Aussetzer automatisch abzufangen.
+**Bug 2 (WSL instability, high-frequency recurrence):** After the OOM
+fix, the run reproducibly failed twice in a row right after minimap2
+index construction (RAM unremarkable at the time, no OOM) - `dmesg`
+showed the earlier EXT4 remount/journal-corruption pattern recurring at
+a ~100-130-second cadence, even though `autoMemoryReclaim=disabled` was
+still set unchanged in `.wslconfig`. Cause not conclusively determined
+(possibly a different disturbance source on the same day/boot than the
+previous day). A clean `wsl --shutdown` + restart fixed it immediately -
+afterward the complete 5-isolate mapping run ran stably for ~2.5 hours
+without further interruption. Additionally, a retry loop
+(`run_mapping_retry.sh`, up to 15 attempts with a 15 s pause) was built
+into the execution script to automatically catch future transient
+hiccups.
 
-**Laufzeit:** Deutlich laenger als anhand der Basenzahl geschaetzt -
-`--secondary=yes` gegen ein 3.677-Sequenzen-Panel mit vielen
-homologen/redundanten core-Regionen erzeugt sehr viele Sekundäralignments
-und dadurch sehr grosse BAM-Dateien (2,4-10,6 GB je Isolat). Gesamtlauf
-fuer alle 5 Isolate: ca. 2,5 Stunden (seriell wegen Speicherlimit).
+**Runtime:** Considerably longer than estimated from base count -
+`--secondary=yes` against a 3,677-sequence panel with many homologous/
+redundant core regions produces very many secondary alignments and
+consequently very large BAM files (2.4-10.6 GB per isolate). Total
+runtime for all 5 isolates: about 2.5 hours (serial, due to the memory
+limit).
 
-**Ergebnis (`samtools flagstat`):**
+**Result (`samtools flagstat`):**
 
-| Isolat | Primaer gemappt | Gesamt gemappt (inkl. Secondary) | BAM-Groesse |
+| Isolate | Primary mapped | Total mapped (incl. secondary) | BAM size |
 |---|---|---|---|
-| TF051MC7 | 99,54 % | 99,92 % | 10,6 GB |
-| ZM12 | 92,96 % | 98,38 % | 5,7 GB |
-| K23_123 | 91,89 % | 97,91 % | 2,4 GB |
-| E34 | 77,53 % | 93,67 % | 6,1 GB |
-| B71 | 71,62 % | 94,37 % | 4,0 GB |
+| TF051MC7 | 99.54% | 99.92% | 10.6 GB |
+| ZM12 | 92.96% | 98.38% | 5.7 GB |
+| K23_123 | 91.89% | 97.91% | 2.4 GB |
+| E34 | 77.53% | 93.67% | 6.1 GB |
+| B71 | 71.62% | 94.37% | 4.0 GB |
 
-B71s auffaellig niedrigere Mapping-Rate (71,62 %) ist noch nicht
-untersucht - moeglicher Hinweis auf hoehere Divergenz der bolivianischen
-Weizenbrand-Linie zum Panel oder auf Datenqualitaetsunterschiede
-(einzelner PacBio-RS/Sequel-Lauf, aeltere Chemie).
+B71's notably lower mapping rate (71.62%) has not yet been
+investigated - a possible indication of greater divergence of the
+Bolivian wheat-blast lineage from the panel, or of data-quality
+differences (a single older-chemistry PacBio RS/Sequel run).
 
-**Wichtigster Einzelbefund - moegliches wirtsuebergreifendes
-Multi-Kopie-Element:** `PANEL001785` (`accessory_chromosome`, Cluster
-`ACC_002`, Repraesentant `GCA059329645_1__CM181349.1`, ein winziger
-35-kb-Contig aus dem Avena-Referenzgenom) zeigt bei **ALLEN 5**
-Testisolaten - trotz voellig unterschiedlicher Wirtslinien (Triticum,
-Eleusine, Wildgrass) - eine extrem hohe mittlere Tiefe (300x bis
-knapp 4.000x, weit ueber der 20-200x-Gesamtgenomcoverage der jeweiligen
-Isolate). Ebenso auffaellig: `PANEL001948` (`shell`,
-`GCA059329645_1__CM181340.1:60001-90000`) mit aehnlich extremer Tiefe
-bei allen 5 Isolaten.
+**Most important individual finding - a possible cross-host multi-copy
+element:** `PANEL001785` (`accessory_chromosome`, cluster `ACC_002`,
+representative `GCA059329645_1__CM181349.1`, a tiny 35-kb contig from
+the Avena reference genome) shows an extremely high mean depth
+(300x to nearly 4,000x, far above the isolates' respective 20-200x
+whole-genome coverage) in **ALL 5** test isolates - despite completely
+different host lineages (Triticum, Eleusine, wild grass). Equally
+notable: `PANEL001948` (`shell`,
+`GCA059329645_1__CM181340.1:60001-90000`) with similarly extreme depth
+in all 5 isolates.
 
-**Vorsicht bei der Interpretation:** Eine derart extreme Tiefe deutet
-eher auf ein hochrepetitives Multi-Kopie-Element (z. B. rRNA-Gencluster)
-als auf eine normale Einzelkopie-Region hin - genau das Szenario, vor
-dem Abschnitt 10.2 warnt ("Eine Region mit hoher Homologie zu mehreren
-Referenzen darf nicht allein ueber den primaeren Alignmenttreffer
-zugeschrieben werden"). Vor einer belastbaren Interpretation als
-"wirtsuebergreifendes akzessorisches Element" muss dies mit
-MAPQ-gefilterten Alignments (Abschnitt 10.2, PAV-Auswertungsebene 2)
-gegengeprueft werden - siehe naechster Eintrag (Abschnitt 11), wo genau
-das gemacht wurde: das Signal hat sich bestaetigt.
+**Caution regarding interpretation:** Such extreme depth points more to
+a highly repetitive multi-copy element (e.g., an rRNA gene cluster) than
+to a normal single-copy region - exactly the scenario Section 10.2
+warns about ("a region with high homology to multiple references must
+not be attributed based on the primary alignment hit alone"). Before a
+reliable interpretation as a "cross-host accessory element" is
+warranted, this must be cross-checked with MAPQ-filtered alignments
+(Section 10.2, PAV evaluation level 2) - see the next entry
+(Section 11), where exactly that was done: the signal was confirmed.
 
-## 2026-09-03 — Abschnitt 11: Fensterbasierte PAV-Analyse - zwei Starship-like-Regionen wirtsuebergreifend bestaetigt
+## 2026-09-03 — Section 11: window-based PAV analysis - two starship-like regions confirmed across host lineages
 
-**Setup:** `workflow/rules/pav.smk` implementiert Abschnitt 11 komplett:
-`panel_windows` (10-kb-Fenster ueber die Panel-FASTA, Abschnitt 11.1) →
-`mosdepth_unique` (MAPQ ≥ 20, mosdepth-Standard schliesst secondary/
-supplementary bereits aus - die quantitative PAV-Ebene) +
-`mosdepth_all` (`--flag 1540`: nur unmapped/qcfail/dup ausschliessen,
-secondary/supplementary BEHALTEN - die Homologie-Kontrollebene,
-Abschnitt 10.2) → `pav_call` (Present/Absent/Uncertain je Fenster nach
-Regionstyp-spezifischen Breadth-Schwellen aus `thresholds.yaml`, plus
-`ambiguous_multimapping`, wenn die Breadth-Differenz zwischen "all" und
-"unique" > 0,3 betraegt) → `pav_matrix` (Panel-Region x Isolat-Matrix,
-Mehrheitsentscheid ueber die Fenster einer Panel-Region).
+**Setup:** `workflow/rules/pav.smk` fully implements Section 11:
+`panel_windows` (10-kb windows across the panel FASTA, Section 11.1) →
+`mosdepth_unique` (MAPQ ≥ 20, mosdepth's default already excludes
+secondary/supplementary - the quantitative PAV level) +
+`mosdepth_all` (`--flag 1540`: excludes only unmapped/qcfail/dup, KEEPS
+secondary/supplementary - the homology control level, Section 10.2) →
+`pav_call` (present/absent/uncertain per window according to
+region-type-specific breadth thresholds from `thresholds.yaml`, plus
+`ambiguous_multimapping` when the breadth difference between "all" and
+"unique" exceeds 0.3) → `pav_matrix` (panel-region x isolate matrix,
+majority vote over the windows of a panel region).
 
-**Technischer Kniff:** Da unsere Panel-FASTA-Header selbst bereits alle
-Metadaten tragen (`>PANEL000001|type=...|cluster=...|rep=...|source=...`,
-keine Leerzeichen), ist der mosdepth-"chrom"-Wert direkt der volle
-Header-String - `panel_id`/`region_type` werden direkt daraus geparst,
-kein separater Manifest-Join noetig.
+**Technical trick:** Since our panel FASTA headers already carry all
+metadata themselves (`>PANEL000001|type=...|cluster=...|rep=...|source=...`,
+no spaces), the mosdepth "chrom" value is directly the full header
+string - `panel_id`/`region_type` are parsed directly from it, no
+separate manifest join needed.
 
-**Bug:** `mosdepth` war in KEINER tatsaechlich existierenden Environment
-installiert (`envs/core.yaml` wurde nie real als `multiref-core`
-angelegt - alle bisherigen `qc.smk`-Laeufe nutzten stattdessen die
-aeltere, vorbestehende `qc_env`, die kein mosdepth enthielt). Behoben
-durch `mamba install -n qc_env mosdepth` statt eine neue Environment
-anzulegen (pragmatisch, da `qc_env` ohnehin schon fuer alle
-core-Werkzeuge in Gebrauch ist).
+**Bug:** `mosdepth` was not installed in ANY actually existing
+environment (`envs/core.yaml` was never actually created as
+`multiref-core` - all previous `qc.smk` runs instead used the older,
+pre-existing `qc_env`, which did not include mosdepth). Fixed via
+`mamba install -n qc_env mosdepth` instead of creating a new
+environment (pragmatic, since `qc_env` is already in use for all core
+tools anyway).
 
-**Laufzeit:** mosdepth ist erheblich schneller als minimap2/samtools
-sort - alle 5 Isolate (2 Ebenen x 5 = 10 mosdepth-Laeufe + 5 pav_call +
-1 pav_matrix) liefen in **~10 Minuten** komplett durch, verglichen mit
-den ~2,5 Stunden fuer das vorausgehende Mapping.
+**Runtime:** mosdepth is considerably faster than minimap2/samtools
+sort - all 5 isolates (2 levels x 5 = 10 mosdepth runs + 5 pav_call + 1
+pav_matrix) completed in **~10 minutes**, compared to the ~2.5 hours for
+the preceding mapping.
 
-**Ergebnis (3.677 Panel-Regionen x 5 Isolate):**
+**Result (3,677 panel regions x 5 isolates):**
 
-| Call-Klasse | B71 | ZM12 | K23_123 | E34 | TF051MC7 |
+| Call class | B71 | ZM12 | K23_123 | E34 | TF051MC7 |
 |---|---|---|---|---|---|
 | present | 854 | 1269 | 1261 | 1403 | 1413 |
 | absent | 546 | 328 | 537 | 309 | 351 |
 | uncertain | 153 | 196 | 170 | 237 | 359 |
 | ambiguous_multimapping | 2124 | 1884 | 1709 | 1728 | 1554 |
 
-**`ambiguous_multimapping` ist die haeufigste Klasse in allen 5
-Isolaten (42-58 % der Panel-Regionen)** - direkte Konsequenz der
-bereits dokumentierten schwachen Panel-Dedup-Rate (89 % der
-strict_core-Cluster blieben Einzelgenom-Eintraege, siehe Abschnitt-8-
-Eintrag): viele nur leicht unterschiedliche Panel-Regionen ziehen sich
-gegenseitig Multi-Mapping-Signal.
+**`ambiguous_multimapping` is the most frequent class in all 5 isolates
+(42-58% of panel regions)** - a direct consequence of the already
+documented weak panel dedup rate (89% of strict_core clusters remained
+single-genome entries, see the Section-8 entry): many only slightly
+different panel regions draw multi-mapping signal from each other.
 
-**Haupt-Befund: 399 von 3.677 Panel-Regionen sind bei ALLEN 5 Isolaten
-eindeutig "present"** (unabhaengig von deren Wirtslinie):
+**Main finding: 399 of 3,677 panel regions are unambiguously "present"
+in ALL 5 isolates** (regardless of their host lineage):
 
-| Regionstyp | Anzahl |
+| Region type | Count |
 |---|---|
 | soft_core | 294 |
 | strict_core | 84 |
@@ -1480,258 +1460,248 @@ eindeutig "present"** (unabhaengig von deren Wirtslinie):
 | **starship_like** | **2** |
 | accessory_chromosome | 1 |
 
-**Die einzelne `accessory_chromosome`-Region ist exakt `PANEL001785`**
-(der zuvor auffaellige Avena-spezifische 35-kb-Contig, siehe Abschnitt-
-10.1-Eintrag) - **bestaetigt bei MAPQ ≥ 20 als echtes Present-Signal in
-allen 5 Isolaten**, nicht als Multi-Mapping-Artefakt (waere sonst als
-`ambiguous_multimapping` klassifiziert worden). Das Signal haelt der
-strengeren Pruefung stand.
+**The single `accessory_chromosome` region is exactly `PANEL001785`**
+(the previously notable Avena-specific 35-kb contig, see the
+Section-10.1 entry) - **confirmed at MAPQ ≥ 20 as a genuine present
+signal in all 5 isolates**, not as a multi-mapping artifact (which would
+otherwise have been classified as `ambiguous_multimapping`). The signal
+withstands the stricter check.
 
-**Die beiden `starship_like`-Regionen, die in allen 5 Testisolaten
-(Triticum x2, Eleusine x2, Wildgrass x1) unabhaengig von der Wirtslinie
-als praesent bestaetigt wurden:**
+**The two `starship_like` regions confirmed as present in all 5 test
+isolates (Triticum x2, Eleusine x2, wild grass x1), regardless of host
+lineage:**
 
-| Panel-ID | Quelle | Laenge | Repeat-Anteil | In wie vielen Referenzen |
+| Panel ID | Source | Length | Repeat fraction | In how many references |
 |---|---|---|---|---|
-| PANEL003659 | Br48 (Triticum), `AP027063.1:170001-200000` | 30 kb | 78,4 % | nur 1 (Br48-spezifisch im Panel) |
-| PANEL003670 | Avena, `CM181346.1:3530001-3560000` | 30 kb | 48,9 % | 2 (Avena + Br48/Triticum) |
+| PANEL003659 | Br48 (Triticum), `AP027063.1:170001-200000` | 30 kb | 78.4% | only 1 (Br48-specific in the panel) |
+| PANEL003670 | Avena, `CM181346.1:3530001-3560000` | 30 kb | 48.9% | 2 (Avena + Br48/Triticum) |
 
-**Einordnung:** Damit ist die POC-Kernfrage - Nachweisbarkeit
-wirtsuebergreifender Starship-like-Elemente per Long-Read-Mapping gegen
-das Multi-Referenzpanel - mit echten Daten UND einer strengen
-Multi-Mapping-Kontrolle positiv demonstriert. Beide Kandidaten
-verdienen vorrangige manuelle Nachpruefung (z. B. Alignment-Visualisierung,
-Cargo-Gen-Identitaet zwischen Referenz und Testisolaten) vor einer
-Publikations-reifen Aussage - die Terminologie bleibt bewusst
-"starship_like", keine strukturell bestaetigten Starships (siehe
-Abschnitt-7.4-Einschraenkung: keine echte Boundary-/Insertionsstellen-
-Detektion durchgefuehrt).
+**Assessment:** This means the POC's core question - detectability
+of cross-host starship-like elements via long-read mapping against the
+multi-reference panel - is positively demonstrated with real data AND a
+strict multi-mapping control. Both candidates deserve priority manual
+follow-up (e.g., alignment visualization, cargo-gene identity between
+the reference and test isolates) before a publication-ready statement -
+the terminology deliberately remains "starship_like", not structurally
+confirmed Starships (see the Section-7.4 caveat: no genuine boundary/
+insertion-site detection was performed).
 
-## 2026-09-03 — Abschnitt 12 (SV-Calling) und Abschnitt 14 (Rarefaction) - Panel ist NICHT gesaettigt
+## 2026-09-03 — Section 12 (SV calling) and Section 14 (rarefaction) - the panel is NOT saturated
 
-**Abschnitt 12, SV-Calling (Sniffles2):** `sniffles_call` (pro Isolat,
-gegen die Panel-FASTA) + `sniffles_cohort` (Kohorten-Merge ueber die
-`.snf`-Dateien) exakt nach Dokument-Befehl. Lief in Sekunden pro Isolat
-(deutlich schneller als Mapping/PAV). **Ergebnis: 193 strukturelle
-Varianten** in der 5-Isolate-Kohorte - 110 Deletionen, 82 Insertionen,
-1 Inversion (`results/pav/pilot_cohort.sv.vcf.gz`). Noch nicht mit der
-Coverage-basierten PAV-Matrix (Abschnitt 11) zu einer kombinierten
-Evidenz verschmolzen (Abschnitt 12s "PAV-Evidenz = Coverage-Breadth +
-Mapping-Eindeutigkeit + SV-Breakpoints + spanning reads" - offener
-Folgeschritt, Abschnitt 13).
+**Section 12, SV calling (Sniffles2):** `sniffles_call` (per isolate,
+against the panel FASTA) + `sniffles_cohort` (cohort merge across the
+`.snf` files) exactly per the document's command. Ran in seconds per
+isolate (considerably faster than mapping/PAV). **Result: 193
+structural variants** in the 5-isolate cohort - 110 deletions, 82
+insertions, 1 inversion (`results/pav/pilot_cohort.sv.vcf.gz`). Not yet
+merged with the coverage-based PAV matrix (Section 11) into combined
+evidence (Section 12's "PAV evidence = coverage breadth + mapping
+uniqueness + SV breakpoints + spanning reads" - an open follow-up step,
+Section 13).
 
-**Abschnitt 14.1/14.2, Referenz-Panel-Rarefaction:** Das Dokument sieht
-1000 zufaellige Permutationen vor (fuer C(14,k), zu gross fuer
-erschoepfende Aufzaehlung). Unser bewusst reduziertes 5-Genom-Panel
-erlaubt **erschoepfende Aufzaehlung ALLER C(5,k)-Kombinationen**
-(hoechstens 10 pro Panelgroesse) - strenger als das Dokument-eigene
-Sampling, keine Abschwaechung (`workflow/scripts/
-rarefaction_reference_panel.py`).
+**Sections 14.1/14.2, reference-panel rarefaction:** The document calls
+for 1,000 random permutations (for C(14,k), too large for exhaustive
+enumeration). Our deliberately reduced 5-genome panel allows
+**exhaustive enumeration of ALL C(5,k) combinations** (at most 10 per
+panel size) - stricter than the document's own sampling, not a
+weakening (`workflow/scripts/rarefaction_reference_panel.py`).
 
-**Ergebnis bei voller Panelgroesse (k=5, 39 Kandidatenregionen
-insgesamt):** 5 accessory_chromosome + 30 starship_like + 4
-private_accessory.
+**Result at full panel size (k=5, 39 candidate regions total):** 5
+accessory_chromosome + 30 starship_like + 4 private_accessory.
 
-**Saettigungs-Check (Abschnitt 14.2, Schwelle 2-5 % laut Dokument):**
+**Saturation check (Section 14.2, threshold 2-5% per the document):**
 
-| Regionsklasse | R(4) Mittel | R(5) | Δ-Anteil | Gesaettigt? |
+| Region class | R(4) mean | R(5) | Δ fraction | Saturated? |
 |---|---|---|---|---|
-| accessory_chromosome | 4,0 | 5 | 20,0 % | **Nein** |
-| starship_like | 24,4 | 30 | 18,7 % | **Nein** |
-| private_accessory | 3,2 | 4 | 20,0 % | **Nein** |
-| alle kombiniert | 31,6 | 39 | 19,0 % | **Nein** |
+| accessory_chromosome | 4.0 | 5 | 20.0% | **No** |
+| starship_like | 24.4 | 30 | 18.7% | **No** |
+| private_accessory | 3.2 | 4 | 20.0% | **No** |
+| all combined | 31.6 | 39 | 19.0% | **No** |
 
-**Wichtiger, ehrlicher Befund: Das 5-Genom-Panel ist NICHT gesaettigt**
-- der Zugewinn beim Hinzufuegen des 5. Genoms liegt bei ~19-20 % fuer
-alle Kandidatenklassen, weit ueber der 2-5-%-Saettigungsschwelle. Das
-ist eine direkte, erwartbare Konsequenz der Panel-Reduktion von 14 auf 5
-Genome (siehe fruehere Entscheidung) - mit nur 5 statt 14 Referenzen ist
-eine Saettigung der Kandidatenregionen-Entdeckung nicht zu erwarten.
-**Konsequenz fuer eine spaetere Vollanalyse:** Zusaetzliche
-Referenzgenome (z. B. aus dem archivierten 14-Genom-Katalog,
-`config/references_full_catalog_14genomes.tsv`) wuerden mit hoher
-Wahrscheinlichkeit weitere, bisher nicht erfasste Kandidatenregionen
-aufdecken - das 5-Genom-Panel ist fuer den POC ausreichend, aber nicht
-als vollstaendiger Kandidatenkatalog misszuverstehen.
+**Important, honest finding: the 5-genome panel is NOT saturated** - the
+gain from adding the 5th genome is ~19-20% for all candidate classes,
+far above the 2-5% saturation threshold. This is a direct, expected
+consequence of the panel reduction from 14 to 5 genomes (see the
+earlier decision) - with only 5 instead of 14 references, saturation of
+candidate-region discovery is not to be expected. **Consequence for a
+later full analysis:** additional reference genomes (e.g., from the
+archived 14-genome catalog, `config/references_full_catalog_14genomes.tsv`)
+would very likely reveal further, currently uncaptured candidate
+regions - the 5-genome panel is sufficient for the POC but should not be
+mistaken for a complete candidate catalog.
 
-**Abschnitt 14.3, Testisolat-Rarefaction/Novelty-Check - bewusst
-reduzierter Umfang:** Volle Umsetzung (unmapped Reads → lokale Assembly
-→ Panel-Ruecksuche → Klassifikation neuer Kandidatenregionen) braucht
-einen Long-Read-Assembler (z. B. Flye), der nicht installiert ist.
-Umgesetzt: nur Schritt 1 (Extraktion + Basisstatistik der unmapped
-Reads) als kostenguenstige Naeherung fuer "wie viel Isolat-Sequenz
-erklaert das Panel gar nicht".
+**Section 14.3, test-isolate rarefaction/novelty check - deliberately
+reduced scope:** Full implementation (unmapped reads → local assembly →
+panel re-search → classification of new candidate regions) requires a
+long-read assembler (e.g., Flye), which is not installed. Implemented:
+only step 1 (extraction + basic statistics of the unmapped reads) as a
+low-cost approximation of "how much isolate sequence the panel does not
+explain at all".
 
-| Isolat | Unmapped Reads | Unmapped Basen | Anteil an Gesamtreads |
+| Isolate | Unmapped reads | Unmapped bases | Fraction of total reads |
 |---|---|---|---|
-| TF051MC7 | 1.489 | 4,4 Mb | 0,46 % (passt zu 99,92 % Gesamt-Mapping) |
-| K23_123 | 27.928 | 41,5 Mb | 8,1 % |
-| ZM12 | 27.994 | 109,3 Mb | 7,0 % |
-| E34 | 211.317 | 485,9 Mb | 22,5 % |
-| **B71** | **46.395** | **273,0 Mb** | **28,4 %** |
+| TF051MC7 | 1,489 | 4.4 Mb | 0.46% (consistent with 99.92% total mapping) |
+| K23_123 | 27,928 | 41.5 Mb | 8.1% |
+| ZM12 | 27,994 | 109.3 Mb | 7.0% |
+| E34 | 211,317 | 485.9 Mb | 22.5% |
+| **B71** | **46,395** | **273.0 Mb** | **28.4%** |
 
-**B71 und E34 haben die mit Abstand groesste unmapped-Sequenzmenge** -
-passt exakt zu B71s bereits dokumentierter, auffaellig niedrigerer
-Mapping-Rate (71,6 %, siehe Abschnitt-10.1-Eintrag). 273 Mb unmapped
-Sequenz bei B71 entspricht etwa dem 6-fachen der Genomgroesse - ein
-starkes Signal, dass B71 (bolivianische Weizenbrand-Linie) substanzielle,
-im aktuellen 5-Genom-Panel nicht repraesentierte Sequenzanteile traegt.
-Kombiniert mit dem oben dokumentierten fehlenden Saettigungssignal
-bestaetigt das: **ein groesseres Referenzpanel wuerde die
-Kandidatenregion-Abdeckung spuerbar verbessern.** Die eigentliche
-Contig-Assembly/Neuheits-Klassifikation dieser unmapped Reads ist NICHT
-durchgefuehrt - klar dokumentierter offener Punkt fuer eine
-Vollanalyse.
+**B71 and E34 have by far the largest amount of unmapped sequence** -
+consistent exactly with B71's already documented, notably lower mapping
+rate (71.6%, see the Section-10.1 entry). 273 Mb of unmapped sequence
+in B71 corresponds to roughly 6 times the genome size - a strong signal
+that B71 (the Bolivian wheat-blast lineage) carries substantial sequence
+content not represented in the current 5-genome panel. Combined with
+the missing-saturation signal documented above, this confirms: **a
+larger reference panel would noticeably improve candidate-region
+coverage.** The actual contig assembly/novelty classification of these
+unmapped reads was NOT carried out - a clearly documented open item for
+a full analysis.
 
-## 2026-09-03 — Abschnitt 13: Kandidatenregionen-Manifest und finale Per-Isolat-Zuordnung
+## 2026-09-03 — Section 13: candidate-region manifest and final per-isolate assignment
 
-**Setup:** Zwei Skripte setzen Abschnitt 13.1/13.2 um:
-- `build_candidate_regions.py` filtert `panel_contig_manifest.tsv` auf
-  die drei tatsaechlich vergebenen Kandidatenklassen
+**Setup:** Two scripts implement Sections 13.1/13.2:
+- `build_candidate_regions.py` filters `panel_contig_manifest.tsv` down
+  to the three candidate classes actually assigned
   (`accessory_chromosome`, `starship_like`, `private_accessory` -
-  `mini_chromosome`/`subtelomeric_dynamic` wurden nie vergeben, siehe
-  fruehere Eintraege, daher keine MCHR_/SUBTEL_-IDs) und verknuepft
-  jede `starship_like`-Region per Koordinatenueberlappung mit ihrem
-  Captain-Gen (`panel_YR.filt.gff`, Abschnitt 7.4) und dessen
-  Cargo-Gen-Zahl (`starship_like_candidates.tsv`).
-- `build_candidate_region_calls.py` kombiniert fuer jede
-  Kandidatenregion x Testisolat: PAV-Status (Abschnitt 11), Breadth/
-  Tiefe/Multi-Mapping-Anteil (aus den Fenster-Calls gemittelt) und
-  SV-Unterstuetzung (Anzahl nicht-Referenz-Genotypen aus der
-  Sniffles2-Kohorten-VCF, Abschnitt 12 - VCF-CHROM entspricht exakt dem
-  Panel-FASTA-Header, keine Koordinatentransformation noetig).
+  `mini_chromosome`/`subtelomeric_dynamic` were never assigned, see
+  earlier entries, hence no MCHR_/SUBTEL_ IDs) and links each
+  `starship_like` region via coordinate overlap to its Captain gene
+  (`panel_YR.filt.gff`, Section 7.4) and its cargo-gene count
+  (`starship_like_candidates.tsv`).
+- `build_candidate_region_calls.py` combines, for each candidate region
+  x test isolate: PAV status (Section 11), breadth/depth/multi-mapping
+  fraction (averaged from the window calls), and SV support (number of
+  non-reference genotypes from the Sniffles2 cohort VCF, Section 12 -
+  the VCF CHROM matches the panel FASTA header exactly, no coordinate
+  transformation needed).
 
-**Nicht umgesetzt:** Abschnitt 13.3 (bedtools-Intersect mit einer
-Panel-weiten Gen-GFF3 fuer Funktionsannotation je PAV-Block) - unsere
-Genannotation liegt nur pro Ausgangsgenom vor (Liftoff), nicht auf
-Panel-Koordinaten projiziert; diese Projektion waere ein zusaetzlicher
-Schritt.
+**Not implemented:** Section 13.3 (bedtools intersect with a panel-wide
+gene GFF3 for functional annotation per PAV block) - our gene
+annotation exists only per source genome (Liftoff), not projected onto
+panel coordinates; this projection would be an additional step.
 
-**Ergebnis:** `results/panel/panel_candidate_regions.tsv` (39
-Kandidatenregionen: 30 `starship_like`, 5 `accessory_chromosome`, 4
-`private_accessory`) und `results/pav/candidate_region_calls.tsv` (196
-Zeilen = bis zu 39 Regionen x 5 Isolate, wo PAV-Daten vorlagen).
+**Result:** `results/panel/panel_candidate_regions.tsv` (39 candidate
+regions: 30 `starship_like`, 5 `accessory_chromosome`, 4
+`private_accessory`) and `results/pav/candidate_region_calls.tsv` (196
+rows = up to 39 regions x 5 isolates, where PAV data were available).
 
-**Captain-Gen-Verknuepfung: 30 von 30 (100 %)** `starship_like`-
-Kandidaten erhielten ein zugeordnetes Captain-Gen ueber die
-Koordinatenueberlappung - vollstaendige Konsistenz zwischen Abschnitt
-7.4 (Starfish-Fund) und Abschnitt 8 (Panel-Clustering), keine
-verlorenen Zuordnungen.
+**Captain-gene linkage: 30 of 30 (100%)** `starship_like` candidates
+received an assigned Captain gene via coordinate overlap - complete
+consistency between Section 7.4 (the Starfish finding) and Section 8
+(panel clustering), no lost assignments.
 
-**Die beiden bereits identifizierten wirtsuebergreifenden
-Starship-Kandidaten im Detail:**
+**The two already identified cross-host Starship candidates in
+detail:**
 - **STAR_012** (`PANEL003659`, Captain `GCA036493215_1__YR35`, Br48/
-  Triticum) - bei allen 5 Isolaten "present", Konfidenz "medium" bei
-  B71/K23_123/TF051MC7/ZM12, "low" bei E34 (niedrigere Breadth, 0,42).
+  Triticum) - "present" in all 5 isolates, confidence "medium" for
+  B71/K23_123/TF051MC7/ZM12, "low" for E34 (lower breadth, 0.42).
 - **STAR_023** (`PANEL003670`, Captain `GCA059329645_1__YR50`, Avena,
-  geteilt mit Triticum/Br48) - bei allen 5 Isolaten "present",
-  Konfidenz "medium" bei TF051MC7/ZM12, "low" bei B71/E34/K23_123.
+  shared with Triticum/Br48) - "present" in all 5 isolates, confidence
+  "medium" for TF051MC7/ZM12, "low" for B71/E34/K23_123.
 
-Kein SV-Support (`sv_support=0`) fuer diese beiden Regionen bei keinem
-Isolat - das Praesenz-Signal stuetzt sich ausschliesslich auf
-Coverage-Breadth, nicht auf Sniffles2-Breakpoints. Das schwaecht die
-Aussage nicht (Coverage-Breadth ist laut Abschnitt 11.3 fuer
-Starship-like-Innenbereiche die primaere Evidenz; SV-Breakpoints sind
-eine ZUSAETZLICHE, nicht notwendige Bestaetigungsebene fuer die
-Grenzen), sollte aber bei einer spaeteren Publikations-Aufbereitung
-explizit benannt werden. 0,0 % |
+No SV support (`sv_support=0`) for either region in any isolate - the
+presence signal rests exclusively on coverage breadth, not on
+Sniffles2 breakpoints. This does not weaken the conclusion (per
+Section 11.3, coverage breadth is the primary evidence for the interior
+of starship-like elements; SV breakpoints are an ADDITIONAL, not
+necessary, confirmation layer for the boundaries), but should be
+explicitly noted in any later publication write-up. 0.0% |
 
-**Konsistenzpruefung bestanden:** `accessory_chromosome`-Fenster treten
-AUSSCHLIESSLICH bei `GCA059329645_1` (133) und `LpKY97` (86) auf - exakt
-die beiden Genome mit den bereits unabhaengig gefundenen
-Mini-Chromosom-Kandidaten-Contigs. `starship_like`-Fenster verteilen sich
-ueber alle 5 Genome (17-24 je Genom), konsistent mit den 68 ueber alle
-Genome gefundenen Captain-Genen.
+**Consistency check passed:** `accessory_chromosome` windows occur
+EXCLUSIVELY in `GCA059329645_1` (133) and `LpKY97` (86) - exactly the
+two genomes with the already independently found mini-chromosome
+candidate contigs. `starship_like` windows are distributed across all 5
+genomes (17-24 per genome), consistent with the 68 Captain genes found
+across all genomes.
 
-**Noch offen:** SyRI-Syntenie (nur fuer 3/5 Genome verfuegbar, siehe
-7.2-Eintrag) ist nicht in die Klassifikation eingeflossen - koennte
-`unclassified`/`shell`-Fenster in nicht-kodierenden Bereichen praeziser
-einordnen, wo die rein genbasierte Praevalenz keine Evidenz liefert
-(1,3 % der Fenster betroffen). `mini_chromosome` (Dokument-Klasse, setzt
-verifizierte Telomer-Begrenzung voraus) wurde bewusst nicht vergeben -
-mangels Telomer-Repeat-Verifikation bleibt die konservativere
-`accessory_chromosome`-Klasse die korrekte Wahl.
+**Still open:** SyRI synteny (available only for 3/5 genomes, see the
+7.2 entry) has not been incorporated into the classification - it could
+more precisely place `unclassified`/`shell` windows in non-coding
+regions, where purely gene-based prevalence provides no evidence (1.3%
+of windows affected). `mini_chromosome` (a document class that
+presupposes verified telomere boundaries) was deliberately not
+assigned - absent telomere-repeat verification, the more conservative
+`accessory_chromosome` class remains the correct choice.
 
-## 2026-09-03 — Abschnitt 8: analytisches Multi-Referenzpanel gebaut - Dedup-Schwelle trifft auf bewusste Host-Divergenz
+## 2026-09-03 — Section 8: analytical multi-reference panel built - the dedup threshold meets deliberate host divergence
 
 **Setup:** `envs/panel.yaml` (mmseqs2, samtools, seqkit),
-`workflow/scripts/build_panel.py` (`build_panel`-Regel) implementiert
-Abschnitt 8 vollstaendig:
-1. Benachbarte Fenster gleicher Regionsklasse aus `panel_regions.bed`
-   (7.3) zu zusammenhaengenden Bloecken zusammengefasst (nur
-   Panel-relevante Klassen: strict_core/soft_core/shell/
-   private_accessory/accessory_chromosome/starship_like -
-   repeat_ambiguous/unclassified/subtelomeric_dynamic bewusst
-   ausgeschlossen, da fuer Panel-Anker zu unsicher).
-2. Sequenzen aller Bloecke ueber alle 5 Genome per `samtools faidx -r`
-   extrahiert (4.213 Bloecke).
-3. **Ein einziger mmseqs2-easy-cluster-Lauf (98 % Identitaet, 90 %
-   gegenseitige Abdeckung, Abschnitt 8.2) auf ALLEN Bloecken zusammen**
-   implementiert beide Haelften der Dedup-Regel gleichzeitig: nahezu
-   identische Kopien EINES homologen Blocks ueber mehrere Genome
-   kollabieren zu einem Cluster/Repraesentanten; strukturell
-   unterschiedliche Varianten (auch bei core/soft-core/shell) bleiben
-   automatisch getrennt - keine Sonderbehandlung je Regionstyp noetig.
-4. Panel-Manifest (`results/panel/panel_contig_manifest.tsv`, exakt die
-   Dokument-Spalten) + finale Panel-FASTA
-   (`results/panel/Mo_multiref_panel_v1.fa` + `.fai`) mit
-   `>PANEL######|type=...|cluster=...|rep=...|source=...`-Headern
-   (Abschnitt 8.3), Cluster-Praefixe `CORE_`/`ACC_`/`STAR_` je nach
-   Regionstyp (Abschnitt 8.4-Beispiel).
+`workflow/scripts/build_panel.py` (`build_panel` rule) fully implements
+Section 8:
+1. Adjacent windows of the same region class from `panel_regions.bed`
+   (7.3) merged into contiguous blocks (only panel-relevant classes:
+   strict_core/soft_core/shell/private_accessory/accessory_chromosome/
+   starship_like - repeat_ambiguous/unclassified/subtelomeric_dynamic
+   deliberately excluded, as too uncertain for panel anchors).
+2. Sequences of all blocks extracted across all 5 genomes via
+   `samtools faidx -r` (4,213 blocks).
+3. **A single mmseqs2 easy-cluster run (98% identity, 90% mutual
+   coverage, Section 8.2) on ALL blocks together** implements both
+   halves of the dedup rule simultaneously: near-identical copies of ONE
+   homologous block across multiple genomes collapse into a single
+   cluster/representative; structurally different variants (even among
+   core/soft-core/shell) remain automatically separated - no special
+   handling per region type needed.
+4. Panel manifest (`results/panel/panel_contig_manifest.tsv`, exactly
+   the document's columns) + final panel FASTA
+   (`results/panel/Mo_multiref_panel_v1.fa` + `.fai`) with
+   `>PANEL######|type=...|cluster=...|rep=...|source=...` headers
+   (Section 8.3), cluster prefixes `CORE_`/`ACC_`/`STAR_` depending on
+   region type (Section 8.4 example).
 
-**Bug (Header-Doppelpraefix):** Erster Lauf schlug mit `KeyError` fehl -
-`block_id()` liefert bereits `"{genome_id}__{contig}:{start}-{end}"`
-(weil `contig` selbst schon das Genom-Praefix traegt), aber der
-Lookup-Schluessel wurde faelschlich als `(genome_id, block_id(b))`
-gebaut - Doppelpraefix. Fix: Lookup direkt ueber den vollen
-`block_id()`-String, der exakt dem FASTA-/mmseqs2-Sequenznamen
-entspricht.
+**Bug (duplicated header prefix):** The first run failed with a
+`KeyError` - `block_id()` already returns
+`"{genome_id}__{contig}:{start}-{end}"` (since `contig` itself already
+carries the genome prefix), but the lookup key was incorrectly built as
+`(genome_id, block_id(b))` - a duplicated prefix. Fix: lookup directly
+via the full `block_id()` string, which matches the FASTA/mmseqs2
+sequence name exactly.
 
-**Ressourcen:** mmseqs2s Prefiltering-Indexaufbau brauchte kurzzeitig
-~9,5 GB von 10 GB WSL-RAM (223 MB frei) - knapp am OOM-Limit, aber
-ueberstanden; Speicherbedarf fiel danach auf ~5 GB fuer die eigentliche
-Such-/Alignmentphase. Gesamtlaufzeit ca. 5 Minuten fuer 7.582
-extrahierte Sequenzen (deutlich mehr als urspruenglich erwartet, siehe
-naechster Punkt).
+**Resources:** mmseqs2's prefiltering index build briefly needed ~9.5 GB
+of the 10 GB WSL RAM (223 MB free) - close to the OOM limit but
+survived; memory demand then dropped to ~5 GB for the actual search/
+alignment phase. Total runtime about 5 minutes for 7,582 extracted
+sequences (considerably more than originally expected, see the next
+point).
 
-**Wichtiger methodischer Befund:** Die Dedup-Rate ist deutlich niedriger
-als das Dokument-Beispiel suggeriert (dort: EIN Repraesentant deckt bis
-zu 14 Genome ab). Ergebnis hier: **3.677 Panel-Regionen aus 4.213
-Vorab-Bloecken** - nur ~13 % Kollaps. Von 1.783 `strict_core`-Clustern
-(gen-basiert in ALLEN 5 Genomen praesent) enthalten **1.590 (89 %) nur
-EIN Genom** im Cluster - die entsprechenden Bloecke der anderen 4 Genome
-sind trotz Orthogruppen-Homologie zu unterschiedlich (>2 % Sequenz-
-divergenz auf 10-kb-Fensterebene), um bei 98 % Identitaet zu clustern.
+**Important methodological finding:** The dedup rate is considerably
+lower than the document's example suggests (there: ONE representative
+covers up to 14 genomes). Result here: **3,677 panel regions from 4,213
+pre-blocks** - only ~13% collapse. Of 1,783 `strict_core` clusters
+(gene-based, present in ALL 5 genomes), **1,590 (89%) contain only ONE
+genome** in the cluster - the corresponding blocks of the other 4
+genomes are, despite orthogroup homology, too divergent (>2% sequence
+divergence at the 10-kb window level) to cluster at 98% identity.
 
-**Erklaerung:** Das ist eine direkte, erwartbare Konsequenz der eigenen
-Panel-Design-Entscheidung (5 maximal divergente Host-Repraesentanten
-statt naher Verwandter, siehe Abschnitt "Panel auf 5 Host-Repraesentanten
-reduziert"). Bei ~1 SNP pro 160 bp zwischen den Wirtslinien (aus den
-SyRI-Zahlen: 237k-272k SNPs auf ~43 Mb) liegt die erwartete Identitaet
-selbst in echten Ortholog-Bloecken zwischen zwei Wirtslinien im Bereich
-98-99 % nur bei kurzen, wenig variablen Abschnitten - ein 10-kb-Fenster
-ueberschreitet die 98 %-Schwelle oft knapp nicht.
+**Explanation:** This is a direct, expected consequence of the panel's
+own design decision (5 maximally divergent host representatives instead
+of close relatives, see the "panel reduced to 5 host representatives"
+entry). At ~1 SNP per 160 bp between host lineages (from the SyRI
+figures: 237k-272k SNPs across ~43 Mb), the expected identity even in
+genuine ortholog blocks between two host lineages lies in the 98-99%
+range only for short, low-variability stretches - a 10-kb window often
+just misses the 98% threshold.
 
-**Bewertung - kein Fehler, sondern ein Trade-off:** Das resultierende
-Panel ist groesser als im Dokument-Beispiel, aber dadurch informativer:
-Es behaelt die tatsaechlichen linienspezifischen Sequenzvarianten
-"core" Regionen, statt sie durch einen einzigen (z. B. nur-Oryza)
-Repraesentanten zu ersetzen, der fuer Long-Read-Mapping aus anderen
-Wirtslinien schlechter geeignet waere (genau das Problem, vor dem
-Abschnitt 7.2 bezueglich eines einzelnen Ankers warnt). Der
-98 %/90 %-Schwellenwert bleibt unveraendert auf dem Dokument-Wert
-(`thresholds.yaml: panel.dedup_identity/dedup_coverage`) - eine
-Absenkung wuerde die biologische Aussage des Panels aendern (mehr
-Kompression, aber Verlust linienspezifischer Core-Varianten) und wird
-hier bewusst NICHT vorgenommen, sondern als konfigurierbarer,
-dokumentierter Parameter belassen.
+**Assessment - not a bug, but a trade-off:** The resulting panel is
+larger than the document's example, but more informative as a result:
+it retains the actual lineage-specific sequence variants of "core"
+regions, instead of replacing them with a single (e.g., Oryza-only)
+representative that would be less suitable for long-read mapping from
+other host lineages (exactly the problem Section 7.2 warns about
+regarding a single anchor). The 98%/90% threshold remains unchanged at
+the document's value (`thresholds.yaml: panel.dedup_identity/
+dedup_coverage`) - lowering it would change the panel's biological
+meaning (more compression, but loss of lineage-specific core variants)
+and is deliberately NOT done here, but left as a configurable,
+documented parameter.
 
-**Panel-Zusammensetzung (3.677 Regionen, 184,5 MB FASTA):**
+**Panel composition (3,677 regions, 184.5 MB FASTA):**
 
-| Regionstyp | Panel-Cluster |
+| Region type | Panel clusters |
 |---|---|
-| `strict_core` | 1.783 |
-| `soft_core` | 1.610 |
+| `strict_core` | 1,783 |
+| `soft_core` | 1,610 |
 | `shell` | 245 |
 | `starship_like` | 30 |
 | `accessory_chromosome` | 5 |

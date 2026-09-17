@@ -1,8 +1,8 @@
-# Phase 9 - Synthese & Go/No-Go
+# Phase 9 - Synthesis & Go/No-Go
 
-Zusammenfuehrung aller Phasen zu einem POC-Bericht mit vier Kernaussagen (Panelgroesse ausreichend? Variabilitaet/Haeufigkeit der Starships? konkrete HGT-Kandidaten mit Evidenzstaerke? empfohlene Stichprobengroesse/Modellkomplexitaet?).
+Bringing together all phases into a POC report with four core statements (is the panel size sufficient? variability/frequency of Starships? concrete HGT candidates with strength of evidence? recommended sample size/model complexity?).
 
-**Input:** Ergebnisse aus 05_saturation, 06_validation, 07_phylogeny, 08_simulation_glmm.
-**Output:** POC-Bericht mit Go/No-Go-Empfehlung.
+**Input:** results from 05_saturation, 06_validation, 07_phylogeny, 08_simulation_glmm.
+**Output:** POC report with go/no-go recommendation.
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

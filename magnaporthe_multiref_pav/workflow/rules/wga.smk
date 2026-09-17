@@ -53,12 +53,12 @@ rule show_coords:
 
 
 rule run_syri:
-    # Das Dokument-Beispiel lässt -d (.delta) weg; die installierte
-    # SyRI-Version braucht es aber explizit fuer SNP/Indel-Identifikation,
-    # da die Table-Coords (-F T, Default) kein CIGAR enthaelt ("CIGAR
-    # string or .delta file is required"). Ausserdem erwartet --prefix
-    # nur den Dateinamen-Zusatz, nicht einen Pfad - das Arbeitsverzeichnis
-    # wird separat ueber --dir gesetzt (sonst Crash-Warnung/Fehler).
+    # The document's example omits -d (.delta); the installed SyRI version
+    # needs it explicitly for SNP/indel identification, since the table
+    # coords (-F T, default) contain no CIGAR ("CIGAR string or .delta file
+    # is required"). Also, --prefix expects only the filename suffix, not a
+    # path - the working directory is set separately via --dir (otherwise
+    # a crash warning/error occurs).
     input:
         coords="results/wga/{ref}_vs_{query}.coords.tsv",
         delta="results/wga/{ref}_vs_{query}.filtered.delta",

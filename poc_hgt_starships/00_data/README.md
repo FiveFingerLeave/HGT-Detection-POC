@@ -1,14 +1,14 @@
-# Phase 0 - Rohdaten
+# Phase 0 - Raw Data
 
-Rohgenome (Long-Read-Assemblies bevorzugt), NCBI-Downloads, Metadaten (Klonlinie, Wirtspflanze) fuer das POC-Panel (Ziel: 20-30 Isolate).
+Raw genomes (long-read assemblies preferred), NCBI downloads, metadata (clone lineage, host plant) for the POC panel (target: 20-30 isolates).
 
-**Input:** NCBI-Suche (Assembly-Level Complete Genome/Chromosome, Technologie PacBio/Nanopore) - Ausgangspunkt sind die bereits vorhandenen Kataloge in `data/ncbi_m_oryzae_*.tsv` und die bereits heruntergeladenen Genome in `assemblies/`.
-**Output:** kuratierte Isolatliste mit Metadaten (Klonlinie, Wirt, Assembly-Level, Technologie, Quelle).
+**Input:** NCBI search (assembly-level Complete Genome/Chromosome, technology PacBio/Nanopore) - starting point is the catalogs already available in `data/ncbi_m_oryzae_*.tsv` and the genomes already downloaded in `assemblies/`.
+**Output:** curated isolate list with metadata (clone lineage, host, assembly level, technology, source).
 
-**Status:** Vollständiger NCBI-Assembly-Katalog abgerufen (605 Genome,
-2026-09-02) — siehe `dataset_summary.md` für Speicher-/Host-/
-Assembly-Level-/Datentyp-Zusammenfassung, `ncbi_pyricularia_oryzae_assemblies_full.tsv`
-für die Volldaten, `host_diversity_summary.tsv` für die normalisierte
-Host-Häufigkeitstabelle. **Noch offen:** finale Panel-Kuration (Filterung
-auf Complete-Genome-/Chromosome-Level + Klonlinien-/Host-Diversität, Ziel
-20–30 Isolate).
+**Status:** Full NCBI assembly catalog retrieved (605 genomes,
+2026-09-02) — see `dataset_summary.md` for the storage/host/
+assembly-level/data-type summary, `ncbi_pyricularia_oryzae_assemblies_full.tsv`
+for the full data, `host_diversity_summary.tsv` for the normalized
+host frequency table. **Still open:** final panel curation (filtering
+to Complete-Genome/Chromosome level + clone-lineage/host diversity, target
+20–30 isolates).

@@ -1,9 +1,9 @@
-# Phase 5 - Saettigungs-/Rarefaktionsanalyse
+# Phase 5 - Saturation/Rarefaction Analysis
 
-Kern des POC: zufaelliges, wiederholtes Subsampling steigender Genomzahlen (1...N), Saettigungsmodell fitten (Heaps'-Law/asymptotisch).
+Core of the POC: random, repeated subsampling of increasing genome numbers (1...N), fitting a saturation model (Heaps' law/asymptotic).
 
-**Tools:** R (vegan::specaccum, micropan) oder eigenes Skript.
-**Input:** PAV-Matrix aus 04_pav_matrix.
-**Output:** Saettigungskurve + Modellparameter + Empfehlung zur Panelgroesse.
+**Tools:** R (vegan::specaccum, micropan) or a custom script.
+**Input:** PAV matrix from 04_pav_matrix.
+**Output:** saturation curve + model parameters + panel-size recommendation.
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

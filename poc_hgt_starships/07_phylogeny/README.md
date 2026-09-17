@@ -1,9 +1,9 @@
-# Phase 7 - Phylogenetische Inkongruenz (HGT-Indizien)
+# Phase 7 - Phylogenetic Incongruence (HGT Evidence)
 
-Core-Genom-Phylogenie (Referenzbaum) vs. Starship-Captain-/Cargo-Gen-Phylogenie, Topologievergleich.
+Core-genome phylogeny (reference tree) vs. Starship Captain/cargo-gene phylogeny, topology comparison.
 
-**Tools:** IQ-TREE/RAxML (Baeume), ALE/Notung (Rekonziliation), Robinson-Foulds-Distanz.
-**Input:** Genmodelle aus 02_annotation, Starship-Katalog aus 03_starship_calls.
-**Output:** Liste priorisierter HGT-Kandidaten mit Belegen.
+**Tools:** IQ-TREE/RAxML (trees), ALE/Notung (reconciliation), Robinson-Foulds distance.
+**Input:** gene models from 02_annotation, Starship catalog from 03_starship_calls.
+**Output:** list of prioritized HGT candidates with supporting evidence.
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

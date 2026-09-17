@@ -1,9 +1,9 @@
-# Phase 3 - Starship-Identifikation
+# Phase 3 - Starship Identification
 
-Detektion von Starship-Elementen im Referenzpanel.
+Detection of Starship elements in the reference panel.
 
-**Tools:** starfish (Captain-Gen-Suche, Boundary-Calling, Cargo-Extraktion), manuelle Kuration (Boundary-Plausibilitaet, Target-Site-Duplications, Captain-Familienzuordnung).
-**Input:** annotierte/maskierte Genome aus 02_annotation.
-**Output:** Starship-Katalog (ID, Koordinaten, Captain-Familie, Cargo-Gene, Insertionsort, flankierende Sequenz) + Sequenz-/Feature-Dateien pro Element.
+**Tools:** starfish (Captain gene search, boundary calling, cargo extraction), manual curation (boundary plausibility, target-site duplications, Captain family assignment).
+**Input:** annotated/masked genomes from 02_annotation.
+**Output:** Starship catalog (ID, coordinates, Captain family, cargo genes, insertion site, flanking sequence) + sequence/feature files per element.
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

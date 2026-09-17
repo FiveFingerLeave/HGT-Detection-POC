@@ -1,9 +1,9 @@
-# POC: Zuverlässige Detektion von HGT-Kandidaten und Starships in *Magnaporthe oryzae*
+# POC: Reliable Detection of HGT Candidates and Starships in *Magnaporthe oryzae*
 
 Proof-of-concept repository for the dissertation exposé *"Population Genomics
 of Horizontal Gene Transfer in Magnaporthe oryzae"*. Authoritative workflow
 specification (8 phases, assembly-/pangenome-/phylogeny-based):
-[Dokumentation/POC_HGT_Starships_Workflow.md](Dokumentation/POC_HGT_Starships_Workflow.md).
+[Documentation/POC_HGT_Starships_Workflow.md](Documentation/POC_HGT_Starships_Workflow.md).
 
 This supersedes the earlier short-read-coverage-only POC approach
 (see `docs/decisions.md` for the pivot rationale and what was carried over).
@@ -87,7 +87,7 @@ barragan/
 ├── assemblies/             # downloaded reference genomes (local cache)
 ├── envs/                   # conda environment.yml per tool group
 ├── docs/                   # decisions.md (chronological project log)
-└── Dokumentation/          # POC_HGT_Starships_Workflow.md + planning notes
+└── Documentation/          # POC_HGT_Starships_Workflow.md + planning notes
 ```
 
 ## Next step

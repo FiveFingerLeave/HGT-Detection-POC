@@ -1,9 +1,9 @@
-# Phase 2 - Annotation & Repeat-Masking
+# Phase 2 - Annotation & Repeat Masking
 
-Einheitliche Genvorhersage (fuer konsistente Ortholog-Vergleiche) und Repeat-Masking (Starships liegen in repetitiven/TE-reichen Regionen - essenziell fuer saubere Boundary-Calls).
+Uniform gene prediction (for consistent ortholog comparisons) and repeat masking (Starships reside in repetitive/TE-rich regions - essential for clean boundary calls).
 
-**Tools:** funannotate/BRAKER (Annotation), RepeatModeler + RepeatMasker (Repeat-Masking).
-**Input:** kuratiertes Panel aus 01_assembly_qc.
-**Output:** einheitliche Genmodelle + maskierte Assemblies pro Genom.
+**Tools:** funannotate/BRAKER (annotation), RepeatModeler + RepeatMasker (repeat masking).
+**Input:** curated panel from 01_assembly_qc.
+**Output:** uniform gene models + masked assemblies per genome.
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

@@ -1,9 +1,9 @@
 # Phase 1 - Assembly & QC
 
-Assembly (bei Luecken ohne oeffentliche Long-Read-Daten) und Qualitaetssicherung des Panels.
+Assembly (for gaps without public long-read data) and quality control of the panel.
 
-**Tools:** hifiasm/Flye, BUSCO, Assembly-Statistiken (N50, Kontiganzahl), BlobTools (Kontaminationscheck).
-**Input:** Rohgenome/Reads aus 00_data.
-**Output:** QC-Report pro Genom, kuratiertes finales Panel.
+**Tools:** hifiasm/Flye, BUSCO, assembly statistics (N50, contig count), BlobTools (contamination check).
+**Input:** raw genomes/reads from 00_data.
+**Output:** QC report per genome, curated final panel.
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

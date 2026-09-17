@@ -1,8 +1,8 @@
-# Phase 6 - Validierung an Testisolaten
+# Phase 6 - Validation on Test Isolates
 
-Leave-one-out-Validierung (Referenzgenom aus Panel entfernen, PAV neu callen, mit Long-Read-Ground-Truth vergleichen) + echte Testisolate (Short-Read-Daten gegen Referenzpanel).
+Leave-one-out validation (remove a reference genome from the panel, re-call PAV, compare against long-read ground truth) + real test isolates (short-read data against the reference panel).
 
-**Input:** PAV-Matrix/Starship-Katalog, echte Short-Read-Testisolate (bereits vorhanden: `data/isolates_poc/`).
-**Output:** Validierungsmetriken (Sensitivitaet/Spezifitaet/Praezision).
+**Input:** PAV matrix/Starship catalog, real short-read test isolates (already available: `data/isolates_poc/`).
+**Output:** validation metrics (sensitivity/specificity/precision).
 
-**Status:** noch nicht implementiert.
+**Status:** not yet implemented.

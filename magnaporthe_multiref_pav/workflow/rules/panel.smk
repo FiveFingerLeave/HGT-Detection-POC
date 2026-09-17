@@ -1,11 +1,11 @@
-# Phase III (Section 8): Aufbau des analytischen Multi-Referenzpanels
-# (Deduplikation strict-core-Bloecke, Panel-FASTA-IDs, panel_contig_manifest.tsv).
+# Phase III (Section 8): Building the analytical multi-reference panel
+# (deduplication of strict-core blocks, panel FASTA IDs, panel_contig_manifest.tsv).
 #
-# Voraussetzung: panel_regions.bed aus starships.smk (Section 7.3)
-# liegt vor. Der volle 14-Genom-Katalog (Panel-Ebene A, Abschnitt 8.1)
-# ist bereits als config/references_full_catalog_14genomes.tsv
-# archiviert; hier geht es um Panel-Ebene B (das deduplizierte
-# analytische Panel aus den 5 Host-Repraesentanten).
+# Prerequisite: panel_regions.bed from starships.smk (Section 7.3)
+# must be available. The full 14-genome catalog (Panel Level A, Section 8.1)
+# is already archived as config/references_full_catalog_14genomes.tsv;
+# this file concerns Panel Level B (the deduplicated
+# analytical panel built from the 5 host representatives).
 
 
 rule build_panel:
@@ -51,13 +51,13 @@ rule index_panel_fasta:
         "samtools faidx {input}"
 
 
-# Phase VIII (Section 13): Kandidatenregionen mit stabilen IDs versehen
-# (13.1) und pro Testisolat die kombinierte PAV+SV-Evidenz zuordnen
-# (13.2). Abschnitt 13.3 (bedtools-Intersect mit Gen-GFF3 fuer
-# Funktionsannotation je PAV-Block) ist NICHT umgesetzt - dafuer
-# fehlt eine einheitliche Panel-weite Gen-GFF3 (unsere Genannotation
-# liegt nur pro Ausgangsgenom vor, nicht auf Panel-Koordinaten
-# projiziert).
+# Phase VIII (Section 13): Assign stable IDs to candidate regions
+# (13.1) and, per test isolate, assign the combined PAV+SV evidence
+# (13.2). Section 13.3 (bedtools intersect with gene GFF3 for
+# functional annotation per PAV block) is NOT implemented - this is
+# missing a unified panel-wide gene GFF3 (our gene annotation
+# is only available per source genome, not projected onto
+# panel coordinates).
 
 
 rule build_candidate_regions:

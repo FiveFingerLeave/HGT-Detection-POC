@@ -1,4 +1,4 @@
-# Große Rohdaten und Sequenzdaten
+# Large raw data and sequence data
 assemblies/
 raw_data/
 reads/
@@ -17,7 +17,7 @@ data/references/*.gff3
 *.cram
 *.crai
 
-# Große Bioinformatikdateien (überall im Projekt)
+# Large bioinformatics files (anywhere in the project)
 *.fna
 *.fa
 *.fasta
@@ -29,7 +29,7 @@ data/references/*.gff3
 *.dmnd
 *.mmi
 
-# bwa-mem2/samtools/faidx Indexdateien (regenerierbar, teils >1 GB)
+# bwa-mem2/samtools/faidx index files (regenerable, some >1 GB)
 *.fa.0123
 *.fa.amb
 *.fa.ann
@@ -38,11 +38,11 @@ data/references/*.gff3
 *.fai
 *.paf
 
-# Rohe NCBI-Download-Archive (regenerierbar, redundant mit extrahierten
-# FASTA/GFF, die bereits oben ausgeschlossen sind)
+# Raw NCBI download archives (regenerable, redundant with the extracted
+# FASTA/GFF already excluded above)
 *.zip
 
-# Automatisch erzeugte Ergebnis- und temporäre Dateien
+# Auto-generated result and temporary files
 results/
 logs/
 benchmarks/
@@ -53,7 +53,7 @@ tmp/
 busco_downloads/
 *.log
 
-# Python- und Editor-Artefakte
+# Python and editor artifacts
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
@@ -61,9 +61,9 @@ __pycache__/
 .DS_Store
 .claude/
 
-# Zugangsdaten und Geheimnisse
+# Credentials and secrets
 .env
 *.key
 
-# Windows/NTFS Metadaten (z. B. bei Dateien via WSL-Mount heruntergeladen)
+# Windows/NTFS metadata (e.g. for files downloaded via a WSL mount)
 *:Zone.Identifier

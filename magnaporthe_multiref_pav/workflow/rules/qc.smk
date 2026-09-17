@@ -1,6 +1,6 @@
-# Phase I (Dokumentation/multireferenzpanel_pav_workflow.md, Section 6.1):
-# Assembly-QC und Header-Standardisierung der 14 Referenzgenome. Laut
-# Section 17 sofort durchfuehrbar (niedriger Aufwand).
+# Phase I (Documentation/multireference_panel_pav_workflow.md, Section 6.1):
+# assembly QC and header standardization of the 14 reference genomes.
+# Per Section 17, immediately runnable (low effort).
 
 
 rule rename_reference_headers:

@@ -1,12 +1,12 @@
-# Phase II (Section 7.2): Whole-genome Alignments (nucmer/MUMmer4) +
-# SyRI-Klassifikation (syntenisch/umgeordnet/lokale Varianten) zwischen
-# mehreren Ankerreferenzen (mind. je eine aus Oryza-, Triticum-,
-# Eleusine-, Wildgras-assoziierten Linien - siehe references.tsv
-# host_group-Spalte).
+# Phase II (Section 7.2): whole-genome alignments (nucmer/MUMmer4) +
+# SyRI classification (syntenic/rearranged/local variants) between
+# multiple anchor references (at least one each from the Oryza-,
+# Triticum-, Eleusine-, wild-grass-associated lineages - see the
+# references.tsv host_group column).
 #
-# Alle 10 ungerichteten Paare des 5-Genom-Panels (genome_pairs, siehe
-# Snakefile) statt eines einzelnen Ankers - vermeidet genau die vom
-# Dokument gewarnte Verzerrung durch einen einzelnen Oryza-Anker.
+# All 10 undirected pairs of the 5-genome panel (genome_pairs, see
+# Snakefile) instead of a single anchor - avoids exactly the bias from a
+# single Oryza anchor that the document warns about.
 
 
 rule nucmer_align:
@@ -82,7 +82,7 @@ rule run_syri:
 
 rule wga_all:
     input:
-        # nucmer/coords fuer alle 10 Paare, SyRI-Klassifikation nur fuer
-        # die Paare mit gleicher Chromosomenzahl (syri_pairs, Snakefile).
+        # nucmer/coords for all 10 pairs, SyRI classification only for
+        # the pairs with matching chromosome count (syri_pairs, Snakefile).
         [f"results/wga/{ref}_vs_{query}.coords.tsv" for ref, query in genome_pairs],
         [f"results/syri/{ref}_vs_{query}_syri.out" for ref, query in syri_pairs],

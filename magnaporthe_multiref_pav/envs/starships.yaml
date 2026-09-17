@@ -1,10 +1,10 @@
-# Section 7.4: Starship-like-Kandidaten (Captain/YR-Gene). Identisch zur
-# bereits funktionierenden globalen Environment `starfish_env`
-# (~/promotion/barragan/envs/starfish.yaml, siehe
-# Dokumentation/Starfish_bisherige_Schritte.md fuer den ersten
-# erfolgreichen Testlauf) - hier als Projekt-lokale Kopie fuer
-# Reproduzierbarkeit. Die HMM-/Referenzproteindatenbanken
-# ($CONDA_PREFIX/db/*) kommen mit dem starfish-Conda-Paket selbst.
+# Section 7.4: starship-like candidates (Captain/YR genes). Identical to
+# the already-working global environment `starfish_env`
+# (~/promotion/barragan/envs/starfish.yaml, see
+# Documentation/Starfish_Progress_Log.md for the first successful
+# test run) - kept here as a project-local copy for reproducibility.
+# The HMM/reference protein databases ($CONDA_PREFIX/db/*) ship with the
+# starfish conda package itself.
 name: multiref-starships
 channels:
   - conda-forge

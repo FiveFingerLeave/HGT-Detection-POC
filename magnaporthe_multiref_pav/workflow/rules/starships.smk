@@ -1,22 +1,22 @@
-# Phase II (Section 7.4): Starship-like-Kandidaten (DUF3435-/Captain-
-# Evidenz + Mindestgroesse + Cargo-Gene + fehlende Core-Syntenie).
+# Phase II (Section 7.4): Starship-like candidates (DUF3435/Captain
+# evidence + minimum size + cargo genes + missing core synteny).
 #
-# Schritt 1 (dieser Datei): `starfish annotate` sucht de-novo nach
-# HMM-validierten Tyrosin-Rekombinase-("Captain")-Genen ueber alle 5
-# Panel-Genome hinweg, in einem gemeinsamen Lauf (Multi-Genome-Assembly-
-# TSV) - reproduziert den erfolgreichen Einzel-Isolat-Test aus
-# Dokumentation/Starfish_bisherige_Schritte.md, jetzt fuer das ganze
-# Panel. `-s '__'` passt den Separator an unsere bestehende
-# {genome_id}__{contig}-Kopfzeilenkonvention an (Default waere '_',
-# was bei genome_ids mit eigenem Unterstrich wie "GCA036493215_1"
-# falsch parsen wuerde). `--gff` bindet die Liftoff-Genmodelle
-# (annotation.smk) ein, damit spaetere Cargo-Gen-Analysen nicht nur auf
-# den neu vorhergesagten YR-Genen basieren.
+# Step 1 (this file): `starfish annotate` searches de novo for
+# HMM-validated tyrosine recombinase ("Captain") genes across all 5
+# panel genomes, in one combined run (multi-genome assembly
+# TSV) - reproduces the successful single-isolate test from
+# Documentation/Starfish_Progress_Log.md, now for the whole
+# panel. `-s '__'` adapts the separator to our existing
+# {genome_id}__{contig} header convention (the default would be '_',
+# which would parse incorrectly for genome_ids containing their own
+# underscore, like "GCA036493215_1"). `--gff` incorporates the Liftoff
+# gene models (annotation.smk) so that later cargo-gene analyses are
+# not based solely on the newly predicted YR genes.
 #
-# Schritt 2 (noch offen): Verknuepfung der YR-Kandidaten mit
-# Mindestgroesse, Cargo-Genen, Repeat-Kontext (repeats.smk) und
-# fehlender Core-Syntenie (wga.smk) zur konservativen
-# "starship_like"-Klassifikation gemaess Abschnitt 7.4.
+# Step 2 (still open): linking the YR candidates with minimum size,
+# cargo genes, repeat context (repeats.smk) and missing core
+# synteny (wga.smk) for the conservative "starship_like"
+# classification per Section 7.4.
 
 
 rule starfish_input_lists:
@@ -65,12 +65,12 @@ rule starfish_annotate_yr:
 
 
 rule classify_starship_candidates:
-    # Kombiniert die YR/Captain-Treffer mit Mindestgroesse (>=20kb,
-    # thresholds.yaml: starship.min_region_length_bp), Repeat-Kontext
-    # (repeats.smk) und Cargo-Genen (Liftoff-GFF3, annotation.smk) zur
-    # konservativen Klassifikation nach Abschnitt 7.4. SyRI-Syntenie-
-    # Kreuzreferenz (nur fuer die 3 kompatiblen Genome aus wga.smk)
-    # ist noch nicht eingebaut - siehe docs/decisions.md.
+    # Combines the YR/Captain hits with minimum size (>=20kb,
+    # thresholds.yaml: starship.min_region_length_bp), repeat context
+    # (repeats.smk) and cargo genes (Liftoff GFF3, annotation.smk) for
+    # the conservative classification per Section 7.4. SyRI synteny
+    # cross-referencing (only for the 3 compatible genomes from wga.smk)
+    # is not yet implemented - see docs/decisions.md.
     input:
         yr_gff="results/starships/panel_YR.filt.gff",
         fais=expand("data/references/{genome_id}.fa.fai", genome_id=genome_ids),
@@ -99,12 +99,12 @@ rule classify_starship_candidates:
 
 
 rule classify_panel_regions:
-    # Section 7.3: klassifiziert jedes 10kb-Fenster jedes Panel-Genoms
-    # in einen Regionstyp, kombiniert aus Orthogruppen-Praevalenz (7.1),
-    # Repeat-Dichte (6.3), Contig-Groesse/Gendichte (Mini-/Accessory-
-    # Chromosom-Signal) und Starship-like-Kandidaten (7.4). SyRI-Syntenie
-    # (nur 3/5 Genome, siehe wga.smk) ist noch NICHT eingebaut - siehe
-    # docs/decisions.md fuer die Begruendung und als offener Folgeschritt.
+    # Section 7.3: classifies every 10kb window of every panel genome
+    # into a region type, combining orthogroup prevalence (7.1),
+    # repeat density (6.3), contig size/gene density (mini-/accessory-
+    # chromosome signal) and starship-like candidates (7.4). SyRI synteny
+    # (only 3/5 genomes, see wga.smk) is NOT yet implemented - see
+    # docs/decisions.md for the rationale and as an open follow-up step.
     input:
         fais=expand("data/references/{genome_id}.fa.fai", genome_id=genome_ids),
         repeat_windows=expand("results/repeats/{genome_id}_repeat_windows.bed", genome_id=genome_ids),

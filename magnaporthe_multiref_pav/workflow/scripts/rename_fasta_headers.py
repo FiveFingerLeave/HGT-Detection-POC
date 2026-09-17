@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Rename FASTA contig headers to '>{genome_id}__{original_contig_name}'
-(Dokumentation/multireferenzpanel_pav_workflow.md, Section 5.3) so contig
+(Documentation/multireference_panel_pav_workflow.md, Section 5.3) so contig
 names are globally unique across the whole reference panel. Writes a
 name-mapping table alongside the renamed copy; the original FASTA is
 never modified.

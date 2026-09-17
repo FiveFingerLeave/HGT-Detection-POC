@@ -1,21 +1,21 @@
-# Phase I (Section 6.3): RepeatModeler2 + RepeatMasker auf allen 14
-# Referenzen; Repeat-Anteil pro Contig/Analysefenster.
+# Phase I (Section 6.3): RepeatModeler2 + RepeatMasker on all 14
+# references; repeat fraction per contig/analysis window.
 #
-# Repeatreiche Bereiche werden NICHT entfernt, sondern nur annotiert - die
-# spaetere PAV-Klassifikation (pav.smk) markiert Fenster mit hohem
-# Repeat-Anteil als moeglicherweise mehrdeutig, statt sie allein wegen
-# geringer eindeutiger Coverage als "absent" zu werten.
+# Repeat-rich regions are NOT removed, only annotated - the later
+# PAV classification (pav.smk) flags windows with high repeat
+# fraction as potentially ambiguous, instead of calling them "absent"
+# solely due to low unique coverage.
 #
-# Eigene Environment (envs/repeats.yaml) statt der schweren
+# Own environment (envs/repeats.yaml) instead of the heavy
 # envs/annotation.yaml (BRAKER3 etc.) - RepeatModeler/RepeatMasker
-# brauchen keine der dortigen Abhaengigkeiten.
+# do not need any of the dependencies from there.
 #
-# Laufzeit-Hinweis: RepeatModeler mit -LTRStruct ist der teuerste Schritt
-# in Phase I (Stunden pro Genom, siehe docs/decisions.md fuer den
-# Pilotlauf-Zeitwert). Wie bei busco_reference (qc.smk) reserviert
-# threads: das volle Kernbudget pro Job, damit Snakemake bei --cores 1
-# echte Serialisierung erzwingt statt mehrere RepeatModeler-Laeufe
-# gleichzeitig zuzulassen (gleiches OOM-Risiko wie bei BUSCO).
+# Runtime note: RepeatModeler with -LTRStruct is the most expensive step
+# in Phase I (hours per genome, see docs/decisions.md for the
+# pilot-run time value). As with busco_reference (qc.smk), threads:
+# reserves the full core budget per job, so that Snakemake with
+# --cores 1 enforces true serialization instead of allowing several
+# RepeatModeler runs concurrently (same OOM risk as with BUSCO).
 
 
 rule index_reference_fai:

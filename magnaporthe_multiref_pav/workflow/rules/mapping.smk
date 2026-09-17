@@ -1,17 +1,17 @@
-# Phase V (Section 10): Long-Read-Mapping der Pilot-Testisolate gegen
-# das analytische Panel (minimap2), inkl. secondary Alignments fuer
-# Homologie-Nachweis und MAPQ-gefilterte Alignments fuer quantitative
-# PAV (Abschnitt 10.2, umgesetzt in pav.smk).
+# Phase V (Section 10): Long-read mapping of the pilot test isolates
+# against the analytical panel (minimap2), incl. secondary alignments
+# for homology evidence and MAPQ-filtered alignments for quantitative
+# PAV (Section 10.2, implemented in pav.smk).
 #
-# Preset-Wahl: Das Dokument unterscheidet nur ONT (map-ont) und PacBio
-# HiFi (map-hifi). Unsere tatsaechlichen PacBio-Isolate (B71, K23_123,
-# E34) sind aber aeltere PacBio RS II/Sequel RAW-Subreads (CLR), keine
-# HiFi/CCS-Reads - dafuer ist minimap2s eigenes "map-pb"-Preset korrekt,
-# nicht "map-hifi" (siehe config/samples.tsv: minimap2_preset-Spalte,
-# pro Isolat anhand der tatsaechlichen SRA-Plattform gesetzt).
+# Preset choice: The document distinguishes only ONT (map-ont) and PacBio
+# HiFi (map-hifi). However, our actual PacBio isolates (B71, K23_123,
+# E34) are older PacBio RS II/Sequel RAW subreads (CLR), not
+# HiFi/CCS reads - for these, minimap2's own "map-pb" preset is correct,
+# not "map-hifi" (see config/samples.tsv: minimap2_preset column,
+# set per isolate based on the actual SRA platform).
 #
-# Nur die 5 von 10 Pilotisolaten mit tatsaechlich heruntergeladenen
-# Rohreads (mappable_sample_ids, Snakefile) werden hier prozessiert.
+# Only the 5 of 10 pilot isolates with actually downloaded
+# raw reads (mappable_sample_ids, Snakefile) are processed here.
 
 
 rule minimap2_map:
@@ -30,12 +30,12 @@ rule minimap2_map:
     conda:
         "../../envs/core.yaml"
     shell:
-        # -m 512M begrenzt samtools sorts Speicher PRO Thread explizit -
-        # ohne das kann `sort -@ N` allein schon N*768M (Default)
-        # reservieren; bei mehreren gleichzeitigen minimap2_map-Jobs
-        # (Snakemake-Parallelisierung ueber Samples) hat das zuvor einen
-        # OOM-Kill ausgeloest (siehe docs/decisions.md), obwohl minimap2
-        # selbst pro Prozess nur ~700 MB brauchte.
+        # -m 512M explicitly caps samtools sort's memory PER thread -
+        # without this, `sort -@ N` alone can already reserve N*768M
+        # (default); with several concurrent minimap2_map jobs
+        # (Snakemake parallelization across samples) this previously
+        # triggered an OOM kill (see docs/decisions.md), even though
+        # minimap2 itself only needed ~700 MB per process.
         "mkdir -p results/mapping logs/mapping && "
         "minimap2 -ax {params.preset} --secondary=yes -t {threads} "
         "{input.panel} {input.fastq} 2> {log} "

@@ -1,5 +1,4 @@
-# Abschliessender Bericht: Zusammenfuehrung von QC-, Panel-, PAV- und
-# Rarefaction-Ergebnissen.
+# Final report: consolidation of QC, panel, PAV, and rarefaction results.
 #
-# Status: NICHT implementiert. Letzter Schritt der Pipeline, erst
-# sinnvoll sobald pav.smk und rarefaction.smk echte Ergebnisse liefern.
+# Status: NOT implemented. Last step of the pipeline, only meaningful
+# once pav.smk and rarefaction.smk deliver real results.

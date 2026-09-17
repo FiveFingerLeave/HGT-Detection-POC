@@ -1,21 +1,21 @@
-# Phase IX (Section 14): Referenz-Rarefaction (14.1/14.2) und
-# Testisolat-Rarefaction/Novelty-Check (14.3, reduzierter Umfang - siehe
-# unten und docs/decisions.md).
+# Phase IX (Section 14): Reference rarefaction (14.1/14.2) and
+# test-isolate rarefaction/novelty check (14.3, reduced scope - see
+# below and docs/decisions.md).
 #
-# 14.1/14.2: Das Dokument sieht zufaellige k-aus-14-Kombinationen vor
-# (1000 Permutationen), weil C(14,k) zu gross fuer erschoepfende
-# Aufzaehlung waere. Unser bewusst auf 5 Host-Repraesentanten reduziertes
-# Panel erlaubt dagegen ERSCHOEPFENDE Aufzaehlung aller C(5,k)-Kombinationen
-# (maximal 10) - strenger als das Dokument-eigene Sampling-Verfahren,
-# keine Abschwaechung.
+# 14.1/14.2: The document specifies random k-out-of-14 combinations
+# (1000 permutations), because C(14,k) would be too large for exhaustive
+# enumeration. Our panel, deliberately reduced to 5 host representatives,
+# instead allows EXHAUSTIVE enumeration of all C(5,k) combinations
+# (at most 10) - stricter than the document's own sampling procedure,
+# not a weakening.
 #
-# 14.3: Volle Umsetzung (unmapped Reads -> lokale Assembly -> Panel-
-# Ruecksuche -> neue Kandidatenregionen) braucht einen Long-Read-Assembler
-# (z.B. Flye), der bisher nicht installiert ist. Umgesetzt ist hier nur
-# der erste, guenstige Teil (unmapped-Read-Extraktion + Basisstatistik)
-# als Naeherung fuer die Frage "wie viel Isolat-Sequenz erklaert das
-# Panel nicht" - die eigentliche Contig-Assembly/Neuheits-Klassifikation
-# ist NICHT umgesetzt.
+# 14.3: Full implementation (unmapped reads -> local assembly -> panel
+# lookup -> new candidate regions) requires a long-read assembler
+# (e.g. Flye), which is not yet installed. Only the first, cheap
+# part (unmapped-read extraction + basic statistics) is implemented
+# here, as an approximation for the question "how much isolate sequence
+# does the panel not explain" - the actual contig assembly/novelty
+# classification is NOT implemented.
 
 
 rule rarefaction_reference_panel:
@@ -41,8 +41,8 @@ rule rarefaction_reference_panel:
 
 
 rule extract_unmapped_reads:
-    # Abschnitt 14.3, Schritt 1 (Teilumsetzung): Reads, die dem Panel
-    # ueberhaupt nicht zugeordnet werden konnten.
+    # Section 14.3, step 1 (partial implementation): reads that could
+    # not be assigned to the panel at all.
     threads: config["threads_default"]
     input:
         bam="results/mapping/{sample_id}.panel.bam",

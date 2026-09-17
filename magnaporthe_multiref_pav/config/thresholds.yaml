@@ -1,16 +1,16 @@
-# Praevalenzschwellen umskaliert von 14 auf 5 Referenzen (Panel-Reduktion
-# auf Host-Repraesentanten, siehe docs/decisions.md 2026-09-02). Original
-# (14 Genome): strict=14/14, soft=13/14=0.93, shell=3-12/14=0.21-0.86.
-# Bei nur 5 moeglichen Praesenzstufen (1/5..5/5) wuerde der alte
-# soft_core-Schwellenwert 0.93 NIE erreicht (naechste Stufe unter 1.0
-# ist 4/5=0.80) - Orthogroups mit 4/5 Praesenz waeren faelschlich in
-# "shell" statt "soft_core" gelandet. Neu, an OrthoFinder-Ergebnis
-# kalibriert (13.226 Orthogruppen: 12.259 bei 5/5, 589 bei 4/5, 200+171
-# bei 2-3/5, 7 bei 1/5):
+# Prevalence thresholds rescaled from 14 to 5 references (panel reduction
+# to host representatives, see docs/decisions.md 2026-09-02). Original
+# (14 genomes): strict=14/14, soft=13/14=0.93, shell=3-12/14=0.21-0.86.
+# With only 5 possible presence levels (1/5..5/5), the old soft_core
+# threshold of 0.93 would NEVER be reached (the next level below 1.0
+# is 4/5=0.80) - orthogroups with 4/5 presence would have incorrectly
+# landed in "shell" instead of "soft_core". Recalibrated against the
+# OrthoFinder result (13,226 orthogroups: 12,259 at 5/5, 589 at 4/5,
+# 200+171 at 2-3/5, 7 at 1/5):
 panel:
   strict_core_fraction: 1.00   # 5/5
   soft_core_fraction: 0.80     # 4/5
-  shell_min_fraction: 0.40     # 2/5 (bis <0.80); darunter (1/5=0.20) = private_accessory
+  shell_min_fraction: 0.40     # 2/5 (up to <0.80); below that (1/5=0.20) = private_accessory
   candidate_min_length_bp: 10000
   dedup_identity: 0.98
   dedup_coverage: 0.90

@@ -1,14 +1,14 @@
-# Phase VI (Section 11): fensterbasierte PAV-Analyse. Zwei mosdepth-
-# Auswertungsebenen pro Isolat (Abschnitt 10.2):
-# - "unique": MAPQ-gefiltert, nur primaere Alignments (quantitative PAV)
-# - "all": ungefiltert, inkl. secondary/supplementary (Homologie-Kontrolle,
-#   deckt Multi-Mapping-Artefakte auf, wenn ein Fenster nur in dieser
-#   Ebene "praesent" erscheint)
+# Phase VI (Section 11): window-based PAV analysis. Two mosdepth
+# evaluation levels per isolate (Section 10.2):
+# - "unique": MAPQ-filtered, primary alignments only (quantitative PAV)
+# - "all": unfiltered, incl. secondary/supplementary (homology control,
+#   reveals multi-mapping artifacts when a window appears "present"
+#   only at this level)
 #
-# Present/Absent/Uncertain-Regeln je Regionstyp aus thresholds.yaml
+# Present/Absent/Uncertain rules per region type from thresholds.yaml
 # (pav.present_breadth_core/accessory, pav.absent_breadth).
 #
-# Phase VII (SV-Calling, Sniffles2) ist noch NICHT implementiert.
+# Phase VII (SV calling, Sniffles2) is not yet implemented.
 
 
 rule panel_windows:
@@ -28,8 +28,8 @@ rule panel_windows:
 
 
 rule mosdepth_unique:
-    # MAPQ-gefiltert, mosdepth schliesst secondary/supplementary standardmaessig
-    # bereits aus (Default --flag 1796).
+    # MAPQ-filtered; mosdepth already excludes secondary/supplementary
+    # by default (default --flag 1796).
     threads: config["threads_default"]
     input:
         bam="results/mapping/{sample_id}.panel.bam",
@@ -54,8 +54,8 @@ rule mosdepth_unique:
 
 
 rule mosdepth_all:
-    # --flag 1540 = nur unmapped(4)+qcfail(512)+dup(1024) ausschliessen,
-    # secondary(256)/supplementary BEHALTEN - fuer den Homologie-Vergleich.
+    # --flag 1540 = exclude only unmapped(4)+qcfail(512)+dup(1024),
+    # KEEP secondary(256)/supplementary - for the homology comparison.
     threads: config["threads_default"]
     input:
         bam="results/mapping/{sample_id}.panel.bam",
@@ -117,10 +117,10 @@ rule pav_matrix:
         "python3 workflow/scripts/build_pav_matrix.py --region-calls {input} --out {output}"
 
 
-# Phase VII (Section 12): breakpoint-basiertes SV-Calling mit Sniffles2,
-# als zusaetzliche, unabhaengige Evidenzlinie neben der Coverage-basierten
-# PAV-Analyse oben (Abschnitt 12: "PAV-Evidenz = Coverage-Breadth +
-# Mapping-Eindeutigkeit + SV-Breakpoints + spanning reads").
+# Phase VII (Section 12): breakpoint-based SV calling with Sniffles2,
+# as an additional, independent line of evidence alongside the
+# coverage-based PAV analysis above (Section 12: "PAV evidence =
+# coverage breadth + mapping uniqueness + SV breakpoints + spanning reads").
 
 
 rule sniffles_call:

@@ -7,11 +7,11 @@ configfile: "config/config.yaml"
 references = pd.read_csv(config["references_tsv"], sep="\t", dtype=str, keep_default_na=False)
 genome_ids = references["genome_id"].tolist()
 
-# Section 7.2: alle ungerichteten Paare des 5-Genom-Panels (10 Paare) -
-# das Dokument warnt explizit vor einem einzelnen Oryza-Anker, der die
-# Diversitaet der anderen Linien systematisch als fehlend darstellen
-# wuerde; bei nur 5 Genomen ist der volle Paarsatz ohne Mehraufwand
-# machbar und liefert die vollstaendigste Syntenie-Evidenz fuer 7.3.
+# Section 7.2: all undirected pairs of the 5-genome panel (10 pairs) -
+# the document explicitly warns against a single Oryza anchor, which
+# would systematically make the diversity of the other lineages appear
+# absent; with only 5 genomes, the full pair set is feasible without
+# extra effort and delivers the most complete synteny evidence for 7.3.
 genome_pairs = list(itertools.combinations(genome_ids, 2))
 
 
@@ -23,12 +23,12 @@ def _n_contigs(genome_id):
     return None
 
 
-# SyRI verlangt gleiche Chromosomen-/Contigzahl zwischen Referenz und
-# Query (whole-genome 1:1-Chromosomen-Zuordnung); Paare mit LpKY97
-# (9 Contigs) oder GCA059329645_1 (10) gegen die 7-Contig-Genome
-# schlagen sonst mit "Unequal number of chromosomes" fehl - siehe
-# docs/decisions.md. nucmer/show-coords laufen trotzdem fuer alle 10
-# Paare (liefern rohe Alignment-Coverage auch ohne SyRI-Klassifikation).
+# SyRI requires an equal chromosome/contig count between reference and
+# query (whole-genome 1:1 chromosome mapping); pairs with LpKY97
+# (9 contigs) or GCA059329645_1 (10) against the 7-contig genomes
+# otherwise fail with "Unequal number of chromosomes" - see
+# docs/decisions.md. nucmer/show-coords still run for all 10 pairs
+# (they deliver raw alignment coverage even without SyRI classification).
 syri_pairs = [
     (r, q)
     for r, q in genome_pairs

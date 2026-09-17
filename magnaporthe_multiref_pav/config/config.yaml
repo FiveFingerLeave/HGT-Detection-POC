@@ -1,11 +1,11 @@
-# Top-level Snakemake config for the Multireferenzpanel/PAV workflow
-# (Dokumentation/multireferenzpanel_pav_workflow.md).
+# Top-level Snakemake config for the multireference panel/PAV workflow
+# (Documentation/multireference_panel_pav_workflow.md).
 #
 # references_tsv is the ACTIVE panel driving the whole pipeline (QC,
 # repeat-masking, annotation, panel-building): 5 genomes, one per host
 # type, deliberately reduced from the document's literal 14-genome
 # catalog for POC compute-cost reasons (see docs/decisions.md,
-# 2026-09-02 "Panel auf 5 Host-Repraesentanten reduziert"). The full
+# 2026-09-02 "Panel reduced to 5 host representatives"). The full
 # 14-genome catalog (BUSCO already run for all 14) is archived in
 # config/references_full_catalog_14genomes.tsv for provenance and is not
 # read by any rule.

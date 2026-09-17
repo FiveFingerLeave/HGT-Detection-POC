@@ -46,19 +46,20 @@ rule annotation_all:
         expand("data/annotations/{genome_id}.gff3", genome_id=genome_ids),
 
 
-# Section 7.1: Orthogruppen. gffread extrahiert die Proteinsequenzen aus
-# den Liftoff-GFF3 (Voraussetzung fuer orthofinder -f), dann orthofinder
-# selbst genau nach Dokument-Befehl (Threadzahlen an die 14 verfuegbaren
-# Kerne angepasst statt der Dokument-Beispielwerte 32/16).
+# Section 7.1: orthogroups. gffread extracts the protein sequences from
+# the Liftoff GFF3 files (a prerequisite for orthofinder -f), then
+# orthofinder itself exactly per the document's command (thread counts
+# adapted to the 14 available cores instead of the document's example
+# values of 32/16).
 
 
 rule extract_proteome:
-    # gffread -y markiert Stopcodons/nicht sauber uebersetzbare Codons
-    # (z.B. an Exon-Grenzen mit Frame-Rest) mit "." - diamond akzeptiert
-    # das nicht im Sequenzalphabet (siehe docs/decisions.md: diamond
-    # v2.2.6 haengt sich bei so einem Zeichen sogar komplett auf statt
-    # einen Fehler zu werfen). Ersetze "." (und vorsorglich "-") in
-    # Sequenzzeilen (nicht Header) durch "X" (unbekannte Aminosaeure).
+    # gffread -y marks stop codons/codons that can't be cleanly translated
+    # (e.g. at exon boundaries with a frame remainder) with "." - diamond
+    # does not accept that in its sequence alphabet (see docs/decisions.md:
+    # diamond v2.2.6 even hangs completely on such a character instead of
+    # raising an error). Replace "." (and, as a precaution, "-") in
+    # sequence lines (not headers) with "X" (unknown amino acid).
     input:
         fasta="data/references/{genome_id}.fa",
         gff="data/annotations/{genome_id}.gff3",
@@ -92,18 +93,18 @@ rule orthofinder:
     conda:
         "../../envs/orthofinder.yaml"
     shell:
-        # Dokument schreibt "-M msa -T iqtree" vor. Getestet und wieder
-        # verworfen (siehe docs/decisions.md): mit nur 5 Spezies bleibt
-        # die Orthogruppen-Zuordnung selbst (diamond+MCL) schnell (Minuten),
-        # aber die anschliessende Gen-Baum-Inferenz laeuft iqtree3 MIT
-        # ModelFinder PRO Orthogruppe einzeln - bei >11.000 Orthogruppen
-        # und >15 Min je Baum waere das ein mehrtaegiger bis
-        # mehrwoechiger Lauf. Fuer den in Abschnitt 7.1 tatsaechlich
-        # benoetigten Output (die Orthogroups.tsv-Praesenz/Abwesenheits-
-        # Matrix fuer die genbasierte PAV-Klassifikation) ist das nicht
-        # noetig - "-M dendroblast" liefert dieselbe Orthogruppen-Matrix
-        # (unveraendert durch diamond+MCL bestimmt) ohne die teure
-        # MSA/Gen-Baum-Verfeinerungsschicht.
+        # The document specifies "-M msa -T iqtree". Tested and then
+        # discarded (see docs/decisions.md): with only 5 species, the
+        # orthogroup assignment itself (diamond+MCL) stays fast (minutes),
+        # but the subsequent gene-tree inference runs iqtree3 WITH
+        # ModelFinder PRO per orthogroup individually - with >11,000
+        # orthogroups and >15 min per tree, that would be a multi-day to
+        # multi-week run. For the output actually needed in Section 7.1
+        # (the Orthogroups.tsv presence/absence matrix for the gene-based
+        # PAV classification), that is not necessary - "-M dendroblast"
+        # delivers the same orthogroup matrix (determined identically by
+        # diamond+MCL) without the expensive MSA/gene-tree refinement
+        # layer.
         "rm -rf {params.proteome_dir}/OrthoFinder {params.fixed_dir} && "
         "mkdir -p results/orthofinder && "
         "orthofinder -f {params.proteome_dir} -S diamond -M dendroblast "

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Section 6.3: Repeat-Anteil pro Contig und pro Analysefenster, aus einem
-# RepeatMasker .out abgeleitet. Nutzt dieselbe Fenstergroesse wie die
-# spaetere windowbasierte PAV-Klassifikation (config/thresholds.yaml:
-# pav.window_size_bp), damit beide spaeter direkt gejoint werden koennen.
+# Section 6.3: repeat fraction per contig and per analysis window, derived
+# from a RepeatMasker .out. Uses the same window size as the
+# later window-based PAV classification (config/thresholds.yaml:
+# pav.window_size_bp), so the two can later be joined directly.
 set -euo pipefail
 
 RM_OUT=$1

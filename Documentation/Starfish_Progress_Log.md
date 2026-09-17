@@ -141,7 +141,7 @@ cat input/test_assemblies_2col.tsv | cat -A
 Output:
 
 ```text
-GCA_004346965.1^I/home/flori/promotion/barragan/assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna$
+GCA_004346965.1^I/home/<user>/promotion/barragan/assemblies/ncbi_dataset/ncbi_dataset/data/GCA_004346965.1/GCA_004346965.1_ASM434696v1_genomic.fna$
 ```
 
 This file is correctly formatted: the first column contains the stable genome ID, the second the full FASTA path.

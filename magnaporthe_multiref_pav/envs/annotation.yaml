@@ -1,17 +1,22 @@
 # Phase I/II annotation env. NOT yet installed (heavy, e.g. BRAKER3
 # needs a GeneMark-ES/ET license file set up separately - see
 # https://github.com/Gaius-Augustus/BRAKER). Installed on demand when
-# annotation.smk is actually run.
+# annotation.smk is actually run. liftoff/orthofinder/diamond/iqtree/
+# repeatmodeler/repeatmasker are pinned to the versions already validated
+# in the corresponding standalone envs (liftoff.yaml, orthofinder.yaml,
+# repeats.yaml); braker3 and eggnog-mapper are unpinned since they have
+# never actually been installed/run here - pin them once the license
+# unblocks this env.
 name: multiref-annotation
 channels:
   - conda-forge
   - bioconda
 dependencies:
   - braker3
-  - liftoff
+  - liftoff=1.6.3
   - eggnog-mapper
-  - orthofinder
-  - diamond
-  - iqtree
-  - repeatmodeler
-  - repeatmasker
+  - orthofinder=3.1.5
+  - diamond=2.2.6
+  - iqtree=3.1.3
+  - repeatmodeler=2.0.5
+  - repeatmasker=4.1.7p1

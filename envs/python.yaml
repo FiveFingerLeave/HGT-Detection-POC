@@ -2,8 +2,8 @@ name: barragan-python
 channels:
   - conda-forge
 dependencies:
-  - python=3.12
-  - pandas
-  - scikit-learn
-  - pyyaml
-  - pytest
+  - python=3.12.14
+  - pandas=3.0.5
+  - scikit-learn=1.9.0
+  - pyyaml=6.0.3
+  - pytest=9.1.1

@@ -44,7 +44,7 @@ Work computer / browser
         └── Remote-SSH, if the compute environment is a server
                     │
                     ▼
-Linux compute environment: MilleniumFalke
+Linux compute environment: compute server
         │
         ├── Project repository: ~/promotion/barragan/
         ├── Conda/Mamba environments
@@ -54,7 +54,7 @@ Linux compute environment: MilleniumFalke
         └── Logs, benchmarks, and reports
 ```
 
-If `MilleniumFalke` is a separate Linux server, VS Code is installed locally on the work computer and connected via SSH. If VS Code runs directly on `MilleniumFalke`, the project folder can be opened directly and locally.
+If the compute environment is a separate Linux server, VS Code is installed locally on the work computer and connected via SSH. If VS Code runs directly on the server, the project folder can be opened directly and locally.
 
 ---
 
@@ -109,16 +109,16 @@ can be opened in VS Code via `File → Open Folder…`.
 
 ## 4. Setting Up Remote-SSH
 
-If `MilleniumFalke` is reached via SSH, Remote-SSH is the most convenient way to work. The editor then operates on the server: files, terminal commands, Conda environments, and extensions use the Linux compute environment directly.
+If a compute server is reached via SSH, Remote-SSH is the most convenient way to work. The editor then operates on the server: files, terminal commands, Conda environments, and extensions use the Linux compute environment directly.
 
 ### Creating an SSH Alias
 
 On the local work computer, the file `~/.ssh/config` can contain an alias:
 
 ```sshconfig
-Host milleniumfalke
+Host myserver
     HostName YOUR_SERVER_OR_YOUR_IP
-    User flori
+    User YOUR_USERNAME
     IdentityFile ~/.ssh/id_ed25519
     ServerAliveInterval 60
 ```
@@ -126,14 +126,14 @@ Host milleniumfalke
 The connection then works in the terminal with:
 
 ```bash
-ssh milleniumfalke
+ssh myserver
 ```
 
 In VS Code:
 
 1. Open the Command Palette with `Ctrl+Shift+P`.
 2. Select `Remote-SSH: Connect to Host...`.
-3. Select the host `milleniumfalke`.
+3. Select the host `myserver`.
 4. After a successful connection, open `~/promotion/barragan` as the folder.
 
 ---
@@ -414,8 +414,8 @@ pilot_samples:
   - GCA_004346965.1
 
 starfish:
-  profile: /home/flori/miniforge3/envs/starfish_env/db/YRsuperfams.p1-512.hmm
-  proteins: /home/flori/miniforge3/envs/starfish_env/db/YRsuperfamRefs.faa
+  profile: /home/<user>/miniforge3/envs/starfish_env/db/YRsuperfams.p1-512.hmm
+  proteins: /home/<user>/miniforge3/envs/starfish_env/db/YRsuperfamRefs.faa
   hmm_evalue: 0.001
 ```
 

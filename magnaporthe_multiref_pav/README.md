@@ -5,6 +5,39 @@ Implementation of
 (19 sections: QC, annotation, pangenome classification, panel construction,
 long-read mapping, window-based PAV, SV calling, rarefaction).
 
+## Quickstart
+
+Requirements: conda/mamba (e.g. [miniforge](https://github.com/conda-forge/miniforge)) and Snakemake.
+
+1. Clone the repo and `cd magnaporthe_multiref_pav`.
+2. Let Snakemake create the per-rule conda environments automatically
+   (`--use-conda` below), or create them manually ahead of time with
+   `conda env create -f envs/core.yaml` etc. Tool versions in `envs/*.yaml`
+   are pinned to the exact versions this pipeline was actually run and
+   validated with (see `docs/decisions.md`); `envs/annotation.yaml` and
+   `envs/reporting.yaml` are the two exceptions still awaiting a validated
+   run (see the comments in those files).
+3. Populate the input data (not tracked in git, see `../.gitignore`):
+   - Reference genomes: download the 5 active panel genomes
+     (`config/references.tsv`) — or the full 14-genome catalog
+     (`config/references_full_catalog_14genomes.tsv`) — from NCBI by
+     accession; place raw FASTA under `data/references_raw/` and any
+     supplied GFF3 under `data/annotations_raw/`.
+   - Long-read isolates: download the SRA runs listed in
+     `config/samples.tsv` (`downloaded_run` column) into
+     `data/longreads/{run}.fastq.gz`.
+   - There is currently no Snakemake rule that automates this download
+     step — see `docs/decisions.md` for the exact NCBI Datasets/SRA
+     commands used to build the existing results.
+4. Run, e.g.: `snakemake --use-conda --cores 4 results/qc/assembly_stats.tsv`
+   for Phase I QC, or any other target under `results/` (see `workflow/rules/`).
+5. Known limitations: BRAKER3 de-novo annotation is blocked by a
+   GeneMark-ES/ET license that must be obtained separately (see
+   `envs/annotation.yaml`); `workflow/rules/report.smk` (final synthesis)
+   is not yet implemented.
+
+License: MIT, see [`../LICENSE`](../LICENSE).
+
 ## Status (2026-09-02)
 
 **Phase I (Section 6.1, QC) — complete for the full 14-genome catalog:**

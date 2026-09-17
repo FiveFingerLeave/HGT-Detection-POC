@@ -9,7 +9,7 @@ channels:
   - bioconda
 dependencies:
   - repeatmodeler=2.0.5
-  - repeatmasker=4.1.7
-  - bedtools
-  - seqkit
-  - samtools
+  - repeatmasker=4.1.7p1
+  - bedtools=2.31.1
+  - seqkit=2.13.0
+  - samtools=1.24

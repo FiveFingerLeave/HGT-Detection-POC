@@ -7,6 +7,6 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - liftoff
-  - minimap2
-  - samtools
+  - liftoff=1.6.3
+  - minimap2=2.24
+  - samtools=1.21

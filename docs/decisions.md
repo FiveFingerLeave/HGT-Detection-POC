@@ -234,7 +234,7 @@ after all 6 Starfish runs had already completed. Fixed; the other three
 while mapping `TH3` (`bwa-mem2.avx2` alone: 4.5 GB RSS). The WSL2 VM's
 default limit (50% of host RAM = 7.5 GB of 16 GB) was too tight for
 this — the same basic type of problem as the earlier BUSCO OOM. Since
-the host actually has 16 GB of RAM, `C:\Users\flori\.wslconfig` was
+the host actually has 16 GB of RAM, `C:\Users\<user>\.wslconfig` was
 newly created (`memory=11GB`, `swap=4GB`) and WSL restarted
 (`wsl --shutdown`). In addition, `map_to_panel`, `map_longread_to_panel`,
 and `fastp_qc` in `mapping.smk` now get an explicit `threads:` value
@@ -444,7 +444,7 @@ supplements to approximate the field/year design is an open check.
 **Decision:** The user provided a new, considerably more comprehensive
 workflow document
 (`Documentation/POC_HGT_Starships_Workflow.md`, originally
-`C:\Users\flori\Downloads\POC_HGT_Starships_Workflow.md`) and instructed
+`C:\Users\<user>\Downloads\POC_HGT_Starships_Workflow.md`) and instructed
 removal of everything previously built that is no longer needed under
 the new approach. The old short-read coverage pipeline setup (`workflow/`,
 `config/`, `power_analysis/`, old `tests/`, `data/references/panel_manifest.tsv`
@@ -650,7 +650,7 @@ of the WSL2 VM itself** (`/` and `/mnt/wslg/distro`, a 1 TB dynamic
 VHDX) — the powercfg hypothesis was thus structurally implausible (no
 USB device involved) and was discarded.
 
-**Actual root cause:** `C:\Users\flori\.wslconfig` had no explicit
+**Actual root cause:** `C:\Users\<user>\.wslconfig` had no explicit
 `autoMemoryReclaim` setting, causing WSL2 (version 2.7.12.0) to use the
 default **`gradual`** — a periodic memory compaction of the VM that, for
 memory-intensive workloads (like the ~6.9 GB RSS BUSCO process), freezes

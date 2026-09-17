@@ -8,6 +8,11 @@ specification (8 phases, assembly-/pangenome-/phylogeny-based):
 This supersedes the earlier short-read-coverage-only POC approach
 (see `docs/decisions.md` for the pivot rationale and what was carried over).
 
+**Quickstart:** the actively developed, runnable part of this POC lives in
+[`magnaporthe_multiref_pav/`](magnaporthe_multiref_pav/README.md), which has
+its own Quickstart (environment setup, input-data population, how to run
+Snakemake) and a detailed status report. License: [MIT](LICENSE).
+
 ## POC scope (from the guideline)
 
 Not exact HGT frequency — proof that the workflow reliably identifies HGT/

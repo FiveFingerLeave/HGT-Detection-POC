@@ -10,10 +10,10 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  - starfish
-  - metaeuk
-  - hmmer
-  - mmseqs2
-  - blast
-  - samtools
-  - minimap2
+  - starfish=1.1.0
+  - metaeuk=6.a5d39d9
+  - hmmer=3.3.2
+  - mmseqs2=14.7e284
+  - blast=2.12.0
+  - samtools=1.6
+  - minimap2=2.24

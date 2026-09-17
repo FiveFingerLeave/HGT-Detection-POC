@@ -40,11 +40,29 @@ GLMM model complexity for the dissertation's main study.
 
 ## Current status
 
-Structural reset only (2026-09-01): old short-read-coverage pipeline
-(`workflow/`, `config/`, old `power_analysis/`) removed; `poc_hgt_starships/`
-phase skeleton created with per-phase READMEs (input/output spec, tools).
-No phase is implemented yet. Phase 1 (reference-panel curation) is the
-natural next step — the NCBI catalogs below already narrow the search.
+Two pivots since the initial structural reset (2026-09-01). The original
+8-phase `poc_hgt_starships/` skeleton below (per-phase READMEs, no
+implementation) still frames the overall POC, but the actual implementation
+work is happening in a dedicated sub-project,
+[`magnaporthe_multiref_pav/`](magnaporthe_multiref_pav/README.md), which
+elaborates the reference-panel/PAV portion of phases 1, 3, and 4 in much
+more concrete detail (its own 19-section workflow document and Snakemake
+pipeline).
+
+As of 2026-09-03, all nine core sections of that sub-workflow (QC,
+repeat-masking, Liftoff gene annotation, OrthoFinder orthogroups,
+whole-genome alignment, Starship/Captain-gene calling, region-type
+classification, panel construction, long-read mapping, PAV analysis, SV
+calling, rarefaction, candidate-region manifest) have been run on a
+5-genome host-representative panel against 5 real long-read test isolates
+— see [`magnaporthe_multiref_pav/README.md`](magnaporthe_multiref_pav/README.md)
+for the full status and headline findings (two `starship_like` regions
+confirmed present across host lineages; the panel is not yet saturated at
+5 genomes). BRAKER3 de-novo annotation remains blocked by a GeneMark
+license, and final report synthesis (`report.smk`) is not yet implemented.
+
+Phases 5–8 of the original 8-phase plan (validation, phylogenetic
+incongruence, GLMM sample-size simulation, synthesis) are not yet started.
 
 ## Data (kept from the previous phase, still directly useful)
 
@@ -69,9 +87,13 @@ natural next step — the NCBI catalogs below already narrow the search.
   cache, not tracked in git).
 - `envs/starfish.yaml` — still directly reusable for Phase 2.
   `envs/mapping.yaml` (bwa-mem2/minimap2/samtools/mosdepth/fastp) and
-  `envs/python.yaml` remain useful tool building blocks across phases;
-  phase-specific environments (BUSCO, funannotate, RepeatMasker, Panaroo,
-  IQ-TREE, etc.) still need to be added under `poc_hgt_starships/`.
+  `envs/python.yaml` remain useful tool building blocks across phases.
+  Phase-specific environments (BUSCO, RepeatModeler/Masker, OrthoFinder,
+  Liftoff, etc.) already exist under
+  [`magnaporthe_multiref_pav/envs/`](magnaporthe_multiref_pav/envs/), with
+  versions pinned to what was actually validated there — see that
+  sub-project's [Quickstart](magnaporthe_multiref_pav/README.md#quickstart)
+  before adding equivalents under `poc_hgt_starships/`.
 
 ## Repo structure
 
@@ -88,15 +110,22 @@ barragan/
 │   ├── 07_phylogeny/       # core tree vs. Starship-gene tree
 │   ├── 08_simulation_glmm/ # deferred - sample-size/model simulation
 │   └── 09_report/          # synthesis, go/no-go
+├── magnaporthe_multiref_pav/  # actively developed panel/PAV sub-project
+│                               (own Snakemake workflow, config, envs — see
+│                               its README for Quickstart and status)
 ├── data/                   # NCBI catalogs, isolates_poc/, references/
 ├── assemblies/             # downloaded reference genomes (local cache)
 ├── envs/                   # conda environment.yml per tool group
-├── docs/                   # decisions.md (chronological project log)
-└── Documentation/          # POC_HGT_Starships_Workflow.md + planning notes
+├── docs/                   # decisions.md (chronological project log),
+│                             ai_usage.md (AI usage log)
+├── Documentation/          # POC_HGT_Starships_Workflow.md + planning notes
+└── LICENSE                 # MIT
 ```
 
 ## Next step
 
-Phase 1 (`poc_hgt_starships/00_data/`): curate the 20–30-isolate reference
-panel from the existing NCBI long-read-assembly catalogs, maximizing clone
-lineage/host diversity.
+Expand the `magnaporthe_multiref_pav/` reference panel beyond the current
+5 host representatives — rarefaction analysis shows it is not yet
+saturated (~19–20% candidate gain from the 5th genome) — then proceed to
+Phases 5–8 of the original plan (validation, phylogenetic incongruence,
+GLMM simulation, synthesis).
